@@ -13,9 +13,12 @@ function activate(context) {
   // This line of code will only be executed once when your extension is activated
   console.log('Congratulations, your extension "apex-intention-actions" is now active!');
 
-  let codeActionProvider = {
+  const codeActionProvider = {
     provideCodeActions: () => {
-      console.log('CODE ACTION RAN!')
+      const editor = vscode.window.activeTextEditor;
+      const position = editor.selection.active
+      const actions = getAvaliableActions(position)
+      console.log('actions >> ', actions)
     }
   }
 
