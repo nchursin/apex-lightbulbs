@@ -8,13 +8,13 @@ const TYPES = module.exports.TYPES = {
 }
 
 const ACTION_NAMES = module.exports.ACTION_NAMES = {
-  GETTER: 'GETTER',
-  SETTER: 'SETTER',
-  GETTER_SETTER: 'GETTER_SETTER',
-  GET_SET: 'GET_SET',
-  CONSTRUCTOR: 'CONSTRUCTOR',
-  CONSTRUCTOR_PARAM: 'CONSTRUCTOR_PARAM',
-  OVERLOAD: 'OVERLOAD',
+  GETTER: 'Add getter',
+  SETTER: 'Add setter',
+  GETTER_SETTER: 'Add getter and setter',
+  GET_SET: 'Add {get; set;}',
+  CONSTRUCTOR: 'Add constructor',
+  CONSTRUCTOR_PARAM: 'Add constructor parameter',
+  OVERLOAD: 'Add overload',
 }
 
 module.exports.ACTION_MAPPING = {
