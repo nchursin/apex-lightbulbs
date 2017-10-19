@@ -11,14 +11,14 @@
         "Other"
     ],
     "activationEvents": [
-        "onCommand:extension.sayHello"
+        "onCommand:extension.getActions"
     ],
     "main": "./extension",
     "contributes": {
         "commands": [
             {
-                "command": "extension.sayHello",
-                "title": "Hello World"
+                "command": "extension.getActions",
+                "title": "Get Available Acitons"
             }
         ]
     },
