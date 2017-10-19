@@ -1,3 +1,5 @@
+const R = require('ramda')
+
 const TYPES = module.exports.TYPES = {
   VAR: 'VAR',
   CLASS: 'CLASS',
@@ -31,5 +33,32 @@ module.exports.ACTION_MAPPING = {
   ],
   [TYPES.METHOD]: [
     ACTION_NAMES.OVERLOAD,
-  ]
+  ],
+}
+
+const LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
+const NUMBERS = '1234567890'
+const SYMBOLS = '\.,<>_ '
+const LETTERS_NUMBERS = `${LETTERS}${NUMBERS}`
+const ALL_IN_ONE = `${LETTERS_NUMBERS}${SYMBOLS}`
+const TYPE_REGEX = `([${ALL_IN_ONE}]+)`
+const INDENT = '^(\\s*)\\w'
+
+const varRegexes = {
+  propDef: new RegExp(`(public|private|global|protected)\\s*(static){0,1}\\s+${TYPE_REGEX}\\s+(\\w+)\\s*;`),
+  propDefGetSet: new RegExp(`(public|private|global|protected)\\s*(static){0,1}\\s+${TYPE_REGEX}\\s+(\\w+)\\s*\\{\\s*(get(;|\\{(.|\\n)*?\\}))\\s*(set(;|\\{(.|\\n)*?\\}))\\s*\\}`),
+  propDefGetSetOptional: new RegExp(`((public|private|global|protected)\\s*(static){0,1}\\s+${TYPE_REGEX}\\s+(\\w+)\\s*(;|\\{\\s*(\\w*\\s*get(;|\\{(.|\\n)*?\\}))\\s*(\\w*\\s*set(;|\\{(.|\\n)*?\\}))\\s*\\}))`),
+}
+const classRegexes = {
+  classDef: new RegExp(`((public|private|global|protected)\\s*(virtual|abstract|with sharing|without sharing){0,1}\\s+class\\s+(\\w+)\\s*.*{?)`),
+  className: new RegExp(`(class\\s+(\\w+)\\s+.*{)`),
+}
+const methodRegexes = {}
+const constrRegexes = {}
+
+module.exports.REGEX = {
+  [TYPES.VAR]: R.values(varRegexes),
+  [TYPES.CLASS]: R.values(classRegexes),
+  [TYPES.METHOD]: R.values(methodRegexes),
+  [TYPES.CONSTR]: R.values(constrRegexes),
 }
