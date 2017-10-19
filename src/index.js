@@ -2,6 +2,7 @@
 // Import the module and reference it with the alias vscode in your code below
 const vscode = require('vscode');
 const { getLineText } = require('./helpers')
+const { getAvaliableActions } = require('./actions/analyzer')
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -20,13 +21,11 @@ function activate(context) {
     // Display a message box to the user
     // vscode.window.showInformationMessage('Hello World!');
 
-    const currentDoc = vscode.window.activeTextEditor.document
+    // const currentDoc = vscode.window.activeTextEditor.document
     const editor = vscode.window.activeTextEditor;
-    if (editor.selection.isEmpty) {
-      // the Position object gives you the line and character where the cursor is
-      const position = editor.selection.active
-      console.log('Line text >> ', getLineText(currentDoc, position.line))
-    }
+    const position = editor.selection.active
+    const actions = getAvaliableActions(position)
+    console.log('actions >> ', actions)
   });
 
   context.subscriptions.push(disposable);
