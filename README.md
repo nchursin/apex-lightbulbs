@@ -2,6 +2,10 @@
 
 A VSCode plugin, an analogue of _Apex Intention Actions_ for Sublime Text 3. Adds quick actions for Salesforce Apex to VSCode such as adding getter, creating constructor, etc.
 
+# WORK IN PROGRESS!
+
+The plugin is not functional right now. We are working on as hard as we can, soon it will be available.
+
 ## Features
 
 1. Add getter
