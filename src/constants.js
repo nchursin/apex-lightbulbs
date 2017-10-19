@@ -1,5 +1,7 @@
 const R = require('ramda')
 
+module.exports.DOC_SELECTOR = 'apex'
+
 const TYPES = module.exports.TYPES = {
   VAR: 'VAR',
   CLASS: 'CLASS',
