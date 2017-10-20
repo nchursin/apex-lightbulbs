@@ -11,13 +11,8 @@ const getType = (text) => R.compose(
   )
 )(REGEX)
 
-const getAvaliableActions = (position) => {
-  const doc = vscode.window.activeTextEditor.document
-
-  const type = getType(getLineText(doc, position.line))
-  return ACTION_MAPPING[type]
-}
+const getCodeLineType = (doc, position) => getType(getLineText(doc, position.line))
 
 module.exports = {
-  getAvaliableActions,
+  getCodeLineType,
 }
