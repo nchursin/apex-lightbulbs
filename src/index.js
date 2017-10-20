@@ -1,8 +1,9 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-const vscode = require('vscode');
+const vscode = require('vscode')
+const R = require('ramda')
 const { getLineText } = require('./helpers')
-const { getAvaliableActions } = require('./actions/analyzer')
+const { getAvaliableActions } = require('./intentions/analyzer')
 const { DOC_SELECTOR } = require('./constants')
 
 // this method is called when your extension is activated
@@ -18,7 +19,7 @@ function activate(context) {
       const editor = vscode.window.activeTextEditor;
       const position = editor.selection.active
       const actions = getAvaliableActions(position)
-      console.log('actions >> ', actions)
+      return R.map((t) => ({title: t}), actions)
     }
   }
 
