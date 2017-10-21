@@ -4,8 +4,6 @@ const { firstWord, dropFirstWord, capitalize } = require('../../helpers')
 
 const isComplexType = R.contains('<')
 
-console.log('actions/actGetter')
-
 const getDefnMetadata = (t) => {
   let text = t
   const access = firstWord(text)
@@ -24,7 +22,10 @@ const getDefnMetadata = (t) => {
     varType = firstWord(text)
     text = dropFirstWord(text)
   }
-  const varName = firstWord(text)
+  let varName = firstWord(text)
+  if (varName.endsWith(';')) {
+    varName = varName.slice(0, -1);
+  }
   text = dropFirstWord(text)
 
   return {
@@ -37,6 +38,7 @@ const getDefnMetadata = (t) => {
 
 const actGetter = (text) => {
   console.log('>> actGetter <<')
+  console.log('text >> ', text)
   const metadata = getDefnMetadata(text)
   const staticKeyWord = metadata.isStatic ? ' static' : ''
   const thisKeyword = metadata.isStatic ? '' : 'this.'

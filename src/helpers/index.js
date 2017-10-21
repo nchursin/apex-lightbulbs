@@ -1,8 +1,5 @@
 const R = require('ramda')
 
-console.log('helpers/index')
-
-
 const getLineText = R.curry(
   (doc, lineNumber) => doc.getText(doc.lineAt(lineNumber).range).trim()
 )
