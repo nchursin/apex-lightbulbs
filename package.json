@@ -13,7 +13,7 @@
     "activationEvents": [
       "onLanguage:apex"
     ],
-    "main": "./extension",
+    "main": "./src/index.js",
     "contributes": {
         "commands": [
             {
