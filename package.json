@@ -17,8 +17,12 @@
     "contributes": {
         "commands": [
             {
-                "command": "extension.getActions",
+                "command": "apex-intention-actions.getActions",
                 "title": "Get Available Acitons"
+            },
+            {
+                "command": "apex-intention-actions.addGetter",
+                "title": "Add getter"
             }
         ]
     },
