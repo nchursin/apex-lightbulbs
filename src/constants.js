@@ -1,6 +1,7 @@
 const R = require('ramda')
 
 module.exports.DOC_SELECTOR = 'apex'
+const PLUGIN_NAME = module.exports.PLUGIN_NAME = 'apex-intention-actions'
 
 const TYPES = module.exports.TYPES = {
   VAR: 'VAR',
@@ -17,6 +18,16 @@ const ACTION_NAMES = module.exports.ACTION_NAMES = {
   CONSTRUCTOR: 'Add constructor',
   CONSTRUCTOR_PARAM: 'Add constructor parameter',
   OVERLOAD: 'Add overload',
+}
+
+module.exports.ACTION_COMMANDS = {
+  [ACTION_NAMES.GETTER]: `${PLUGIN_NAME}.addGetter`,
+  [ACTION_NAMES.SETTER]: `${PLUGIN_NAME}.addSetter`,
+  [ACTION_NAMES.GET_SET]: `${PLUGIN_NAME}.addGetSet`,
+  [ACTION_NAMES.GETTER_SETTER]: `${PLUGIN_NAME}.addGetterSetter`,
+  [ACTION_NAMES.CONSTRUCTOR]: `${PLUGIN_NAME}.addConstructor`,
+  [ACTION_NAMES.CONSTRUCTOR_PARAM]: `${PLUGIN_NAME}.addConstructorParam`,
+  [ACTION_NAMES.OVERLOAD]: `${PLUGIN_NAME}.addOverload`,
 }
 
 module.exports.ACTION_MAPPING = {
