@@ -6,7 +6,7 @@ const getLineText = R.curry(
 
 const firstWord = R.compose(
   R.head,
-  R.split(/\s/)
+  R.split(/[^\w]/)
 )
 
 const dropFirstWord = (t) => t.replace(firstWord(t), '').trim()
