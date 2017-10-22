@@ -21,6 +21,10 @@ function activate(ctx) {
       const text = getLineText(doc, range.start.line)
       try {
         const metadata = getDefnMetadata(text)
+        if (!metadata) {
+          console.log('Not a handleable type of code')
+          return
+        }
         const result = getCodeActions( ACTION_MAPPING[metadata.defnType], [ text, metadata ] )
         return result
       } catch (e) {

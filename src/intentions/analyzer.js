@@ -85,6 +85,9 @@ const getClassMetadata = (t) => {
 
 const getDefnMetadata = (t) => {
   const defnType = getType(t)
+  if (!defnType) {
+    return
+  }
   let metadata = {
     defnType,
   }
@@ -93,9 +96,12 @@ const getDefnMetadata = (t) => {
       metadata = R.merge(metadata, getClassMetadata(t))
       console.log('class metadata >> ', metadata)
       break;
-    default:
+    case TYPES.VAR:
       metadata = R.merge(metadata, getVarMetadata(t))
       console.log('var metadata >> ', metadata)
+      break;
+    default:
+      // skip
   }
   return metadata
 }
