@@ -1,5 +1,5 @@
 const R = require('ramda')
-const { getLineText, firstWord, dropFirstWord } = require('../helpers')
+const { getLineText, firstWord, dropFirstWord, firstOfSplit } = require('../helpers')
 const { REGEX, TYPES, CLASS_TYPES, SHARING_TYPES } = require('../constants')
 
 const isComplexType = R.contains('<')
@@ -12,6 +12,13 @@ const getType = (text) => R.compose(
   )
 )(REGEX)
 
+// param text shouldn't start with access or static or else. First part should be the type
+const getVarType = R.ifElse(
+  isComplexType,
+  (text) => firstOfSplit(0, R.lastIndexOf('> ', text), text),
+  firstWord
+)
+
 const getCodeLineType = (doc, position) => getType(getLineText(doc, position.line))
 
 const getVarMetadata = (t) => {
@@ -22,16 +29,8 @@ const getVarMetadata = (t) => {
   if (isStatic) {
     text = dropFirstWord(text)
   }
-  let varType
-  if (isComplexType(text)) {
-    // handling complex types like List<T> ot Map<K, V>
-    const closingType = R.lastIndexOf('> ', text)
-    varType = text.substring(0, closingType + 1).trim()
-    text = text.replace(varType, '').trim()
-  } else {
-    varType = firstWord(text)
-    text = dropFirstWord(text)
-  }
+  const varType = getVarType(text)
+  text = text.replace(varType, '').trim()
   let varName = firstWord(text)
   if (varName.endsWith(';')) {
     varName = varName.slice(0, -1)

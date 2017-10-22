@@ -10,6 +10,11 @@ const firstWord = R.compose(
   R.split(/[^\w]/)
 )
 
+const firstOfSplit = R.compose(
+  R.head,
+  R.split
+)
+
 const dropFirstWord = (t) => t.replace(firstWord(t), '').trim()
 
 const capitalize = (text) => `${text.charAt(0).toUpperCase()}${text.slice(1)}`
@@ -34,4 +39,5 @@ module.exports = {
   dropFirstWord,
   capitalize,
   logger,
+  firstOfSplit,
 }
