@@ -19,7 +19,11 @@ const getVarType = R.ifElse(
   firstWord
 )
 
-const getCodeLineType = (doc, position) => getType(getLineText(doc, position.line))
+// (doc, position) => getType(getLineText(doc, position.line))
+const getCodeLineType = R.compose(
+  getType,
+  getLineText
+)
 
 const getVarMetadata = (t) => {
   let text = t
@@ -49,31 +53,23 @@ const getClassMetadata = (t) => {
   let text = t
   const access = firstWord(text)
   text = dropFirstWord(text)
-  let sharing, classType
+  let sharing = SHARING_TYPES.INHERIT
+  let classType = CLASS_TYPES.NORMAL
   if ('class' !== firstWord(text) && !R.startsWith('with', firstWord(text))) {
-    if (firstWord(text) === 'abstract') {
-      classType = CLASS_TYPES.ABSTRACT
-    } else {
-      classType = CLASS_TYPES.VIRTUAL
-    }
+    classType = firstWord(text) === 'abstract'
+      ? CLASS_TYPES.ABSTRACT
+      : CLASS_TYPES.VIRTUAL
     text = dropFirstWord(text)
   }
   if ('class' !== firstWord(text) && R.startsWith('with', firstWord(text))) {
-    if (firstWord(text) === 'with') {
-      sharing = SHARING_TYPES.WITH_SHARING
-    } else {
-      sharing = SHARING_TYPES.WITHOUT_SHARING
-    }
+    sharing = firstWord(text) === 'with'
+      ? sharing = SHARING_TYPES.WITH_SHARING
+      : sharing = SHARING_TYPES.WITHOUT_SHARING
     text = dropFirstWord(dropFirstWord(text))
   }
   text = dropFirstWord(text)
   const className = firstWord(text)
-  if (!sharing) {
-    sharing = SHARING_TYPES.INHERIT
-  }
-  if (!classType) {
-    classType = CLASS_TYPES.NORMAL
-  }
+
   return {
     access,
     sharing,
