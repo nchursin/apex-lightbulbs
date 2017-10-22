@@ -3,7 +3,7 @@
 const vscode = require('vscode')
 const R = require('ramda')
 const { getLineText } = require('./helpers')
-const { getCodeLineType } = require('./intentions/analyzer')
+const { getCodeLineType, getDefnMetadata } = require('./intentions/analyzer')
 const { DOC_SELECTOR, ACTION_MAPPING, PLUGIN_NAME } = require('./constants')
 const { getCodeActions, actions } = require('./intentions/actions')
 
@@ -16,9 +16,14 @@ function activate(ctx) {
 
   const codeActionProvider = {
     provideCodeActions: (doc, range, ctx) => {
-      const lineIntent = getCodeLineType(doc, range.start)
-      const result = getCodeActions(ACTION_MAPPING[lineIntent], [ getLineText(doc, range.start.line) ])
-      return result
+      const text = getLineText(doc, range.start.line)
+      try {
+        const metadata = getDefnMetadata(text)
+        const result = getCodeActions(ACTION_MAPPING[metadata.defnType], [ text, metadata ])
+        return result
+      } catch (e) {
+        console.log('e >> ', e)
+      }
     },
   }
 

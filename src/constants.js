@@ -3,6 +3,8 @@ const R = require('ramda')
 module.exports.DOC_SELECTOR = 'apex'
 const PLUGIN_NAME = module.exports.PLUGIN_NAME = 'apex-intention-actions'
 
+module.exports.DEFAULT_ACCESS_LEVEL = 'public'
+
 const TYPES = module.exports.TYPES = {
   VAR: 'VAR',
   CLASS: 'CLASS',
