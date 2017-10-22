@@ -12,6 +12,18 @@ const TYPES = module.exports.TYPES = {
   CONSTR: 'CONSTR',
 }
 
+module.exports.CLASS_TYPES = {
+  NORMAL: 'normal',
+  ABSTRACT: 'abstract',
+  VIRTUAL: 'virtual',
+}
+
+module.exports.SHARING_TYPES = {
+  INHERIT: 'inherit',
+  WITH_SHARING: 'with sharing',
+  WITHOUT_SHARING: 'without sharing',
+}
+
 const ACTION_NAMES = module.exports.ACTION_NAMES = {
   GETTER: 'Add getter',
   SETTER: 'Add setter',
