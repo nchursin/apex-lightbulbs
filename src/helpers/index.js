@@ -17,7 +17,6 @@ const capitalize = (text) => `${text.charAt(0).toUpperCase()}${text.slice(1)}`
 const logger = () => {
   const oldLog = console.log
   const oldError = console.error
-  const filename = R.join(':', R.split('/', R.last(R.split(PLUGIN_NAME, __filename))))
   console.log = function() {
     Array.prototype.unshift.call(arguments, `${PLUGIN_NAME}::`)
     oldLog.apply(this, arguments)
