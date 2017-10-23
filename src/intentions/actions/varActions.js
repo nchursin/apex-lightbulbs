@@ -30,8 +30,13 @@ const setter = (text, metadata) => {
   return result
 }
 
+const getterSetter = (text, metadata) => {
+  return `${getter(text, metadata)}\n${setter(text, metadata)}`
+}
+
 
 module.exports = {
   getter: vscode.commands.registerCommand('apex-intention-actions.addGetter', getter),
   setter: vscode.commands.registerCommand('apex-intention-actions.addSetter', setter),
+  getterSetter: vscode.commands.registerCommand('apex-intention-actions.addGetterSetter', getterSetter),
 }
