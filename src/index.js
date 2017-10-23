@@ -25,7 +25,7 @@ function activate(ctx) {
           console.log('Not a handleable type of code')
           return
         }
-        const result = getCodeActions( ACTION_MAPPING[metadata.defnType], [ text, metadata ] )
+        const result = getCodeActions( ACTION_MAPPING[metadata.defnType], [ metadata ] )
         return result
       } catch (e) {
         console.log('e >> ', e)

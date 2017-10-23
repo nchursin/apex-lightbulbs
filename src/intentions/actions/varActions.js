@@ -8,9 +8,7 @@ const handleStatic = (metadata) => ({
   thisKeyword: metadata.isStatic ? '' : 'this.',
 })
 
-const getter = (text, metadata) => {
-  console.log('>> actGetter <<')
-  console.log('text >> ', text)
+const getter = (metadata) => {
   const { staticKeyword, thisKeyword } = handleStatic(metadata)
   const result = `${DEFAULT_ACCESS_LEVEL}${staticKeyword} ${metadata.varType} get${capitalize(metadata.varName)}() {\n`
     + `\treturn ${thisKeyword}${metadata.varName};\n`
@@ -19,9 +17,7 @@ const getter = (text, metadata) => {
   return result
 }
 
-const setter = (text, metadata) => {
-  console.log('>> actSetter <<')
-  console.log('text >> ', text)
+const setter = (metadata) => {
   const { staticKeyword, thisKeyword } = handleStatic(metadata)
   const result = `${DEFAULT_ACCESS_LEVEL}${staticKeyword} void set${capitalize(metadata.varName)}(${metadata.varType} value) {\n`
     + `\t${thisKeyword}${metadata.varName} = value;\n`
@@ -30,10 +26,7 @@ const setter = (text, metadata) => {
   return result
 }
 
-const getterSetter = (text, metadata) => {
-  return `${getter(text, metadata)}\n${setter(text, metadata)}`
-}
-
+const getterSetter = (metadata) => `${getter(metadata)}\n${setter(metadata)}`
 
 module.exports = {
   getter: vscode.commands.registerCommand('apex-intention-actions.addGetter', getter),
