@@ -10,9 +10,9 @@ const firstWord = R.compose(
   R.split(/[^\w]/)
 )
 
-const firstOfSplit = R.compose(
+const firstOfSlice = R.compose(
   R.head,
-  R.split
+  R.slice
 )
 
 const dropFirstWord = (t) => t.replace(firstWord(t), '').trim()
@@ -39,5 +39,5 @@ module.exports = {
   dropFirstWord,
   capitalize,
   logger,
-  firstOfSplit,
+  firstOfSlice,
 }
