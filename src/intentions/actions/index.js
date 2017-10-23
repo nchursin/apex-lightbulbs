@@ -1,18 +1,19 @@
 const R = require('ramda')
 const { ACTION_NAMES, ACTION_COMMANDS } = require('../../constants')
-const getter = require('./actGetter')
+const { getter, setter } = require('./varActions')
 
 const actions = {
   [ACTION_NAMES.GETTER]: getter,
+  [ACTION_NAMES.SETTER]: setter,
 }
 
-const getCodeActions = (actions, args) => R.map((a) => {
+const getCodeActions = (acts, args) => R.map((a) => {
   return {
     title: a,
     command: ACTION_COMMANDS[a],
     arguments: args,
   }
-}, actions)
+}, acts)
 
 module.exports = {
   actions,
