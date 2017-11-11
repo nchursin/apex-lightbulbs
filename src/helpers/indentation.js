@@ -74,4 +74,6 @@ const getFoldableRegion = (pos) => {
 
 module.exports = {
   getFoldableRegion,
+  singleIndent,
+  getIndent,
 }
