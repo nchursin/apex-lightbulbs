@@ -3,6 +3,19 @@ const R = require('ramda')
 module.exports.DOC_SELECTOR = 'apex'
 const PLUGIN_NAME = module.exports.PLUGIN_NAME = 'apex-intention-actions'
 
+module.exports.PLACERS = {
+  END_OF_BLOCK: 'END_OF_BLOCK',
+  START_OF_BLOCK: 'START_OF_BLOCK',
+  BEFORE_BLOCK: 'BEFORE_BLOCK',
+  AFTER_BLOCK: 'AFTER_BLOCK',
+  INSTEAD_OF_BLOCK: 'INSTEAD_OF_BLOCK',
+}
+
+module.exports.PLACER_OPERATION = {
+  INSERT: 'INSERT',
+  REPLACE: 'REPLACE',
+}
+
 module.exports.DEFAULT_ACCESS_LEVEL = 'public'
 
 const TYPES = module.exports.TYPES = {
