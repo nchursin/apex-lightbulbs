@@ -20,7 +20,7 @@ function activate(ctx) {
     provideCodeActions: (doc, range, ctx) => {
       const text = getLineText(doc, range.start.line)
       try {
-        const metadata = getDefnMetadata(text)
+        const metadata = getDefnMetadata(text, range.start.line)
         if (!metadata) {
           console.log('Not a handleable type of code')
           return

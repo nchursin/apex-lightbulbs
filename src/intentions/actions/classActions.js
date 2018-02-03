@@ -1,7 +1,7 @@
-const vscode = require('vscode')
 const R = require('ramda')
 const { capitalize } = require('../../helpers')
 const { DEFAULT_ACCESS_LEVEL } = require('../../constants')
+const { singleIndent } = require('../../helpers/indentation')
 
 // defnType:"CLASS"
 // access:"public"
@@ -9,8 +9,14 @@ const { DEFAULT_ACCESS_LEVEL } = require('../../constants')
 // classType:"normal"
 // className:"FeatureToggleMgr"
 
-const getConstructor = (metadata) => `${DEFAULT_ACCESS_LEVEL} ${metadata.className} {\n\t// constructor\n}\n`
+const superConstr = R.ifElse(
+  R.prop('isExtends'),
+  () => `${singleIndent()}super();\n`,
+  () => ''
+)
+
+const getConstructor = (metadata) => `${DEFAULT_ACCESS_LEVEL} ${metadata.className} {\n${superConstr(metadata)}${singleIndent()}// constructor\n}\n`
 
 module.exports = {
-  getConstructor: vscode.commands.registerCommand('apex-intention-actions.addConstructor', getConstructor),
+  getConstructor: getConstructor,
 }

@@ -3,12 +3,13 @@ const R = require('ramda')
 module.exports.DOC_SELECTOR = 'apex'
 const PLUGIN_NAME = module.exports.PLUGIN_NAME = 'apex-intention-actions'
 
-module.exports.PLACERS = {
+const PLACERS = module.exports.PLACERS = {
   END_OF_BLOCK: 'END_OF_BLOCK',
   START_OF_BLOCK: 'START_OF_BLOCK',
   BEFORE_BLOCK: 'BEFORE_BLOCK',
   AFTER_BLOCK: 'AFTER_BLOCK',
   INSTEAD_OF_BLOCK: 'INSTEAD_OF_BLOCK',
+  IN_CONSTRUCTOR: 'IN_CONSTRUCTOR',
 }
 
 module.exports.PLACER_OPERATION = {
@@ -41,10 +42,10 @@ const ACTION_NAMES = module.exports.ACTION_NAMES = {
   GETTER: 'Add getter',
   SETTER: 'Add setter',
   GETTER_SETTER: 'Add getter and setter',
-  GET_SET: 'Add {get; set;}',
+  // GET_SET: 'Add {get; set;}',
   CONSTRUCTOR: 'Add constructor',
-  CONSTRUCTOR_PARAM: 'Add constructor parameter',
-  OVERLOAD: 'Add overload',
+  // CONSTRUCTOR_PARAM: 'Add constructor parameter',
+  // OVERLOAD: 'Add overload',
 }
 
 module.exports.ACTION_COMMANDS = {
@@ -62,18 +63,55 @@ module.exports.ACTION_MAPPING = {
     ACTION_NAMES.GETTER,
     ACTION_NAMES.SETTER,
     ACTION_NAMES.GETTER_SETTER,
-    ACTION_NAMES.GET_SET,
-    ACTION_NAMES.CONSTRUCTOR_PARAM,
+    // ACTION_NAMES.GET_SET,
+    // ACTION_NAMES.CONSTRUCTOR_PARAM,
   ],
   [TYPES.CLASS]: [
     ACTION_NAMES.CONSTRUCTOR,
   ],
-  [TYPES.CONSTR]: [
-    ACTION_NAMES.OVERLOAD,
-  ],
-  [TYPES.METHOD]: [
-    ACTION_NAMES.OVERLOAD,
-  ],
+  // [TYPES.CONSTR]: [
+  //   ACTION_NAMES.OVERLOAD,
+  // ],
+  // [TYPES.METHOD]: [
+  //   ACTION_NAMES.OVERLOAD,
+  // ],
+}
+
+const BLOCK_NAMES = module.exports.BLOCK_NAMES = {
+  FOLDABLE: 'FOLDABLE',
+  SELF: 'SELF',
+  CONSTRUCTOR: 'CONSTRUCTOR',
+}
+
+module.exports.ACTION_PLACERS = {
+  [ACTION_NAMES.GETTER]: {
+    BLOCK: BLOCK_NAMES.FOLDABLE,
+    PLACE: PLACERS.END_OF_BLOCK,
+  },
+  [ACTION_NAMES.SETTER]: {
+    BLOCK: BLOCK_NAMES.FOLDABLE,
+    PLACE: PLACERS.END_OF_BLOCK,
+  },
+  [ACTION_NAMES.GET_SET]: {
+    BLOCK: BLOCK_NAMES.SELF,
+    PLACE: PLACERS.INSTEAD_OF_BLOCK,
+  },
+  [ACTION_NAMES.GETTER_SETTER]: {
+    BLOCK: BLOCK_NAMES.FOLDABLE,
+    PLACE: PLACERS.END_OF_BLOCK,
+  },
+  [ACTION_NAMES.CONSTRUCTOR]: {
+    BLOCK: BLOCK_NAMES.FOLDABLE,
+    PLACE: PLACERS.END_OF_BLOCK,
+  },
+  [ACTION_NAMES.CONSTRUCTOR_PARAM]: {
+    BLOCK: BLOCK_NAMES.CONSTRUCTOR,
+    PLACE: PLACERS.IN_CONSTRUCTOR,
+  },
+  [ACTION_NAMES.OVERLOAD]: {
+    BLOCK: BLOCK_NAMES.FOLDABLE,
+    PLACE: PLACERS.AFTER_BLOCK,
+  },
 }
 
 const LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'

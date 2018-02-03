@@ -55,6 +55,8 @@ const getClassMetadata = (t) => {
   text = dropFirstWord(text)
   let sharing = SHARING_TYPES.INHERIT
   let classType = CLASS_TYPES.NORMAL
+  let isExtends = false
+  let isImplements = false
   if ('class' !== firstWord(text) && !R.startsWith('with', firstWord(text))) {
     classType = firstWord(text) === 'abstract'
       ? CLASS_TYPES.ABSTRACT
@@ -69,22 +71,27 @@ const getClassMetadata = (t) => {
   }
   text = dropFirstWord(text)
   const className = firstWord(text)
+  isExtends = R.contains(' extends ', text)
+  isImplements = R.contains(' implements ', text)
 
   return {
     access,
     sharing,
     classType,
     className,
+    isExtends,
+    isImplements,
   }
 }
 
-const getDefnMetadata = (t) => {
+const getDefnMetadata = (t, lineNumber) => {
   const defnType = getType(t)
   if (!defnType) {
     return
   }
   let metadata = {
     defnType,
+    lineNumber,
   }
   switch (defnType) {
     case TYPES.CLASS:

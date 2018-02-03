@@ -1,4 +1,4 @@
-const { PLACERS, PLACER_OPERATION } = require('../constants')
+const { PLACERS, PLACER_OPERATION, BLOCK_NAMES } = require('../constants')
 const vscode = require('vscode')
 
 const endOfBlock = (range) => {

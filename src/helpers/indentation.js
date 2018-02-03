@@ -12,11 +12,7 @@ const position = () => editor().selection.active
 const document = () => editor().document
 const isSpaceIndent = () => editor().options.insertSpaces
 const tabSize = () => editor().options.tabSize
-const singleIndent = () =>
-  R.cond([
-    [isSpaceIndent, repeatString(' ', tabSize())],
-    [R.T, R.identity('\t')]
-  ])
+const singleIndent = () => isSpaceIndent() ? repeatString(' ', tabSize()) : '\t'
 
 const toSpaces = R.compose(
   R.join(''),
@@ -72,8 +68,24 @@ const getFoldableRegion = (pos) => {
   return new vscode.Range(startPos, endPos)
 }
 
+const getLinesFoldableRegion = (lineNumber) => getFoldableRegion(new vscode.Position(lineNumber, 0))
+
+const addIndentation = R.compose(
+  R.join('\n'),
+  R.map(
+    R.ifElse(
+      R.prop('length'),
+      R.concat(singleIndent()),
+      R.identity
+    )
+  ),
+  R.split('\n')
+)
+
 module.exports = {
   getFoldableRegion,
+  getLinesFoldableRegion,
   singleIndent,
   getIndent,
+  addIndentation,
 }
