@@ -2,8 +2,12 @@
     "name": "apex-intention-actions",
     "displayName": "Apex Intention Actions",
     "description": "",
-    "version": "0.0.1",
+    "version": "0.1.0",
     "publisher": "nchursin",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/nchursin/vscode-ApexIntentionActions"
+    },
     "engines": {
         "vscode": "^1.17.0"
     },
@@ -11,7 +15,7 @@
         "Other"
     ],
     "activationEvents": [
-      "onLanguage:apex"
+        "onLanguage:apex"
     ],
     "main": "./src/index.js",
     "contributes": {
