@@ -1,5 +1,5 @@
 import { TYPES } from '../constants';
-import { join } from 'ramda';
+import { join, replace } from 'ramda';
 
 const modifiers = [
     'public',
@@ -10,6 +10,10 @@ const modifiers = [
 const modifierRegexp = `(${join('|', modifiers)})`;
 const staticModifier = `(static\\s+)?`;
 const regex = new RegExp(`${modifierRegexp}\\s+${staticModifier}\\w+\\s+\\w+\\s*;`);
+
+export const addGetSet = (lineText: string) => {
+    return replace(';', ' { get; set; }', lineText);
+};
 
 export const getLineType = (lineText: string) => {
     const lowerCase = lineText.toLowerCase();
