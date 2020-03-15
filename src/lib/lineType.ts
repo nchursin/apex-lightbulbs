@@ -4,10 +4,12 @@ import { join } from 'ramda';
 const modifiers = [
     'public',
     'private',
+    'protected',
 ];
 
 const modifierRegexp = `(${join('|', modifiers)})`;
-const regex = new RegExp(`${modifierRegexp}\\s+\\w+\\s+\\w+\\s*;`);
+const staticModifier = `(static\\s+)?`;
+const regex = new RegExp(`${modifierRegexp}\\s+${staticModifier}\\w+\\s+\\w+\\s*;`);
 
 export const getLineType = (lineText: string) => {
     const lowerCase = lineText.toLowerCase();

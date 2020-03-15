@@ -6,25 +6,27 @@ import * as vscode from 'vscode';
 
 import { getLineType } from '../../lib/lineType';
 import { TYPES } from '../../constants';
+import { keys } from 'ramda';
+
+const TEST_CASES = {
+    'public string varname;': TYPES.VAR,
+    'Private string varname ;': TYPES.VAR,
+    'Protected     string    varname;': TYPES.VAR,
+    'Public static string varname;': TYPES.VAR,
+
+    'Public static static  string varname;': TYPES.UNKNOWN,
+    'public': TYPES.UNKNOWN,
+};
 
 suite('Line Type Analyzer Suite', () => {
 	vscode.window.showInformationMessage('Start all tests.');
-
-	test('"public string varname;" must be variable', () => {
-        const lineText = 'public string varname;';
-        const result = getLineType(lineText);
-        assert.equal(result, TYPES.VAR, `Return result must be "${TYPES.VAR}" for ${lineText}`);
-	});
-
-	test('"public" must be unknown', () => {
-        const lineText = 'public';
-        const result = getLineType(lineText);
-        assert.equal(result, TYPES.UNKNOWN, `Return result must be "${TYPES.UNKNOWN}" for ${lineText}`);
-	});
-
-	test('"Private string varname ;" must be variable', () => {
-        const lineText = 'Private string varname ;';
-        const result = getLineType(lineText);
-        assert.equal(result, TYPES.VAR, `Return result must be "${TYPES.VAR}" for ${lineText}`);
-	});
+    
+    test('run all test cases', () => {
+        const cases = keys(TEST_CASES);
+        cases.forEach((key) => {
+            const expected = TEST_CASES[key];
+            const actual = getLineType(key);
+            assert.equal(actual, expected, `Return result must be "${expected}" for ${key}`);
+        });
+    });
 });
