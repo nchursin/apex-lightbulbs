@@ -6,7 +6,7 @@ import * as Mocha from 'mocha';
 // as well as import your extension to test it
 import * as vscode from 'vscode';
 import { VARIABLE_ACTIONS } from '../../../../labels';
-import GetterSetterActionProvider from '../../../../lib/actionProviders/getterSetterActionProvider';
+import { GetterSetterActionProvider } from '../../../../lib/actionProviders/getterSetterActionProvider';
 
 suite('VariableActionProvider Suite', () => {
     vscode.window.showInformationMessage('Start all tests.');

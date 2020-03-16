@@ -8,8 +8,6 @@ import { getLineType } from '../../../lib/lineType';
 import { TYPES } from '../../../constants';
 import { keys } from 'ramda';
 
-import GetterSetterActionProvider from "../../../lib/actionProviders/getterSetterActionProvider";
-
 const TYPE_CHECK_TEST_CASES = {
     'public string varname;': TYPES.VAR,
     'string varname;': TYPES.VAR,

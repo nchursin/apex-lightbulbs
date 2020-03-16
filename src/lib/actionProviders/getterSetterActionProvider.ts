@@ -3,7 +3,7 @@ import { VARIABLE_ACTIONS } from '../../labels';
 import { TYPES } from '../../constants';
 import { getLineType } from "../lineType";
 
-export default class GetterSetterActionProvider implements vscode.CodeActionProvider {
+export class GetterSetterActionProvider implements vscode.CodeActionProvider {
     public static readonly providedCodeActionKinds = [
 		vscode.CodeActionKind.Refactor
 	];
