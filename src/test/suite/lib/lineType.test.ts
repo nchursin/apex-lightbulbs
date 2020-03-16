@@ -4,9 +4,11 @@ import * as assert from 'assert';
 // as well as import your extension to test it
 import * as vscode from 'vscode';
 
-import { getLineType, addGetSet } from '../../lib/lineType';
-import { TYPES } from '../../constants';
+import { getLineType } from '../../../lib/lineType';
+import { TYPES } from '../../../constants';
 import { keys } from 'ramda';
+
+import VariableActionProvider from "../../../lib/actionProviders/varActionProvider";
 
 const TYPE_CHECK_TEST_CASES = {
     'public string varname;': TYPES.VAR,
@@ -22,21 +24,12 @@ const TYPE_CHECK_TEST_CASES = {
 suite('Line Type Analyzer Suite', () => {
 	vscode.window.showInformationMessage('Start all tests.');
 
-    test('run all test cases', () => {
+    test('run all test cases for getLineType', () => {
         const cases = keys(TYPE_CHECK_TEST_CASES);
         cases.forEach((key) => {
             const expected = TYPE_CHECK_TEST_CASES[key];
             const actual = getLineType(key);
             assert.equal(actual, expected, `Return result must be "${expected}" for ${key}`);
         });
-    });
-
-    test('add { get; set; } props test', () => {
-        const varDefn = 'public string varname';
-        const lineText = `${varDefn};`;
-        const expected = `${varDefn} { get; set; }`;
-        const actual = addGetSet(lineText);
-
-        assert.equal(actual, expected, '{ get; set; } were added badly');
     });
 });

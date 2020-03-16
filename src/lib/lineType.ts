@@ -1,5 +1,7 @@
 import { TYPES } from '../constants';
 import { join, replace } from 'ramda';
+import { CodeActionProvider } from 'vscode';
+import VariableActionProvider from './actionProviders/varActionProvider';
 
 const modifiers = [
     'public',
@@ -11,11 +13,12 @@ const modifierRegexp = `(${join('|', modifiers)})`;
 const staticModifier = `(static\\s+)?`;
 const regex = new RegExp(`${modifierRegexp}\\s+${staticModifier}\\w+\\s+\\w+\\s*;`);
 
-export const addGetSet = (lineText: string) => {
-    return replace(';', ' { get; set; }', lineText);
+const PROVIDERS = {
+    [TYPES.VAR]: VariableActionProvider,
+    [TYPES.UNKNOWN]: undefined,
 };
 
-export const getLineType = (lineText: string) => {
+export const getLineType = (lineText: string): string => {
     const lowerCase = lineText.toLowerCase();
     const isVar = regex.test(lowerCase);
     if (isVar) {
