@@ -24,8 +24,9 @@
 	"scripts": {
 		"vscode:prepublish": "yarn run compile",
 		"compile": "tsc -p ./",
+		"testdata": "mkdir -p ./out/test/data/ && cp -r ./src/test/data/* ./out/test/data/",
 		"watch": "tsc -watch -p ./",
-		"pretest": "yarn run compile",
+		"pretest": "yarn run compile && yarn run testdata",
 		"test": "node ./out/test/runTest.js"
 	},
 	"devDependencies": {
