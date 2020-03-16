@@ -2,14 +2,14 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 
-import VariableActionProvider from './lib/actionProviders/varActionProvider';
+import GetterSetterActionProvider from './lib/actionProviders/getterSetterActionProvider';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(
-		vscode.languages.registerCodeActionsProvider('apex', new VariableActionProvider(), {
-			providedCodeActionKinds: VariableActionProvider.providedCodeActionKinds
+		vscode.languages.registerCodeActionsProvider('apex', new GetterSetterActionProvider(), {
+			providedCodeActionKinds: GetterSetterActionProvider.providedCodeActionKinds
 		}));
 }
 

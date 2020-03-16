@@ -1,7 +1,7 @@
 import { TYPES } from '../constants';
 import { join, replace } from 'ramda';
 import { CodeActionProvider } from 'vscode';
-import VariableActionProvider from './actionProviders/varActionProvider';
+import GetterSetterActionProvider from './actionProviders/getterSetterActionProvider';
 
 const modifiers = [
     'public',
@@ -15,7 +15,7 @@ const staticModifier = `(static\\s+)?`;
 const regex = new RegExp(`^${annotation}${modifierRegexp}${staticModifier}\\w+\\s+\\w+\\s*;`);
 
 const PROVIDERS = {
-    [TYPES.VAR]: VariableActionProvider,
+    [TYPES.VAR]: GetterSetterActionProvider,
     [TYPES.UNKNOWN]: undefined,
 };
 

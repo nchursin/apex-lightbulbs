@@ -6,7 +6,7 @@ import * as Mocha from 'mocha';
 // as well as import your extension to test it
 import * as vscode from 'vscode';
 import { VARIABLE_ACTIONS } from '../../../../labels';
-import VariableActionProvider from '../../../../lib/actionProviders/varActionProvider';
+import GetterSetterActionProvider from '../../../../lib/actionProviders/getterSetterActionProvider';
 
 suite('VariableActionProvider Suite', () => {
     vscode.window.showInformationMessage('Start all tests.');
@@ -14,7 +14,7 @@ suite('VariableActionProvider Suite', () => {
     const dataFolder = path.resolve(__dirname, '../../../data');
     const testClass = path.join(dataFolder, 'Test.cls');
     let textDocument: vscode.TextDocument;
-    let provider = new VariableActionProvider();
+    let provider = new GetterSetterActionProvider();
 
     Mocha.beforeEach(async () => {
         textDocument = await vscode.workspace.openTextDocument(testClass);
