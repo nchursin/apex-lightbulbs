@@ -12,10 +12,15 @@ import VariableActionProvider from "../../../lib/actionProviders/varActionProvid
 
 const TYPE_CHECK_TEST_CASES = {
     'public string varname;': TYPES.VAR,
+    'string varname;': TYPES.VAR,
     'Private string varname ;': TYPES.VAR,
     'Protected     string    varname;': TYPES.VAR,
     'Public static string varname;': TYPES.VAR,
     'Public static st4231_ring var3124_name;': TYPES.VAR,
+    '@testvisible private static st4231_ring var3124_name;': TYPES.VAR,
+    '@testvisible static st4231_ring var3124_name;': TYPES.VAR,
+    'static st4231_ring var3124_name;': TYPES.VAR,
+    '@testvisible st4231_ring var3124_name;': TYPES.VAR,
 
     'Public static static  string varname;': TYPES.UNKNOWN,
     'public': TYPES.UNKNOWN,

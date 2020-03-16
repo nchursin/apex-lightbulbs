@@ -50,5 +50,5 @@ suite('VariableActionProvider Suite', () => {
         const position = new vscode.Position(0, 15);
         const actions = provider.provideCodeActions(textDocument, new vscode.Range(position, position));
         assert.equal(actions.length, 0, '0 actions must be returned');
-    })
+    });
 });

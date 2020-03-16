@@ -1,4 +1,4 @@
 export const TYPES = {
-    VAR: 'variable',
+    VAR: 'VARIABLE',
     UNKNOWN: 'UNKNOWN',
 }

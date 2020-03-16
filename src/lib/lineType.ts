@@ -9,9 +9,10 @@ const modifiers = [
     'protected',
 ];
 
-const modifierRegexp = `(${join('|', modifiers)})`;
+const annotation = `(@\\w+\\s+)?`;
+const modifierRegexp = `((${join('|', modifiers)})\\s+)?`;
 const staticModifier = `(static\\s+)?`;
-const regex = new RegExp(`${modifierRegexp}\\s+${staticModifier}\\w+\\s+\\w+\\s*;`);
+const regex = new RegExp(`^${annotation}${modifierRegexp}${staticModifier}\\w+\\s+\\w+\\s*;`);
 
 const PROVIDERS = {
     [TYPES.VAR]: VariableActionProvider,
