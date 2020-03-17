@@ -7,7 +7,7 @@ import * as Mocha from 'mocha';
 import * as vscode from 'vscode';
 import { find, propEq } from "ramda";
 import { VARIABLE_ACTIONS } from '../../../../labels';
-import { GetterSetterActionProvider } from '../../../../lib/actionProviders/getterSetterActionProvider';
+import { GetterSetterActionProvider } from '../../../../lib/actionProviders/vars/getterSetterActionProvider';
 
 suite('GetterSetterActionProvider Suite', () => {
     vscode.window.showInformationMessage('Start all tests.');

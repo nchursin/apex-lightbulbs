@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
-import { VARIABLE_ACTIONS } from '../../labels';
-import { TYPES } from '../../constants';
-import { getLineType } from "../lineType";
+import { VARIABLE_ACTIONS } from '../../../labels';
+import { TYPES } from '../../../constants';
+import { getLineType } from "../../lineType";
 
 export class GetterSetterActionProvider implements vscode.CodeActionProvider {
     public static readonly providedCodeActionKinds = [
