@@ -5,10 +5,11 @@ import * as Mocha from 'mocha';
 // You can import and use all API from the 'vscode' module
 // as well as import your extension to test it
 import * as vscode from 'vscode';
+import { find, propEq } from "ramda";
 import { VARIABLE_ACTIONS } from '../../../../labels';
 import { GetterSetterActionProvider } from '../../../../lib/actionProviders/getterSetterActionProvider';
 
-suite('VariableActionProvider Suite', () => {
+suite('GetterSetterActionProvider Suite', () => {
     vscode.window.showInformationMessage('Start all tests.');
 
     const dataFolder = path.resolve(__dirname, '../../../data');
@@ -26,8 +27,11 @@ suite('VariableActionProvider Suite', () => {
 
         const position = new vscode.Position(lineNumber, 15);
         const actions = provider.provideCodeActions(textDocument, new vscode.Range(position, position));
-        assert.equal(actions.length, 1, '1 action must be returned');
-        const act = actions[0];
+        const act = find(propEq('title', label), actions);
+        if (!act) {
+            assert.notEqual(act, undefined, `No action "${label}" found`);
+            return;
+        }
         assert.equal(act.title, label, 'title is different from expected');
         assert.equal(act.kind, actionKind, 'Action Kind is different from expected');
         assert.notEqual(act.edit, undefined, 'Edit must be set for action');
