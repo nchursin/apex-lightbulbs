@@ -1,7 +1,5 @@
 import { TYPES } from '../constants';
-import { join, replace } from 'ramda';
-import { CodeActionProvider } from 'vscode';
-import { GetterSetterActionProvider } from './actionProviders';
+import { join } from 'ramda';
 
 const modifiers = [
     'public',

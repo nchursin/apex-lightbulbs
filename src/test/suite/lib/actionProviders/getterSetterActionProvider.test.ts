@@ -13,7 +13,7 @@ suite('GetterSetterActionProvider Suite', () => {
     vscode.window.showInformationMessage('Start all tests.');
 
     const dataFolder = path.resolve(__dirname, '../../../data');
-    const testClass = path.join(dataFolder, 'Test.cls');
+    const testClass = path.join(dataFolder, 'getterSetterActionProvider.test.cls');
     let textDocument: vscode.TextDocument;
     let provider = new GetterSetterActionProvider();
 
