@@ -38,17 +38,17 @@ suite('VariableActionProvider Suite', () => {
         }
     };
 
+    test('non-variable type must provide no actions', () => {
+        const position = new vscode.Position(0, 15);
+        const actions = provider.provideCodeActions(textDocument, new vscode.Range(position, position));
+        assert.equal(actions.length, 0, '0 actions must be returned');
+    });
+
     test('"Add { get; set; }"', async () => {
         await testAddGetSet(1, 'public String stringVar { get; set; }');
     });
 
     test('"Add { get; set; }" to a line with trailing spaces', async () => {
         await testAddGetSet(2, 'public String stringVarWithSpaces { get; set; }');
-    });
-
-    test('non-variable type must provide no actions', () => {
-        const position = new vscode.Position(0, 15);
-        const actions = provider.provideCodeActions(textDocument, new vscode.Range(position, position));
-        assert.equal(actions.length, 0, '0 actions must be returned');
     });
 });
