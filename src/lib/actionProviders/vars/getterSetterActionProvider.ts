@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { VARIABLE_ACTIONS } from '../../../labels';
 import { TYPES } from '../../../constants';
-import { getLineType } from "../../lineType";
+import { getLineMetadata } from "../../lineType";
 
 export class GetterSetterActionProvider implements vscode.CodeActionProvider {
     public static readonly providedCodeActionKinds = [
@@ -10,8 +10,8 @@ export class GetterSetterActionProvider implements vscode.CodeActionProvider {
 
 	public provideCodeActions(document: vscode.TextDocument, range: vscode.Range): vscode.CodeAction[] {
         const line = document.lineAt(range.start.line);
-        const type = getLineType(line.text.trim());
-        if (TYPES.VAR !== type) {
+        const lineMeta = getLineMetadata(line.text.trim());
+        if (TYPES.VAR !== lineMeta.type) {
             return [];
         }
 

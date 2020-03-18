@@ -8,6 +8,7 @@ import * as vscode from 'vscode';
 import { find, propEq } from "ramda";
 import { VARIABLE_ACTIONS } from '../../../../labels';
 import { GetterSetterActionProvider } from '../../../../lib/actionProviders/vars/getterSetterActionProvider';
+import { replaceDocumentText } from '../../../utils';
 
 suite('GetterSetterActionProvider Suite', () => {
     vscode.window.showInformationMessage('Start all tests.');
@@ -16,9 +17,15 @@ suite('GetterSetterActionProvider Suite', () => {
     const testClass = path.join(dataFolder, 'getterSetterActionProvider.test.cls');
     let textDocument: vscode.TextDocument;
     let provider = new GetterSetterActionProvider();
+    let initialState: string;
 
     Mocha.beforeEach(async () => {
         textDocument = await vscode.workspace.openTextDocument(testClass);
+        initialState = textDocument.getText();
+    });
+
+    Mocha.afterEach(async () => {
+        replaceDocumentText(textDocument, initialState);
     });
 
     const testAddGetSet = async (lineNumber: number, resultText: string) => {

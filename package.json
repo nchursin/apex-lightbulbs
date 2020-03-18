@@ -23,6 +23,7 @@
 	},
 	"scripts": {
 		"vscode:prepublish": "yarn run compile",
+		"precompile": "rm -rf out",
 		"compile": "tsc -p ./",
 		"testdata": "mkdir -p ./out/test/data/ && cp -r ./src/test/data/* ./out/test/data/",
 		"watch": "tsc -watch -p ./",
