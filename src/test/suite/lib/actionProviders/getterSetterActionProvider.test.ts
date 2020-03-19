@@ -62,4 +62,8 @@ suite('GetterSetterActionProvider Suite', () => {
     test('"Add { get; set; }" to a line with trailing spaces', async () => {
         await testAddGetSet(2, 'public String stringVarWithSpaces { get; set; }');
     });
+
+    test('"Add { get; set; }" to a line with trailing spaces', async () => {
+        await testAddGetSet(5, 'public string innerClassVar { get; set; }');
+    });
 });
