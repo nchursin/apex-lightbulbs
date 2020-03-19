@@ -1,5 +1,5 @@
 import { TYPES } from '../constants';
-import { join } from 'ramda';
+import { join, tail } from 'ramda';
 
 const modifiers = [
     'public',
@@ -12,14 +12,28 @@ const modifierRegexp = `((${join('|', modifiers)})\\s+)?`;
 const staticModifier = `(static\\s+)?`;
 const regex = new RegExp(`^${annotation}${modifierRegexp}${staticModifier}\\w+\\s+\\w+\\s*;`);
 
-export const getLineMetadata = (lineText: string): { type: string } => {
-    const result = {
-        type: TYPES.UNKNOWN,
-    };
+const staticKeywordGroupNumber = 4;
+
+export const getLineMetadata = (lineText: string): LineMetadata => {
+    let result: LineMetadata;
     const lowerCase = lineText.toLowerCase();
     const isVar = regex.test(lowerCase);
     if (isVar) {
-        result.type = TYPES.VAR;
+        const matches = lowerCase.match(regex);
+        result = new LineMetadata(TYPES.VAR);
+        result.isStatic = Boolean(matches && matches[staticKeywordGroupNumber]);
+    } else {
+        result = new LineMetadata(TYPES.UNKNOWN);
     }
     return result;
 };
+
+export class LineMetadata {
+    public type: string;
+    public isStatic: boolean;
+
+    constructor(type: string) {
+        this.type = type;
+        this.isStatic = false;
+    }
+}

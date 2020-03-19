@@ -8,8 +8,9 @@ import { getLineMetadata } from '../../../lib/lineType';
 import { TYPES } from '../../../constants';
 import { keys } from 'ramda';
 
-const constructLineMeta = (type: string) => ({
+const constructLineMeta = (type: string, isStatic: Boolean = false) => ({
     type,
+    isStatic,
 });
 
 const TYPE_CHECK_TEST_CASES = {
@@ -17,14 +18,15 @@ const TYPE_CHECK_TEST_CASES = {
     'string varname;': constructLineMeta(TYPES.VAR),
     'Private string varname ;': constructLineMeta(TYPES.VAR),
     'Protected     string    varname;': constructLineMeta(TYPES.VAR),
-    'Public static string varname;': constructLineMeta(TYPES.VAR),
-    'Public static st4231_ring var3124_name;': constructLineMeta(TYPES.VAR),
-    '@testvisible private static st4231_ring var3124_name;': constructLineMeta(TYPES.VAR),
-    '@testvisible static st4231_ring var3124_name;': constructLineMeta(TYPES.VAR),
-    'static st4231_ring var3124_name;': constructLineMeta(TYPES.VAR),
+    'Public static string varname;': constructLineMeta(TYPES.VAR, true),
+    'Public static st4231_ring var3124_name;': constructLineMeta(TYPES.VAR, true),
+    '@testvisible private static st4231_ring var3124_name;': constructLineMeta(TYPES.VAR, true),
+    '@testvisible static st4231_ring var3124_name;': constructLineMeta(TYPES.VAR, true),
+    'static st4231_ring var3124_name;': constructLineMeta(TYPES.VAR, true),
     '@testvisible st4231_ring var3124_name;': constructLineMeta(TYPES.VAR),
 
     'Public static static  string varname;': constructLineMeta(TYPES.UNKNOWN),
+    // 'Public static static varname;': constructLineMeta(TYPES.UNKNOWN),
     'public': constructLineMeta(TYPES.UNKNOWN),
 };
 
