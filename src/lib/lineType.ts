@@ -15,16 +15,7 @@ const regex = new RegExp(`^${annotation}${modifierRegexp}${staticModifier}\\w+\\
 const staticKeywordGroupNumber = 4;
 
 export const getLineMetadata = (lineText: string): LineMetadata => {
-    let result: LineMetadata;
-    const lowerCase = lineText.toLowerCase();
-    const isVar = regex.test(lowerCase);
-    if (isVar) {
-        const matches = lowerCase.match(regex);
-        result = new LineMetadata(TYPES.VAR);
-        result.isStatic = Boolean(matches && matches[staticKeywordGroupNumber]);
-    } else {
-        result = new LineMetadata(TYPES.UNKNOWN);
-    }
+    const result = new LineMetadata(lineText);
     return result;
 };
 
@@ -32,7 +23,14 @@ export class LineMetadata {
     public type: string;
     public isStatic: boolean | undefined;
 
-    constructor(type: string) {
-        this.type = type;
+    constructor(lineText: string) {
+        this.type = TYPES.UNKNOWN;
+        const lowerCase = lineText.toLowerCase();
+        const isVar = regex.test(lowerCase);
+        if (isVar) {
+            const matches = lowerCase.match(regex);
+            this.type = TYPES.VAR;
+            this.isStatic = Boolean(matches && matches[staticKeywordGroupNumber]);
+        }
     }
 }
