@@ -34,9 +34,15 @@ const TYPE_CHECK_TEST_CASES = {
     'Public static static  string varname;': {
         type: TYPES.UNKNOWN
     },
-    // 'Public static static varname;': {
-    //     type: TYPES.UNKNOWN
-    // },
+    'Public static static varname;': {
+        type: TYPES.UNKNOWN
+    },
+    'Public static class varname;': {
+        type: TYPES.UNKNOWN
+    },
+    'Public class varname;': {
+        type: TYPES.UNKNOWN
+    },
     'public': {
         type: TYPES.UNKNOWN
     },

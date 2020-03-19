@@ -11,11 +11,10 @@ const modifiers = [
 const annotation = `(@\\w+\\s+)?`;
 const accessModifier = `((${join('|', modifiers)})\\s+)?`;
 const staticModifier = `(static\\s+)?`;
-const varRegex = new RegExp(`^${annotation}${accessModifier}${staticModifier}\\w+\\s+\\w+\\s*;`);
+const typeName = '(?!(?:static|class))\\w+';
+const varRegex = new RegExp(`^${annotation}${accessModifier}${staticModifier}${typeName}\\s+\\w+\\s*;`);
 
 const methodRegex = new RegExp(`^${annotation}${accessModifier}${staticModifier}\\w+\\s+\\w+\\s*\\(.*`);
-
-const staticKeywordGroupNumber = 4;
 
 export const getLineMetadata = (lineText: string): LineMetadata => {
     const result = new LineMetadata(lineText);
