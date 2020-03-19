@@ -30,10 +30,9 @@ export const getLineMetadata = (lineText: string): LineMetadata => {
 
 export class LineMetadata {
     public type: string;
-    public isStatic: boolean;
+    public isStatic: boolean | undefined;
 
     constructor(type: string) {
         this.type = type;
-        this.isStatic = false;
     }
 }

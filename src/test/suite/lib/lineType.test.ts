@@ -25,9 +25,15 @@ const TYPE_CHECK_TEST_CASES = {
     'static st4231_ring var3124_name;': constructLineMeta(TYPES.VAR, true),
     '@testvisible st4231_ring var3124_name;': constructLineMeta(TYPES.VAR),
 
-    'Public static static  string varname;': constructLineMeta(TYPES.UNKNOWN),
-    // 'Public static static varname;': constructLineMeta(TYPES.UNKNOWN),
-    'public': constructLineMeta(TYPES.UNKNOWN),
+    'Public static static  string varname;': {
+        type: TYPES.UNKNOWN
+    },
+    // 'Public static static varname;': {
+    //     type: TYPES.UNKNOWN
+    // },
+    'public': {
+        type: TYPES.UNKNOWN
+    },
 };
 
 suite('Line Type Analyzer Suite', () => {
