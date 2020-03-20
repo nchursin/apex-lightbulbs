@@ -29,10 +29,14 @@ const TYPE_CHECK_TEST_CASES = {
     'public string methodName() {': constructLineMeta(TYPES.METHOD),
 
     'public class ClassName {': constructLineMeta(TYPES.CLASS),
-
-    'Public class className': {
-        type: TYPES.UNKNOWN
-    },
+    'public with sharing class classname {': constructLineMeta(TYPES.CLASS),
+    'public without sharing class classname {': constructLineMeta(TYPES.CLASS),
+    'public inherited sharing class classname {': constructLineMeta(TYPES.CLASS),
+    'public abstract class ClassName {': constructLineMeta(TYPES.CLASS),
+    'public virtual class ClassName {': constructLineMeta(TYPES.CLASS),
+    'public class ClassName': constructLineMeta(TYPES.CLASS),
+    'public virtual with sharing class ClassName': constructLineMeta(TYPES.CLASS),
+    'Public class className': constructLineMeta(TYPES.CLASS),
 
     'Public static static  string varname;': {
         type: TYPES.UNKNOWN
@@ -40,10 +44,10 @@ const TYPE_CHECK_TEST_CASES = {
     'Public static static varname;': {
         type: TYPES.UNKNOWN
     },
-    'Public static class varname;': {
+    'Public class varname;': {
         type: TYPES.UNKNOWN
     },
-    'Public class varname;': {
+    'Public static class varname;': {
         type: TYPES.UNKNOWN
     },
     'public': {

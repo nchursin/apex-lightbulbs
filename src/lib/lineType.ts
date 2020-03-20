@@ -17,7 +17,9 @@ const varRegex = new RegExp(`^${annotation}${accessModifier}${staticModifier}${t
 
 const methodRegex = new RegExp(`^${annotation}${accessModifier}${staticModifier}\\w+\\s+\\w+\\s*\\(.*`);
 
-const classRegex = new RegExp(`^${annotation}${accessModifier}class\\s+\\w+\\s*{`);
+const abstractionModifier = '((abstract|virtual)\\s+)?';
+const sharingModifier = '((with|without|inherited)\\s+sharing\\s+)?';
+const classRegex = new RegExp(`^${annotation}${accessModifier}${abstractionModifier}${sharingModifier}class\\s+\\w+\\s*{?$`);
 
 export const getLineMetadata = (lineText: string): LineMetadata => {
     const result = new LineMetadata(lineText);
