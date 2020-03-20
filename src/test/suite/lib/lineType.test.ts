@@ -1,10 +1,11 @@
 import * as assert from 'assert';
+import * as path from 'path';
 
 // You can import and use all API from the 'vscode' module
 // as well as import your extension to test it
 import * as vscode from 'vscode';
 
-import { getLineMetadata } from '../../../lib/lineType';
+import { getLineMetadata, getFirstNonVarDefnLine } from '../../../lib/lineType';
 import { TYPES } from '../../../constants';
 import { keys } from 'ramda';
 
@@ -27,6 +28,8 @@ const TYPE_CHECK_TEST_CASES = {
 
     'public string methodName() {': constructLineMeta(TYPES.METHOD),
 
+    'public class ClassName {': constructLineMeta(TYPES.CLASS),
+
     'Public class className': {
         type: TYPES.UNKNOWN
     },
@@ -48,6 +51,14 @@ const TYPE_CHECK_TEST_CASES = {
     },
 };
 
+const NON_VAR_LINE_TEST_CASES = {
+    'Test1.cls': 2,
+    'Test2.cls': 9,
+    'Test3.cls': 9,
+    'Test4.cls': 8,
+    // 'Test5.cls': 12,
+};
+
 suite('Line Type Analyzer Suite', () => {
 	vscode.window.showInformationMessage('Start all tests.');
 
@@ -58,5 +69,20 @@ suite('Line Type Analyzer Suite', () => {
             const actual = getLineMetadata(key);
             assert.deepEqual(actual, expected, `Return result must be "${JSON.stringify(expected)}" for ${key}, actual: "${JSON.stringify(actual)}"`);
         });
+    });
+
+    test('get first non-var defn line number', async () => {
+        const cases = keys(NON_VAR_LINE_TEST_CASES);
+        await Promise.all(cases.map(async (fileName) => {
+            const expected = NON_VAR_LINE_TEST_CASES[fileName];
+            const dataFolder = path.resolve(__dirname, '../../data');
+            const testClass = path.join(dataFolder, 'PositionTests/NonVarPositions', fileName);
+            const textDocument = await vscode.workspace.openTextDocument(testClass);
+
+            const actual = getFirstNonVarDefnLine(textDocument);
+            assert.equal(actual, expected, 'First non-ver defn line number is different from expected');
+            return Promise.resolve();
+        }));
+
     });
 });
