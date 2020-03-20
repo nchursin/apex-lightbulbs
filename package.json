@@ -24,7 +24,7 @@
 	"scripts": {
 		"vscode:prepublish": "yarn run compile",
 		"precompile": "rm -rf out",
-		"compile": "tsc -p ./",
+		"compile": "tsc -p ./ && cp ./src/apex-jorje-lsp.jar ./out/",
 		"testdata": "mkdir -p ./out/test/data/ && cp -r ./src/test/data/* ./out/test/data/",
 		"watch": "tsc -watch -p ./",
 		"pretest": "yarn run compile && yarn run testdata",
@@ -45,6 +45,15 @@
 	},
 	"dependencies": {
 		"@types/ramda": "^0.26.44",
-		"ramda": "^0.27.0"
+		"@types/shelljs": "^0.8.6",
+		"@types/sinon": "^7.5.2",
+		"chai": "^4.2.0",
+		"expand-home-dir": "^0.0.3",
+		"find-java-home": "^1.1.0",
+		"ramda": "^0.27.0",
+		"shelljs": "^0.8.3",
+		"sinon": "^9.0.1",
+		"vscode-extension-telemetry": "^0.1.2",
+		"vscode-languageclient": "5.1.1"
 	}
 }
