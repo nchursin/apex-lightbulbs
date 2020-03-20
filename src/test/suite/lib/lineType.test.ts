@@ -60,7 +60,7 @@ const NON_VAR_LINE_TEST_CASES = {
     'Test2.cls': 9,
     'Test3.cls': 9,
     'Test4.cls': 8,
-    // 'Test5.cls': 12,
+    'Test5.cls': 12,
 };
 
 suite('Line Type Analyzer Suite', () => {
@@ -84,7 +84,7 @@ suite('Line Type Analyzer Suite', () => {
             const textDocument = await vscode.workspace.openTextDocument(testClass);
 
             const actual = getFirstNonVarDefnLine(textDocument);
-            assert.equal(actual, expected, 'First non-ver defn line number is different from expected');
+            assert.equal(actual, expected, `First non-ver defn line number is different from expected for test: ${fileName}`);
             return Promise.resolve();
         }));
 

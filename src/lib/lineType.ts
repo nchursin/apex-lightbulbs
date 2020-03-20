@@ -1,5 +1,5 @@
 import { TYPES } from '../constants';
-import { join, tail, find, split, findIndex, dropWhile } from 'ramda';
+import { join, tail, find, split, findIndex, dropWhile, drop } from 'ramda';
 import { types } from 'util';
 import { TextDocument } from 'vscode';
 
@@ -65,10 +65,9 @@ export class LineMetadata {
 
 export const getFirstNonVarDefnLine = (textDocument: TextDocument): number => {
     const text = textDocument.getText();
-    const splitted = tail(split('\n', text));
-    // splitted = dropWhile((elem) => {
-
-    // }, splitted);
-    const indexFirstNonVar = findIndex((lineText) => Boolean(lineText.trim()) && !varRegex.test(lineText.trim()), splitted);
-    return indexFirstNonVar + 1;
+    const splitted: string[] = split('\n', text);
+    const classDeclarationIndex = findIndex((lineText) => Boolean(lineText.trim()) && classRegex.test(lineText.trim()), splitted);
+    const increaseIndexBy = 1 + classDeclarationIndex;
+    const indexFirstNonVar = findIndex((lineText: string) => Boolean(lineText.trim()) && !varRegex.test(lineText.trim()), drop(increaseIndexBy, splitted));
+    return indexFirstNonVar + increaseIndexBy;
 };
