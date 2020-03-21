@@ -2,13 +2,35 @@ import * as vscode from 'vscode';
 import { VARIABLE_ACTIONS } from '../../../labels';
 import { TYPES } from '../../../constants';
 import { getLineMetadata } from "../../lineType";
+import { LanguageClient } from 'vscode-languageclient';
 
 export class GetterSetterActionProvider implements vscode.CodeActionProvider {
+    private languageClient: LanguageClient | undefined;
+
+    constructor(languageClient: LanguageClient | undefined = undefined) {
+        this.languageClient = languageClient;
+    }
+
     public static readonly providedCodeActionKinds = [
 		vscode.CodeActionKind.Refactor
 	];
 
-	public provideCodeActions(document: vscode.TextDocument, range: vscode.Range): vscode.CodeAction[] {
+	public async provideCodeActions(document: vscode.TextDocument, range: vscode.Range): Promise<vscode.CodeAction[]> {
+        if (this.languageClient) {
+            try {
+                const result = await this.languageClient.sendRequest(
+                    'textDocument/documentSymbol',
+                    {
+                        textDocument: {
+                            uri: `${document.uri.scheme}://${document.uri.fsPath}`,
+                        }
+                    }
+                );
+                console.log('result >> ', result);
+            } catch(err) {
+                console.error(err);
+            }
+        }
         const line = document.lineAt(range.start.line);
         const lineMeta = getLineMetadata(line.text.trim());
         if (TYPES.VAR !== lineMeta.type) {

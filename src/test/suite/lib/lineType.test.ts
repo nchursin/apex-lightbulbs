@@ -61,6 +61,7 @@ const NON_VAR_LINE_TEST_CASES = {
     'Test3.cls': 9,
     'Test4.cls': 8,
     'Test5.cls': 12,
+    'Test6.cls': 12,
 };
 
 suite('Line Type Analyzer Suite', () => {

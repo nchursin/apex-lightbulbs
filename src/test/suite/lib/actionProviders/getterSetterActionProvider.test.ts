@@ -33,7 +33,7 @@ suite('GetterSetterActionProvider Suite', () => {
         const actionKind = vscode.CodeActionKind.Refactor;
 
         const position = new vscode.Position(lineNumber, 15);
-        const actions = provider.provideCodeActions(textDocument, new vscode.Range(position, position));
+        const actions = await provider.provideCodeActions(textDocument, new vscode.Range(position, position));
         const act = find(propEq('title', label), actions);
         if (!act) {
             assert.notEqual(act, undefined, `No action "${label}" found`);
@@ -49,9 +49,9 @@ suite('GetterSetterActionProvider Suite', () => {
         }
     };
 
-    test('non-variable type must provide no actions', () => {
+    test('non-variable type must provide no actions', async () => {
         const position = new vscode.Position(0, 15);
-        const actions = provider.provideCodeActions(textDocument, new vscode.Range(position, position));
+        const actions = await provider.provideCodeActions(textDocument, new vscode.Range(position, position));
         assert.equal(actions.length, 0, '0 actions must be returned');
     });
 

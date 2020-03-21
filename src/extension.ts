@@ -3,14 +3,52 @@
 import * as vscode from 'vscode';
 
 import { GetterSetterActionProvider } from './lib/actionProviders/vars';
+import * as languageServer from './lib/languageServer/languageServer';
+import { telemetryService } from './lib/languageServer/telemetry';
+import { LanguageClient } from 'vscode-languageclient';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
-export function activate(context: vscode.ExtensionContext) {
+export async function activate(context: vscode.ExtensionContext) {
+    let languageClient: LanguageClient | undefined;
+    try {
+        const langClientHRStart = process.hrtime();
+        languageClient = await languageServer.createLanguageServer(context);
+        // languageClientUtils.setClientInstance(languageClient);
+        const handle = languageClient.start();
+        // languageClientUtils.setStatus(ClientStatus.Indexing, '');
+        context.subscriptions.push(handle);
+
+        languageClient
+        .onReady()
+        .then(async () => {
+            if (languageClient) {
+                languageClient.onNotification('indexer/done', async () => {});
+            }
+            // TODO: This currently keeps existing behavior in which we set the language
+            // server to ready before it finishes indexing. We'll evaluate this in the future.
+            // languageClientUtils.setStatus(ClientStatus.Ready, '');
+            telemetryService.sendApexLSPActivationEvent(langClientHRStart);
+        })
+        .catch(err => {
+            console.error('ERROR: ', err);
+            // Handled by clients
+            telemetryService.sendApexLSPError(err);
+            // languageClientUtils.setStatus(
+            //   ClientStatus.Error,
+            //   nls.localize('apex_language_server_failed_activate')
+            // );
+        });
+    } catch (e) {
+        console.error('ERROR: ', e);
+        console.error('Apex language server failed to initialize');
+        // languageClientUtils.setStatus(ClientStatus.Error, e);
+    }
+
     context.subscriptions.push(
-		vscode.languages.registerCodeActionsProvider('apex', new GetterSetterActionProvider(), {
+		vscode.languages.registerCodeActionsProvider('apex', new GetterSetterActionProvider(languageClient), {
 			providedCodeActionKinds: GetterSetterActionProvider.providedCodeActionKinds
-		}));
+        }));
 }
 
 // this method is called when your extension is deactivated
