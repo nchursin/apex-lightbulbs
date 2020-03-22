@@ -5,8 +5,8 @@ import * as path from 'path';
 // as well as import your extension to test it
 import * as vscode from 'vscode';
 
-import { getLineMetadata, getFirstNonVarDefnLine } from '../../../lib/lineType';
-import { TYPES } from '../../../constants';
+import { getLineMetadata, getFirstNonVarDefnLine } from '../../../../lib/lineType';
+import { TYPES } from '../../../../constants';
 import { keys } from 'ramda';
 
 const constructLineMeta = (type: string, isStatic: Boolean = false) => ({
@@ -56,12 +56,12 @@ const TYPE_CHECK_TEST_CASES = {
 };
 
 const NON_VAR_LINE_TEST_CASES = {
-    'Test1.cls': 2,
-    'Test2.cls': 9,
-    'Test3.cls': 9,
-    'Test4.cls': 8,
-    'Test5.cls': 12,
-    'Test6.cls': 12,
+    'Test1': 2,
+    'Test2': 9,
+    'Test3': 9,
+    'Test4': 8,
+    'Test5': 12,
+    'Test6': 12,
 };
 
 suite('Line Type Analyzer Suite', () => {
@@ -80,8 +80,8 @@ suite('Line Type Analyzer Suite', () => {
         const cases = keys(NON_VAR_LINE_TEST_CASES);
         await Promise.all(cases.map(async (fileName) => {
             const expected = NON_VAR_LINE_TEST_CASES[fileName];
-            const dataFolder = path.resolve(__dirname, '../../data');
-            const testClass = path.join(dataFolder, 'PositionTests/NonVarPositions', fileName);
+            const dataFolder = path.resolve(__dirname);
+            const testClass = path.join(dataFolder, 'data', fileName, 'Class.cls');
             const textDocument = await vscode.workspace.openTextDocument(testClass);
 
             const actual = getFirstNonVarDefnLine(textDocument);
