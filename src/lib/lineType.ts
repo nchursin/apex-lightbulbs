@@ -2,6 +2,7 @@ import { TYPES } from '../constants';
 import { join, tail, find, split, findIndex, dropWhile, drop } from 'ramda';
 import { types } from 'util';
 import { TextDocument } from 'vscode';
+import { LanguageClient } from 'vscode-languageclient';
 
 const modifiers = [
     'public',
@@ -63,7 +64,24 @@ export class LineMetadata {
     }
 }
 
-export const getFirstNonVarDefnLine = (textDocument: TextDocument): number => {
+export const getFirstNonVarDefnLine = async(textDocument: TextDocument, languageClient?: LanguageClient): Promise<number> => {
+    // if (languageClient) {
+    //     try {
+    //         const result: any[] = await languageClient.sendRequest(
+    //             'textDocument/documentSymbol',
+    //             {
+    //                 textDocument: {
+    //                     uri: `${textDocument.uri.scheme}://${textDocument.uri.fsPath}`,
+    //                 }
+    //             }
+    //         );
+    //         console.log('service >> ', result[0].location.uri);
+    //         console.log('doc >> ', textDocument.uri.path);
+    //     } catch(err) {
+    //         console.error(err);
+    //     }
+    // }
+
     const text = textDocument.getText();
     const splitted: string[] = split('\n', text);
     const classDeclarationIndex = findIndex((lineText) => Boolean(lineText.trim()) && classRegex.test(lineText.trim()), splitted);

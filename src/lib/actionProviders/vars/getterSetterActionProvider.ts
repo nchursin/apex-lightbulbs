@@ -26,6 +26,7 @@ export class GetterSetterActionProvider implements vscode.CodeActionProvider {
                         }
                     }
                 );
+                const stringifiedResult = JSON.stringify(result);
                 console.log('result >> ', result);
             } catch(err) {
                 console.error(err);

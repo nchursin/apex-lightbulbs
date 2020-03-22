@@ -3,7 +3,7 @@
         "name": "stringVar : String",
         "kind": 8,
         "location": {
-            "uri": "file:///Users/nchursin/Documents/Projects/apex-intention-actions/src/test/data/PositionTests/NonVarPositions/Class.cls",
+            "uri": "file:///Users/nchursin/Documents/Projects/apex-intention-actions/src/test/data/PositionTests/NonVarPositions/Test1/Class.cls",
             "range": {
                 "start": {
                     "line": 1,
@@ -20,7 +20,7 @@
         "name": "Test",
         "kind": 5,
         "location": {
-            "uri": "file:///Users/nchursin/Documents/Projects/apex-intention-actions/src/test/data/PositionTests/NonVarPositions/Class.cls",
+            "uri": "file:///Users/nchursin/Documents/Projects/apex-intention-actions/src/test/data/PositionTests/NonVarPositions/Test1/Class.cls",
             "range": {
                 "start": {
                     "line": 0,

@@ -3,7 +3,7 @@
         "name": "stringVar : String",
         "kind": 8,
         "location": {
-            "uri": "file:///Users/nchursin/Documents/Projects/apex-intention-actions/src/test/suite/lib/lineType/data/PositionTests/NonVarPositions/Class.cls",
+            "uri": "file:///Users/nchursin/Documents/Projects/apex-intention-actions/src/test/suite/lib/lineType/data/PositionTests/NonVarPositions/Test3/Class.cls",
             "range": {
                 "start": {
                     "line": 1,
@@ -20,7 +20,7 @@
         "name": "stringVar : String",
         "kind": 8,
         "location": {
-            "uri": "file:///Users/nchursin/Documents/Projects/apex-intention-actions/src/test/suite/lib/lineType/data/PositionTests/NonVarPositions/Class.cls",
+            "uri": "file:///Users/nchursin/Documents/Projects/apex-intention-actions/src/test/suite/lib/lineType/data/PositionTests/NonVarPositions/Test3/Class.cls",
             "range": {
                 "start": {
                     "line": 2,
@@ -37,7 +37,7 @@
         "name": "stringVar : String",
         "kind": 8,
         "location": {
-            "uri": "file:///Users/nchursin/Documents/Projects/apex-intention-actions/src/test/suite/lib/lineType/data/PositionTests/NonVarPositions/Class.cls",
+            "uri": "file:///Users/nchursin/Documents/Projects/apex-intention-actions/src/test/suite/lib/lineType/data/PositionTests/NonVarPositions/Test3/Class.cls",
             "range": {
                 "start": {
                     "line": 3,
@@ -54,7 +54,7 @@
         "name": "stringVar : String",
         "kind": 8,
         "location": {
-            "uri": "file:///Users/nchursin/Documents/Projects/apex-intention-actions/src/test/suite/lib/lineType/data/PositionTests/NonVarPositions/Class.cls",
+            "uri": "file:///Users/nchursin/Documents/Projects/apex-intention-actions/src/test/suite/lib/lineType/data/PositionTests/NonVarPositions/Test3/Class.cls",
             "range": {
                 "start": {
                     "line": 4,
@@ -71,7 +71,7 @@
         "name": "stringVar : String",
         "kind": 8,
         "location": {
-            "uri": "file:///Users/nchursin/Documents/Projects/apex-intention-actions/src/test/suite/lib/lineType/data/PositionTests/NonVarPositions/Class.cls",
+            "uri": "file:///Users/nchursin/Documents/Projects/apex-intention-actions/src/test/suite/lib/lineType/data/PositionTests/NonVarPositions/Test3/Class.cls",
             "range": {
                 "start": {
                     "line": 7,
@@ -88,7 +88,7 @@
         "name": "stringVar : String",
         "kind": 8,
         "location": {
-            "uri": "file:///Users/nchursin/Documents/Projects/apex-intention-actions/src/test/suite/lib/lineType/data/PositionTests/NonVarPositions/Class.cls",
+            "uri": "file:///Users/nchursin/Documents/Projects/apex-intention-actions/src/test/suite/lib/lineType/data/PositionTests/NonVarPositions/Test3/Class.cls",
             "range": {
                 "start": {
                     "line": 8,
@@ -105,7 +105,7 @@
         "name": "Test",
         "kind": 5,
         "location": {
-            "uri": "file:///Users/nchursin/Documents/Projects/apex-intention-actions/src/test/suite/lib/lineType/data/PositionTests/NonVarPositions/Class.cls",
+            "uri": "file:///Users/nchursin/Documents/Projects/apex-intention-actions/src/test/suite/lib/lineType/data/PositionTests/NonVarPositions/Test3/Class.cls",
             "range": {
                 "start": {
                     "line": 0,
