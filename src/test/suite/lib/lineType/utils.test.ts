@@ -146,18 +146,20 @@ suite('Line Type Analyzer Suite', () => {
     test('get documentSymbol on current position', async () => {
         const cases = keys(CURRENT_DOC_SYMBOL);
         await Promise.all(cases.map(async (fileName) => {
-            const langClient = new LanguageClient('', { command: '' }, {});
 
             const testCaseMeta = CURRENT_DOC_SYMBOL[fileName];
             const expected = testCaseMeta.symbol;
             const position = testCaseMeta.position;
             const dataFolder = path.resolve(__dirname);
             const testClass = path.join(dataFolder, 'data', fileName, 'Class.cls');
+
+            const langClient = new LanguageClient('', { command: '' }, {});
             const documentSymbolFile = path.join(dataFolder, 'data', fileName, 'documentSymbol.json');
             const documentSymbolString = await fs.promises.readFile(documentSymbolFile, 'utf8');
             const documentSymbol = JSON.parse(documentSymbolString);
-            const textDocument = await vscode.workspace.openTextDocument(testClass);
             stub(langClient, 'sendRequest').returns(Promise.resolve(documentSymbol));
+
+            const textDocument = await vscode.workspace.openTextDocument(testClass);
 
             const actual = await getSymbolAtLine(position.line, textDocument, langClient);
             assert.deepEqual(actual, expected, `First non-ver defn line number is different from expected for test: ${fileName}`);

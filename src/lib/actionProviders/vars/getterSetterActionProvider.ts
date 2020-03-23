@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { VARIABLE_ACTIONS } from '../../../labels';
-import { TYPES } from '../../../constants';
-import { getLineMetadata } from "../../utils";
+import { TYPES, SYMBOL_KIND } from '../../../constants';
+import { getLineMetadata, getSymbolAtLine } from "../../utils";
 import { LanguageClient } from 'vscode-languageclient';
 
 export class GetterSetterActionProvider implements vscode.CodeActionProvider {
@@ -16,32 +16,22 @@ export class GetterSetterActionProvider implements vscode.CodeActionProvider {
 	];
 
 	public async provideCodeActions(document: vscode.TextDocument, range: vscode.Range): Promise<vscode.CodeAction[]> {
-        if (this.languageClient) {
-            try {
-                const result = await this.languageClient.sendRequest(
-                    'textDocument/documentSymbol',
-                    {
-                        textDocument: {
-                            uri: `${document.uri.scheme}://${document.uri.fsPath}`,
-                        }
-                    }
-                );
-                const stringifiedResult = JSON.stringify(result);
-                console.log('result >> ', result);
-            } catch(err) {
-                console.error(err);
-            }
+        if (!this.languageClient) {
+            throw new Error('Language Client is not provided');
         }
-        const line = document.lineAt(range.start.line);
-        const lineMeta = getLineMetadata(line.text.trim());
-        if (TYPES.VAR !== lineMeta.type) {
-            return [];
-        }
+        try {
+            const result = [];
+            const symbol = await getSymbolAtLine(range.start.line, document, this.languageClient);
 
-        const addGetSetAction = this.getAddGetSetAction(document, range);
-        return [
-            addGetSetAction,
-        ];
+            if (symbol && SYMBOL_KIND.FIELD === symbol.kind) {
+                const addGetSetAction = this.getAddGetSetAction(document, range);
+                result.push(addGetSetAction);
+            }
+            return result;
+        } catch(err) {
+            console.error(err);
+            throw err;
+        }
     }
 
     private getAddGetSetAction(document: vscode.TextDocument, range: vscode.Range): vscode.CodeAction {

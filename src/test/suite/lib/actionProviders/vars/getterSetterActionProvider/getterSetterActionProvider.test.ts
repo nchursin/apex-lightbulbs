@@ -1,23 +1,38 @@
 import * as assert from 'assert';
 import * as path from 'path';
 import * as Mocha from 'mocha';
+import * as fs from 'fs';
 
 // You can import and use all API from the 'vscode' module
 // as well as import your extension to test it
 import * as vscode from 'vscode';
 import { find, propEq } from "ramda";
-import { VARIABLE_ACTIONS } from '../../../../labels';
-import { GetterSetterActionProvider } from '../../../../lib/actionProviders/vars/getterSetterActionProvider';
-import { replaceDocumentText } from '../../../utils';
+import { VARIABLE_ACTIONS } from '../../../../../../labels';
+import { GetterSetterActionProvider } from '../../../../../../lib/actionProviders/vars/getterSetterActionProvider';
+import { replaceDocumentText } from '../../../../../utils';
+import { LanguageClient } from 'vscode-languageclient';
+import { stub } from 'sinon';
 
-suite('GetterSetterActionProvider Suite', () => {
+suite('GetterSetterActionProvider Suite', async () => {
     vscode.window.showInformationMessage('Start all tests.');
 
-    const dataFolder = path.resolve(__dirname, '../../../data');
+    const dataFolder = path.resolve(__dirname, 'data');
     const testClass = path.join(dataFolder, 'getterSetterActionProvider.test.cls');
+    const documentSymbolFile = path.join(dataFolder, 'documentSymbol.json');
+
+    let langClient: LanguageClient;
+
     let textDocument: vscode.TextDocument;
-    let provider = new GetterSetterActionProvider();
+    let provider: GetterSetterActionProvider;
     let initialState: string;
+
+    Mocha.before(async () => {
+        langClient = new LanguageClient('', { command: '' }, {});
+        const documentSymbolString = await fs.promises.readFile(documentSymbolFile, 'utf8');
+        const documentSymbol = JSON.parse(documentSymbolString);
+        stub(langClient, 'sendRequest').returns(Promise.resolve(documentSymbol));
+        provider = new GetterSetterActionProvider(langClient);
+    });
 
     Mocha.beforeEach(async () => {
         textDocument = await vscode.workspace.openTextDocument(testClass);

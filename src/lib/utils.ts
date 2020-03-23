@@ -1,7 +1,6 @@
 import { TYPES } from '../constants';
-import { join, tail, find, split, findIndex, dropWhile, drop, findLast } from 'ramda';
-import { types } from 'util';
-import { TextDocument, Position, DocumentSymbol } from 'vscode';
+import { join, find, findLast } from 'ramda';
+import { TextDocument, SymbolInformation } from 'vscode';
 import { LanguageClient } from 'vscode-languageclient';
 
 const modifiers = [
@@ -64,8 +63,8 @@ export class LineMetadata {
     }
 }
 
-export const getSymbolAtLine = async (lineNumber: number, textDocument: TextDocument, languageClient: LanguageClient): Promise<any> => {
-    const docSymbolResult: any[] = await languageClient.sendRequest(
+export const getSymbolAtLine = async (lineNumber: number, textDocument: TextDocument, languageClient: LanguageClient): Promise<SymbolInformation | undefined> => {
+    const docSymbolResult: SymbolInformation[] = await languageClient.sendRequest(
         'textDocument/documentSymbol',
         {
             textDocument: {
@@ -78,7 +77,7 @@ export const getSymbolAtLine = async (lineNumber: number, textDocument: TextDocu
 };
 
 export const getFirstNonVarDefnLine = async (textDocument: TextDocument, languageClient: LanguageClient): Promise<number> => {
-    const docSymbolResult: any[] = await languageClient.sendRequest(
+    const docSymbolResult: SymbolInformation[] = await languageClient.sendRequest(
         'textDocument/documentSymbol',
         {
             textDocument: {
@@ -88,11 +87,14 @@ export const getFirstNonVarDefnLine = async (textDocument: TextDocument, languag
     );
     const firstNonVar = find((symbol) => symbol.kind !== 7 && symbol.kind !== 8, docSymbolResult);
     let result: number;
-    if (firstNonVar.location.range.start.line) {
+    if (firstNonVar && firstNonVar.location.range.start.line) {
         result = firstNonVar.location.range.start.line;
     } else {
-        const LastVar = findLast((symbol) => symbol.kind === 7 || symbol.kind === 8, docSymbolResult);
-        result = LastVar.location.range.start.line + 1;
+        const lastVar = findLast((symbol) => symbol.kind === 7 || symbol.kind === 8, docSymbolResult);
+        if (!lastVar) {
+            throw new Error('No symbols found');
+        }
+        result = lastVar.location.range.start.line + 1;
     }
     return result;
 };
