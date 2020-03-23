@@ -1,5 +1,5 @@
 import { TYPES } from '../constants';
-import { join, tail, find, split, findIndex, dropWhile, drop } from 'ramda';
+import { join, tail, find, split, findIndex, dropWhile, drop, findLast } from 'ramda';
 import { types } from 'util';
 import { TextDocument } from 'vscode';
 import { LanguageClient } from 'vscode-languageclient';
@@ -64,28 +64,23 @@ export class LineMetadata {
     }
 }
 
-export const getFirstNonVarDefnLine = async(textDocument: TextDocument, languageClient?: LanguageClient): Promise<number> => {
-    // if (languageClient) {
-    //     try {
-    //         const result: any[] = await languageClient.sendRequest(
-    //             'textDocument/documentSymbol',
-    //             {
-    //                 textDocument: {
-    //                     uri: `${textDocument.uri.scheme}://${textDocument.uri.fsPath}`,
-    //                 }
-    //             }
-    //         );
-    //         console.log('service >> ', result[0].location.uri);
-    //         console.log('doc >> ', textDocument.uri.path);
-    //     } catch(err) {
-    //         console.error(err);
-    //     }
-    // }
-
-    const text = textDocument.getText();
-    const splitted: string[] = split('\n', text);
-    const classDeclarationIndex = findIndex((lineText) => Boolean(lineText.trim()) && classRegex.test(lineText.trim()), splitted);
-    const increaseIndexBy = 1 + classDeclarationIndex;
-    const indexFirstNonVar = findIndex((lineText: string) => Boolean(lineText.trim()) && !varRegex.test(lineText.trim()), drop(increaseIndexBy, splitted));
-    return indexFirstNonVar + increaseIndexBy;
+export const getFirstNonVarDefnLine = async(textDocument: TextDocument, languageClient: LanguageClient): Promise<number> => {
+    // TODO: rewrite this to utilize language server
+    const docSymbolResult: any[] = await languageClient.sendRequest(
+        'textDocument/documentSymbol',
+        {
+            textDocument: {
+                uri: `${textDocument.uri.scheme}://${textDocument.uri.fsPath}`,
+            }
+        }
+    );
+    const firstNonVar = find((symbol) => symbol.kind !== 7 && symbol.kind !== 8, docSymbolResult);
+    let result: number;
+    if (firstNonVar.location.range.start.line) {
+        result = firstNonVar.location.range.start.line;
+    } else {
+        const LastVar = findLast((symbol) => symbol.kind === 7 || symbol.kind === 8, docSymbolResult);
+        result = LastVar.location.range.start.line + 1;
+    }
+    return result;
 };

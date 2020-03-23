@@ -60,7 +60,7 @@ const TYPE_CHECK_TEST_CASES = {
 
 const NON_VAR_LINE_TEST_CASES = {
     'Test1': 2,
-    'Test2': 9,
+    'Test2': 7,
     'Test3': 9,
     'Test4': 8,
     'Test5': 12,
