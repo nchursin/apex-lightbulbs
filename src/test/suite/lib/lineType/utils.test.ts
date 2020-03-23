@@ -6,7 +6,7 @@ import * as fs from 'fs';
 // as well as import your extension to test it
 import * as vscode from 'vscode';
 
-import { getLineMetadata, getFirstNonVarDefnLine } from '../../../../lib/lineType';
+import { getLineMetadata, getFirstNonVarDefnLine } from '../../../../lib/utils';
 import { TYPES } from '../../../../constants';
 import { keys } from 'ramda';
 import { stub } from "sinon";

@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { VARIABLE_ACTIONS } from '../../../labels';
 import { TYPES } from '../../../constants';
-import { getLineMetadata } from "../../lineType";
+import { getLineMetadata } from "../../utils";
 import { LanguageClient } from 'vscode-languageclient';
 
 export class GetterSetterActionProvider implements vscode.CodeActionProvider {
