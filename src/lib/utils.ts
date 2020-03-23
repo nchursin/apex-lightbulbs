@@ -1,6 +1,6 @@
 import { TYPES } from '../constants';
-import { join, find, findLast } from 'ramda';
-import { TextDocument, SymbolInformation } from 'vscode';
+import { join, find, findLast, compose, repeat } from 'ramda';
+import { TextDocument, SymbolInformation, window } from 'vscode';
 import { LanguageClient } from 'vscode-languageclient';
 
 const modifiers = [
@@ -98,3 +98,14 @@ export const getFirstNonVarDefnLine = async (textDocument: TextDocument, languag
     }
     return result;
 };
+
+const repeatString = compose<string, number, string[], string>(
+    join(''),
+    repeat
+);
+
+export const editor = () => window.activeTextEditor;
+// TODO: stub vscode.window.activeTextEditor in test to avoid using the || hack
+export const isSpaceIndent = () => editor()?.options.insertSpaces || true;
+export const tabSize = () => Number(editor()?.options.tabSize || 4);
+export const singleIndent = isSpaceIndent() ? repeatString(' ', tabSize()) : '\t';

@@ -3,6 +3,7 @@
 import * as vscode from 'vscode';
 
 import { GetterSetterActionProvider } from './lib/actionProviders/vars';
+import { AddConstructorProvider } from './lib/actionProviders/classes';
 import * as languageServer from './lib/languageServer/languageServer';
 import { telemetryService } from './lib/languageServer/telemetry';
 import { LanguageClient } from 'vscode-languageclient';
@@ -10,7 +11,7 @@ import { LanguageClient } from 'vscode-languageclient';
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export async function activate(context: vscode.ExtensionContext) {
-    let languageClient: LanguageClient | undefined;
+    let languageClient: LanguageClient;
     try {
         const langClientHRStart = process.hrtime();
         languageClient = await languageServer.createLanguageServer(context);
@@ -33,6 +34,11 @@ export async function activate(context: vscode.ExtensionContext) {
                 context.subscriptions.push(
                     vscode.languages.registerCodeActionsProvider('apex', new GetterSetterActionProvider(languageClient), {
                         providedCodeActionKinds: GetterSetterActionProvider.providedCodeActionKinds
+                    }));
+
+                context.subscriptions.push(
+                    vscode.languages.registerCodeActionsProvider('apex', new AddConstructorProvider(languageClient), {
+                        providedCodeActionKinds: AddConstructorProvider.providedCodeActionKinds
                     }));
             })
             .catch(err => {
