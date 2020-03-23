@@ -1,65 +1,45 @@
-# apex-intention-actions README
+# Apex Intention Actions
 
-This is the README for your extension "apex-intention-actions". After writing up a brief description, we recommend including the following sections.
+A VSCode plugin, an analogue of _Apex Intention Actions_ for Sublime Text 3. Adds quick actions for Salesforce Apex to VSCode such as adding getter, creating constructor, etc.
+
+# WORK IN PROGRESS! AGAIN! Release this week!
 
 ## Features
+Currently existing features:
+1. Add getter
+2. Add setter
+3. Add both getter and setter
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+Planned features:
+1. Add constructor parameter
+2. Add class constructor
+3. Add init method and call in each constructor
+4. Add 0-arg constructor and init method
+5. Add method overload
 
-For example if there is an image subfolder under your extension project workspace:
-
-\!\[feature X\]\(images/feature-x.png\)
-
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+> A little demo recorded in Sublime Text 3:
+![Getter-setter demo](https://github.com/nchursin/resources/blob/master/ApexIntentionActions/getter-setter.gif?raw=true)
 
 ## Requirements
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+Just VSCode. You can use it with whatever Apex plugin you like.
 
 ## Extension Settings
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+>To be described
 
-For example:
+## Links
+* [Issues](https://github.com/nchursin/vscode-ApexIntentionActions/issues)
+* [Repository](https://github.com/nchursin/vscode-ApexIntentionActions)
 
-This extension contributes the following settings:
+## References
 
-* `myExtension.enable`: enable/disable this extension
-* `myExtension.thing`: set to `blah` to do something
+1. [Sublime Plugin](https://packagecontrol.io/packages/Apex%20Intention%20Actions)
+2. [Sublime Plugin wiki](https://github.com/nchursin/ApexIntentionActions/wiki)
+3. Colaborators: [NChursin](https://github.com/nchursin)
 
-## Known Issues
+## Versioning
+Apex Intention Actions follows [Semantic Versioning 2.0.0](https://semver.org/)
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
-
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
------------------------------------------------------------------------------------------------------------
-
-## Working with Markdown
-
-**Note:** You can author your README using Visual Studio Code.  Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux)
-* Toggle preview (`Shift+CMD+V` on macOS or `Shift+Ctrl+V` on Windows and Linux)
-* Press `Ctrl+Space` (Windows, Linux) or `Cmd+Space` (macOS) to see a list of Markdown snippets
-
-### For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+## License
+Apache 2.0
