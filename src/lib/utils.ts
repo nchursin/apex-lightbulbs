@@ -1,7 +1,7 @@
 import { TYPES } from '../constants';
 import { join, tail, find, split, findIndex, dropWhile, drop, findLast } from 'ramda';
 import { types } from 'util';
-import { TextDocument } from 'vscode';
+import { TextDocument, Position, DocumentSymbol } from 'vscode';
 import { LanguageClient } from 'vscode-languageclient';
 
 const modifiers = [
@@ -64,8 +64,20 @@ export class LineMetadata {
     }
 }
 
-export const getFirstNonVarDefnLine = async(textDocument: TextDocument, languageClient: LanguageClient): Promise<number> => {
-    // TODO: rewrite this to utilize language server
+export const getSymbolAtLine = async (lineNumber: number, textDocument: TextDocument, languageClient: LanguageClient): Promise<any> => {
+    const docSymbolResult: any[] = await languageClient.sendRequest(
+        'textDocument/documentSymbol',
+        {
+            textDocument: {
+                uri: `${textDocument.uri.scheme}://${textDocument.uri.fsPath}`,
+            }
+        }
+    );
+    const firstMatch = find((symbol) => symbol.location.range.start.line === lineNumber, docSymbolResult);
+    return firstMatch;
+};
+
+export const getFirstNonVarDefnLine = async (textDocument: TextDocument, languageClient: LanguageClient): Promise<number> => {
     const docSymbolResult: any[] = await languageClient.sendRequest(
         'textDocument/documentSymbol',
         {

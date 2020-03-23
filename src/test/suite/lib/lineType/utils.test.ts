@@ -6,11 +6,11 @@ import * as fs from 'fs';
 // as well as import your extension to test it
 import * as vscode from 'vscode';
 
-import { getLineMetadata, getFirstNonVarDefnLine } from '../../../../lib/utils';
+import { getLineMetadata, getFirstNonVarDefnLine, getSymbolAtLine } from '../../../../lib/utils';
 import { TYPES } from '../../../../constants';
 import { keys } from 'ramda';
 import { stub } from "sinon";
-import { LanguageClient, ServerOptions } from 'vscode-languageclient';
+import { LanguageClient } from 'vscode-languageclient';
 
 const constructLineMeta = (type: string, isStatic: Boolean = false) => ({
     type,
@@ -68,6 +68,69 @@ const NON_VAR_LINE_TEST_CASES = {
     'Test7': 13,
 };
 
+const CURRENT_DOC_SYMBOL = {
+    'Test1': {
+        position: new vscode.Position(1, 23),
+        symbol: {
+            'name': 'stringVar : String',
+            'kind': 8,
+            'location': {
+                'uri': 'file:///Users/nchursin/Documents/Projects/apex-intention-actions/src/test/data/PositionTests/NonVarPositions/Test1/Class.cls',
+                'range': {
+                    'start': {
+                        'line': 1,
+                        'character': 18
+                    },
+                    'end': {
+                        'line': 1,
+                        'character': 27
+                    }
+                }
+            }
+        },
+    },
+    'Test2': {
+        position: new vscode.Position(0, 10),
+        symbol: {
+            'name': 'Test',
+            'kind': 5,
+            'location': {
+                'uri': 'file:///Users/nchursin/Documents/Projects/apex-intention-actions/src/test/suite/lib/lineType/data/PositionTests/NonVarPositions/Test2/Class.cls',
+                'range': {
+                    'start': {
+                        'line': 0,
+                        'character': 13
+                    },
+                    'end': {
+                        'line': 0,
+                        'character': 17
+                    }
+                }
+            }
+        },
+    },
+    'Test5': {
+        position: new vscode.Position(12, 15),
+        symbol: {
+            'name': 'something() : String',
+            'kind': 6,
+            'location': {
+                'uri': 'file:///Users/nchursin/Documents/Projects/apex-intention-actions/src/test/suite/lib/lineType/data/PositionTests/NonVarPositions/Test5/Class.cls',
+                'range': {
+                    'start': {
+                        'line': 12,
+                        'character': 18
+                    },
+                    'end': {
+                        'line': 12,
+                        'character': 27
+                    }
+                }
+            }
+        },
+    },
+};
+
 suite('Line Type Analyzer Suite', () => {
 	vscode.window.showInformationMessage('Start all tests.');
 
@@ -80,8 +143,29 @@ suite('Line Type Analyzer Suite', () => {
         });
     });
 
-    test('get first non-var defn line number', async () => {
+    test('get documentSymbol on current position', async () => {
+        const cases = keys(CURRENT_DOC_SYMBOL);
+        await Promise.all(cases.map(async (fileName) => {
+            const langClient = new LanguageClient('', { command: '' }, {});
 
+            const testCaseMeta = CURRENT_DOC_SYMBOL[fileName];
+            const expected = testCaseMeta.symbol;
+            const position = testCaseMeta.position;
+            const dataFolder = path.resolve(__dirname);
+            const testClass = path.join(dataFolder, 'data', fileName, 'Class.cls');
+            const documentSymbolFile = path.join(dataFolder, 'data', fileName, 'documentSymbol.json');
+            const documentSymbolString = await fs.promises.readFile(documentSymbolFile, 'utf8');
+            const documentSymbol = JSON.parse(documentSymbolString);
+            const textDocument = await vscode.workspace.openTextDocument(testClass);
+            stub(langClient, 'sendRequest').returns(Promise.resolve(documentSymbol));
+
+            const actual = await getSymbolAtLine(position.line, textDocument, langClient);
+            assert.deepEqual(actual, expected, `First non-ver defn line number is different from expected for test: ${fileName}`);
+            return Promise.resolve();
+        }));
+    });
+
+    test('get first non-var defn line number', async () => {
         const cases = keys(NON_VAR_LINE_TEST_CASES);
         await Promise.all(cases.map(async (fileName) => {
             const langClient = new LanguageClient('', { command: '' }, {});
