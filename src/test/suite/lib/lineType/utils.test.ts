@@ -11,6 +11,7 @@ import { TYPES } from '../../../../constants';
 import { keys } from 'ramda';
 import { stub } from "sinon";
 import { LanguageClient } from 'vscode-languageclient';
+import { getStubLanguageClient } from '../../../utils';
 
 const constructLineMeta = (type: string, isStatic: Boolean = false) => ({
     type,
@@ -170,16 +171,13 @@ suite('Line Type Analyzer Suite', () => {
     test('get first non-var defn line number', async () => {
         const cases = keys(NON_VAR_LINE_TEST_CASES);
         await Promise.all(cases.map(async (fileName) => {
-            const langClient = new LanguageClient('', { command: '' }, {});
 
             const expected = NON_VAR_LINE_TEST_CASES[fileName];
-            const dataFolder = path.resolve(__dirname);
-            const testClass = path.join(dataFolder, 'data', fileName, 'Class.cls');
-            const documentSymbolFile = path.join(dataFolder, 'data', fileName, 'documentSymbol.json');
-            const documentSymbolString = await fs.promises.readFile(documentSymbolFile, 'utf8');
-            const documentSymbol = JSON.parse(documentSymbolString);
+            const dataFolder = path.resolve(__dirname, 'data', fileName);
+            const testClass = path.join(dataFolder, 'Class.cls');
             const textDocument = await vscode.workspace.openTextDocument(testClass);
-            stub(langClient, 'sendRequest').returns(Promise.resolve(documentSymbol));
+
+            const langClient = await getStubLanguageClient(dataFolder);
 
             const actual = await getFirstNonVarDefnLine(textDocument, langClient);
             assert.equal(actual, expected, `First non-ver defn line number is different from expected for test: ${fileName}`);

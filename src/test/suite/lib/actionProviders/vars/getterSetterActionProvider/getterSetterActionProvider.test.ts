@@ -9,7 +9,7 @@ import * as vscode from 'vscode';
 import { find, propEq } from "ramda";
 import { VARIABLE_ACTIONS } from '../../../../../../labels';
 import { GetterSetterActionProvider } from '../../../../../../lib/actionProviders/vars/getterSetterActionProvider';
-import { replaceDocumentText } from '../../../../../utils';
+import { replaceDocumentText, getStubLanguageClient } from '../../../../../utils';
 import { LanguageClient } from 'vscode-languageclient';
 import { stub } from 'sinon';
 
@@ -18,19 +18,13 @@ suite('GetterSetterActionProvider Suite', async () => {
 
     const dataFolder = path.resolve(__dirname, 'data');
     const testClass = path.join(dataFolder, 'getterSetterActionProvider.test.cls');
-    const documentSymbolFile = path.join(dataFolder, 'documentSymbol.json');
-
-    let langClient: LanguageClient;
 
     let textDocument: vscode.TextDocument;
     let provider: GetterSetterActionProvider;
     let initialState: string;
 
     Mocha.before(async () => {
-        langClient = new LanguageClient('', { command: '' }, {});
-        const documentSymbolString = await fs.promises.readFile(documentSymbolFile, 'utf8');
-        const documentSymbol = JSON.parse(documentSymbolString);
-        stub(langClient, 'sendRequest').returns(Promise.resolve(documentSymbol));
+        const langClient = await getStubLanguageClient(dataFolder);
         provider = new GetterSetterActionProvider(langClient);
     });
 
