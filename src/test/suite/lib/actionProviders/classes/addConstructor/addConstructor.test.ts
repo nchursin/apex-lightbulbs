@@ -13,28 +13,29 @@ import { replaceDocumentText, getStubLanguageClient } from '../../../../../utils
 suite('AddConstructorActionProvider Suite', () => {
     vscode.window.showInformationMessage('Start all tests.');
 
-    const dataFolder = path.resolve(__dirname, 'data', 'AddConstructor');
-    const testClass = path.join(dataFolder, 'AddConstructor.test.cls');
+    const dataFolder = path.resolve(__dirname, 'data');
     let textDocument: vscode.TextDocument;
     let provider: AddConstructorProvider;
 
     let initialState: string;
 
-    Mocha.before(async () => {
-        const langClient = await getStubLanguageClient(dataFolder);
-        provider = new AddConstructorProvider(langClient);
+    Mocha.afterEach(async () => {
+        replaceDocumentText(textDocument, initialState);
     });
 
-    Mocha.beforeEach(async () => {
+    const prepareTestData = async (testCaseName: string) => {
+        const testCaseDataFolder = path.join(dataFolder, testCaseName);
+        const testClass = path.join(testCaseDataFolder, 'Class.cls');
         textDocument = await vscode.workspace.openTextDocument(testClass);
         initialState = textDocument.getText();
-    });
 
-    Mocha.afterEach(async () => {
-        // replaceDocumentText(textDocument, initialState);
-    });
+        const langClient = await getStubLanguageClient(testCaseDataFolder);
+        provider = new AddConstructorProvider(langClient);
+    };
 
     test('"Add constructor"', async () => {
+        await prepareTestData('AddConstructor');
+
         const lineToReplace = 'public String stringVar;';
         const replacement = `${lineToReplace}\n\n    public Test() {\n    }`;
         const result = replace(lineToReplace, replacement, initialState);
@@ -87,6 +88,8 @@ suite('AddConstructorActionProvider Suite', () => {
     // });
 
     test('if line type is not class declaration - no action must be provided', async () => {
+        await prepareTestData('AddConstructor');
+
         const lineNumber = 1;
         const position = new vscode.Position(lineNumber, 5);
         const actions: vscode.CodeAction[] = await provider.provideCodeActions(textDocument, new vscode.Range(position, position));
