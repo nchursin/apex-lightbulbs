@@ -73,6 +73,7 @@ export const getSymbolAtLine = async (lineNumber: number, textDocument: TextDocu
         }
     );
     const firstMatch = find((symbol) => symbol.location.range.start.line === lineNumber, docSymbolResult);
+    const str = JSON.stringify(docSymbolResult);
     return firstMatch;
 };
 

@@ -1,5 +1,22 @@
 [
     {
+        "name": "Test.InnerClass",
+        "kind": 5,
+        "location": {
+            "uri": "file:///Users/nchursin/Documents/Projects/apex-intention-actions/src/test/suite/lib/actionProviders/classes/addConstructor/data/AddConstructor.test.cls",
+            "range": {
+                "start": {
+                    "line": 3,
+                    "character": 17
+                },
+                "end": {
+                    "line": 3,
+                    "character": 27
+                }
+            }
+        }
+    },
+    {
         "name": "stringVar : String",
         "kind": 8,
         "location": {

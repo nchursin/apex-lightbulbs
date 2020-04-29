@@ -31,7 +31,7 @@ suite('AddConstructorActionProvider Suite', () => {
     });
 
     Mocha.afterEach(async () => {
-        replaceDocumentText(textDocument, initialState);
+        // replaceDocumentText(textDocument, initialState);
     });
 
     test('"Add constructor"', async () => {
@@ -56,9 +56,37 @@ suite('AddConstructorActionProvider Suite', () => {
         if (act.edit) {
             await vscode.workspace.applyEdit(act.edit);
             const textAfter = textDocument.getText();
+            console.log('result >> ', result)
+            console.log('textAfter >> ', textAfter)
             assert.equal(textAfter, result, 'Changed text is different from expected');
         }
     });
+
+    // test('"Add constructor" for inner class', async () => {
+    //     const lineToReplace = 'public class InnerClass {';
+    //     const replacement = `${lineToReplace}\n    public InnerClass() {\n    }`;
+    //     const result = replace(lineToReplace, replacement, initialState);
+
+    //     const label = CLASS_ACTIONS.ADD_CONSTRUCTOR;
+    //     const actionKind = vscode.CodeActionKind.Refactor;
+    //     const lineNumber = 3;
+
+    //     const position = new vscode.Position(lineNumber, 5);
+    //     const actions: vscode.CodeAction[] = await provider.provideCodeActions(textDocument, new vscode.Range(position, position));
+    //     const act = find(propEq('title', label), actions);
+    //     if (!act) {
+    //         assert.notEqual(act, undefined, `No action "${label}" found`);
+    //         return;
+    //     }
+    //     assert.equal(act.title, label, 'title is different from expected');
+    //     assert.equal(act.kind, actionKind, 'Action Kind is different from expected');
+    //     assert.notEqual(act.edit, undefined, 'Edit must be set for action');
+    //     if (act.edit) {
+    //         await vscode.workspace.applyEdit(act.edit);
+    //         const textAfter = textDocument.getText();
+    //         assert.equal(textAfter, result, 'Changed text is different from expected');
+    //     }
+    // });
 
     test('if line type is not class declaration - no action must be provided', async () => {
         const lineNumber = 1;

@@ -47,7 +47,7 @@ export class AddConstructorProvider implements vscode.CodeActionProvider {
         const lineToAddConstructor = await getFirstNonVarDefnLine(document, this.languageClient);
         const addConstructorAction = new vscode.CodeAction(CLASS_ACTIONS.ADD_CONSTRUCTOR, vscode.CodeActionKind.Refactor);
 
-        const text = `\n${singleIndent}public ${className}() {\n${singleIndent}}\n`;
+        const text = `${singleIndent}public ${className}() {\n${singleIndent}}\n\n`;
         addConstructorAction.edit = new vscode.WorkspaceEdit();
         addConstructorAction.edit.insert(document.uri, new vscode.Position(lineToAddConstructor, 0), text);
 
