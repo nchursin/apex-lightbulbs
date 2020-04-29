@@ -13,7 +13,7 @@ import { replaceDocumentText, getStubLanguageClient } from '../../../../../utils
 suite('AddConstructorActionProvider Suite', () => {
     vscode.window.showInformationMessage('Start all tests.');
 
-    const dataFolder = path.resolve(__dirname, 'data');
+    const dataFolder = path.resolve(__dirname, 'data', 'AddConstructor');
     const testClass = path.join(dataFolder, 'AddConstructor.test.cls');
     let textDocument: vscode.TextDocument;
     let provider: AddConstructorProvider;
@@ -56,8 +56,6 @@ suite('AddConstructorActionProvider Suite', () => {
         if (act.edit) {
             await vscode.workspace.applyEdit(act.edit);
             const textAfter = textDocument.getText();
-            console.log('result >> ', result)
-            console.log('textAfter >> ', textAfter)
             assert.equal(textAfter, result, 'Changed text is different from expected');
         }
     });
