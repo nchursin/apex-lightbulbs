@@ -1,7 +1,7 @@
 public class Test {
     public String stringVar;
 
-    public Test(String a, Integer b) {
+    public Test() {
         
     }
 

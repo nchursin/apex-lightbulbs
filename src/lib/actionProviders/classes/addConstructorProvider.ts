@@ -3,9 +3,9 @@ import * as path from 'path';
 import { CLASS_ACTIONS } from "../../../labels";
 import { SYMBOL_KIND } from "../../../constants";
 import { constructor } from "../../templates";
-import { join } from "ramda";
+import { join, find } from "ramda";
 import { LanguageClient } from "vscode-languageclient";
-import { getSymbolAtLine, getFirstNonVarDefnLine, singleIndent, isSpaceIndent } from "../../utils";
+import { getAllSymbols, findSymbolAtLine, getFirstNonVarDefnLine, singleIndent, isSpaceIndent } from "../../utils";
 import * as template from 'es6-template-strings';
 
 const modifiers = [
@@ -34,12 +34,19 @@ export class AddConstructorProvider implements vscode.CodeActionProvider {
 
     public async provideCodeActions(document: vscode.TextDocument, range: vscode.Range): Promise<vscode.CodeAction[]> {
         const result: vscode.CodeAction[] = [];
-        const symbol = await getSymbolAtLine(range.start.line, document, this.languageClient);
-        if (SYMBOL_KIND.CLASS !== symbol?.kind) {
+        const allSymbols = await getAllSymbols(document, this.languageClient);
+        const providingSymbol = findSymbolAtLine(allSymbols, range.start.line);
+        if (SYMBOL_KIND.CLASS !== providingSymbol?.kind) {
+            return result;
+        }
+        const constructor = find((symbol: vscode.SymbolInformation) => {
+            return SYMBOL_KIND.CONSTRUCTOR === symbol.kind && symbol.name.startsWith(providingSymbol.name);
+        }, allSymbols);
+        if (constructor) {
             return result;
         }
 
-        const addConstructorAction = await this.constructTheAction(document, symbol?.name || '');
+        const addConstructorAction = await this.constructTheAction(document, providingSymbol?.name || '');
 
         return [
             addConstructorAction,

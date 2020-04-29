@@ -63,7 +63,7 @@ export class LineMetadata {
     }
 }
 
-export const getSymbolAtLine = async (lineNumber: number, textDocument: TextDocument, languageClient: LanguageClient): Promise<SymbolInformation | undefined> => {
+export const getAllSymbols = async (textDocument: TextDocument, languageClient: LanguageClient): Promise<SymbolInformation[]> => {
     const docSymbolResult: SymbolInformation[] = await languageClient.sendRequest(
         'textDocument/documentSymbol',
         {
@@ -72,9 +72,18 @@ export const getSymbolAtLine = async (lineNumber: number, textDocument: TextDocu
             }
         }
     );
+    const str = JSON.stringify(docSymbolResult); // this line is to easily copy JSON value of server response
+    return docSymbolResult;
+};
+
+export const getSymbolAtLine = async (lineNumber: number, textDocument: TextDocument, languageClient: LanguageClient): Promise<SymbolInformation | undefined> => {
+    const docSymbolResult: SymbolInformation[] = await getAllSymbols(textDocument, languageClient);
     const firstMatch = find((symbol) => symbol.location.range.start.line === lineNumber, docSymbolResult);
-    const str = JSON.stringify(docSymbolResult);
     return firstMatch;
+};
+
+export const findSymbolAtLine = (docSymbolResult: SymbolInformation[], lineNumber: number): SymbolInformation | undefined => {
+    return find((symbol) => symbol.location.range.start.line === lineNumber, docSymbolResult);
 };
 
 export const getFirstNonVarDefnLine = async (textDocument: TextDocument, languageClient: LanguageClient): Promise<number> => {

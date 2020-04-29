@@ -61,6 +61,18 @@ suite('AddConstructorActionProvider Suite', () => {
         }
     });
 
+    test('No "Add constructor" action should be shown if one already exists', async () => {
+        await prepareTestData('NEGAddConstructor');
+
+        const label = CLASS_ACTIONS.ADD_CONSTRUCTOR;
+        const lineNumber = 0;
+
+        const position = new vscode.Position(lineNumber, 5);
+        const actions: vscode.CodeAction[] = await provider.provideCodeActions(textDocument, new vscode.Range(position, position));
+        const act = find(propEq('title', label), actions);
+        assert.equal(act, undefined, `Constructor exists, bust action still shown`);
+    });
+
     // test('"Add constructor" for inner class', async () => {
     //     const lineToReplace = 'public class InnerClass {';
     //     const replacement = `${lineToReplace}\n    public InnerClass() {\n    }`;
