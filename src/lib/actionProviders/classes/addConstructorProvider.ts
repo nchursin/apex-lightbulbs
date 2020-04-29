@@ -1,9 +1,12 @@
 import * as vscode from "vscode";
+import * as path from 'path';
 import { CLASS_ACTIONS } from "../../../labels";
 import { SYMBOL_KIND } from "../../../constants";
-import { split, findIndex, equals, reject, match, head, join, repeat } from "ramda";
+import { constructor } from "../../templates";
+import { join } from "ramda";
 import { LanguageClient } from "vscode-languageclient";
 import { getSymbolAtLine, getFirstNonVarDefnLine, singleIndent, isSpaceIndent } from "../../utils";
+import * as template from 'es6-template-strings';
 
 const modifiers = [
     'public',
@@ -47,7 +50,8 @@ export class AddConstructorProvider implements vscode.CodeActionProvider {
         const lineToAddConstructor = await getFirstNonVarDefnLine(document, this.languageClient);
         const addConstructorAction = new vscode.CodeAction(CLASS_ACTIONS.ADD_CONSTRUCTOR, vscode.CodeActionKind.Refactor);
 
-        const text = `${singleIndent}public ${className}() {\n${singleIndent}}\n\n`;
+        const source = await constructor();
+        const text = template(source, { singleIndent, className });
         addConstructorAction.edit = new vscode.WorkspaceEdit();
         addConstructorAction.edit.insert(document.uri, new vscode.Position(lineToAddConstructor, 0), text);
 

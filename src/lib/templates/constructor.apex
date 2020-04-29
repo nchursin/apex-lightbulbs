@@ -1,0 +1,3 @@
+${singleIndent}public ${className}() {
+${singleIndent}}
+

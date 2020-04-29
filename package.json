@@ -24,7 +24,8 @@
 	"scripts": {
 		"vscode:prepublish": "yarn run compile",
 		"precompile": "rm -rf out",
-		"compile": "tsc -p ./ && cp ./src/apex-jorje-lsp.jar ./out/",
+		"compile:non-ts": "bash ./scripts/nonTsCompile.sh",
+		"compile": "tsc -p ./ && yarn compile:non-ts",
 		"test:data": "bash ./scripts/testData.sh",
 		"watch": "tsc -watch -p ./",
 		"pretest": "yarn run compile && yarn run test:data",
@@ -48,6 +49,7 @@
 		"@types/shelljs": "^0.8.6",
 		"@types/sinon": "^7.5.2",
 		"chai": "^4.2.0",
+		"es6-template-strings": "^2.0.1",
 		"expand-home-dir": "^0.0.3",
 		"find-java-home": "^1.1.0",
 		"ramda": "^0.27.0",
