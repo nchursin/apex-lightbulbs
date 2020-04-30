@@ -33,6 +33,13 @@ namespace SymbolParser {
         }
         return result;
     };
+
+    export const findConstructor = (symbolInfos: SymbolInformation[]): SymbolInformation | undefined => {
+        const classDeclaration = last(symbolInfos);
+        return classDeclaration && find((symbol: SymbolInformation) => {
+            return SYMBOL_KIND.CONSTRUCTOR === symbol.kind && symbol.name.startsWith(classDeclaration.name);
+        }, symbolInfos);
+    };
 }
 
 export default SymbolParser;

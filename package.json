@@ -37,8 +37,8 @@
         "@labels": "out/src/labels",
         "@constants": "out/src/constants",
         "@templates": "out/src/lib/templates",
-        "@languageServer/*": "out/src/lib/languageServer/*",
-        "@actionProviders/*": "out/src/lib/actionProviders/*",
+        "@languageServer": "out/src/lib/languageServer",
+        "@actionProviders": "out/src/lib/actionProviders",
         "@testutils": "out/test/utils"
     },
 	"devDependencies": {
