@@ -14,7 +14,7 @@ export const getSymbolAtLine = async (lineNumber: number, textDocument: TextDocu
 
 export const getFirstNonVarDefnLine = async (textDocument: TextDocument, languageClient: LanguageClient): Promise<number> => {
     const docSymbolResult: SymbolInformation[] = await ApexServer.getAllSymbols(textDocument, languageClient);
-    return SymbolParser.findFirstNonVarDefnLine(docSymbolResult);
+    return SymbolParser.findFirstNonVarDeclarationLine(docSymbolResult);
 };
 
 export {

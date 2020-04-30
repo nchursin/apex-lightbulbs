@@ -51,7 +51,7 @@ export class AddConstructorProvider implements vscode.CodeActionProvider {
     }
 
     private async constructTheAction(classSymbols: vscode.SymbolInformation[], document: vscode.TextDocument, providingSymbol: vscode.SymbolInformation): Promise<vscode.CodeAction> {
-        let lineToAddConstructor = SymbolParser.findFirstNonVarDefnLine(classSymbols);
+        let lineToAddConstructor = SymbolParser.findFirstNonVarDeclarationLine(classSymbols);
         const addConstructorAction = new vscode.CodeAction(CLASS_ACTIONS.ADD_CONSTRUCTOR, vscode.CodeActionKind.Refactor);
 
         const line = document.lineAt(lineToAddConstructor);

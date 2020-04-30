@@ -63,7 +63,7 @@ suite(suiteName, () => {
                 }
             }
         ]`);
-        const result = SymbolParser.findFirstNonVarDefnLine(testData);
+        const result = SymbolParser.findFirstNonVarDeclarationLine(testData);
         assert.equal(result, 3, 'A different linenumber expected for first non-var definition when a method exists');
     });
 
@@ -104,7 +104,7 @@ suite(suiteName, () => {
                 }
             }
         ]`);
-        const result = SymbolParser.findFirstNonVarDefnLine(testData);
+        const result = SymbolParser.findFirstNonVarDeclarationLine(testData);
         assert.equal(result, 2, 'A different linenumber expected for first non-var definition only vars exist');
     });
 
@@ -145,7 +145,7 @@ suite(suiteName, () => {
                 }
             }
         ]`);
-        const result = SymbolParser.findFirstNonVarDefnLine(testData);
+        const result = SymbolParser.findFirstNonVarDeclarationLine(testData);
         assert.equal(result, 7, 'A different linenumber expected for first non-var definition only vars exist');
     });
 
@@ -169,7 +169,7 @@ suite(suiteName, () => {
                 }
             }
         ]`);
-        const result = SymbolParser.findFirstNonVarDefnLine(testData);
+        const result = SymbolParser.findFirstNonVarDeclarationLine(testData);
         assert.equal(result, 1, 'A different linenumber expected for empty class');
     });
 });
