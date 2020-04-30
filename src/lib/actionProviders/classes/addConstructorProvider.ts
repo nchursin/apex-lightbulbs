@@ -2,7 +2,7 @@ import * as vscode from "vscode";
 import { CLASS_ACTIONS } from "@labels";
 import { SYMBOL_KIND } from "@constants";
 import { constructor } from "@templates";
-import { join, find, last, equals, findIndex, slice, findLastIndex, repeat } from "ramda";
+import { join, find, last, equals, findIndex, slice, findLastIndex, repeat, add } from "ramda";
 import { LanguageClient } from "vscode-languageclient";
 import { ApexServer, SymbolParser, Editor } from "@utils";
 import * as template from 'es6-template-strings';
@@ -19,25 +19,40 @@ export class AddConstructorProvider implements vscode.CodeActionProvider {
     }
 
     public async provideCodeActions(document: vscode.TextDocument, range: vscode.Range): Promise<vscode.CodeAction[]> {
-        const result: vscode.CodeAction[] = [];
         const allSymbols = await ApexServer.getAllSymbols(document, this.languageClient);
         const providingSymbol = SymbolParser.findSymbolAtLine(allSymbols, range.start.line);
-        if (SYMBOL_KIND.CLASS !== providingSymbol?.kind) {
-            return result;
+
+        if (!providingSymbol || !this.isClassSymbol(providingSymbol)) {
+            return [];
         }
+
         const classSymbols = this.getWholeClassMeta(providingSymbol, allSymbols);
-        const constructor = find((symbol: vscode.SymbolInformation) => {
-            return SYMBOL_KIND.CONSTRUCTOR === symbol.kind && symbol.name.startsWith(providingSymbol.name);
-        }, classSymbols);
-        if (constructor) {
-            return result;
+        return await this.getAvailableClassActions(classSymbols, document);
+    }
+
+    private async getAvailableClassActions(symbolInfos: vscode.SymbolInformation[], document: vscode.TextDocument): Promise<vscode.CodeAction[]> {
+        const result: vscode.CodeAction[] = [];
+        const classDeclaration = symbolInfos[symbolInfos.length - 1];
+        if (!this.hasConstructor(symbolInfos)) {
+            const addConstructorAction = await this.createAction(symbolInfos, document, classDeclaration);
+            result.push(addConstructorAction);
         }
+        return result;
+    }
 
-        const addConstructorAction = await this.constructTheAction(classSymbols, document, providingSymbol);
+    private isClassSymbol(symbol: vscode.SymbolInformation): boolean {
+        return SYMBOL_KIND.CLASS === symbol.kind;
+    }
 
-        return [
-            addConstructorAction,
-        ];
+    private hasConstructor(symbolInfos: vscode.SymbolInformation[]): Boolean {
+        return Boolean(this.findConstructor(symbolInfos));
+    }
+
+    private findConstructor(symbolInfos: vscode.SymbolInformation[]): vscode.SymbolInformation | undefined {
+        const classDeclaration = last(symbolInfos);
+        return classDeclaration && find((symbol: vscode.SymbolInformation) => {
+            return SYMBOL_KIND.CONSTRUCTOR === symbol.kind && symbol.name.startsWith(classDeclaration.name);
+        }, symbolInfos);
     }
 
     private getWholeClassMeta(symbol: vscode.SymbolInformation, allSymbols: vscode.SymbolInformation[]) {
@@ -50,7 +65,7 @@ export class AddConstructorProvider implements vscode.CodeActionProvider {
         return slice(lastClassIndex + 1, classDefnIndex + 1, allSymbols);
     }
 
-    private async constructTheAction(classSymbols: vscode.SymbolInformation[], document: vscode.TextDocument, providingSymbol: vscode.SymbolInformation): Promise<vscode.CodeAction> {
+    private async createAction(classSymbols: vscode.SymbolInformation[], document: vscode.TextDocument, providingSymbol: vscode.SymbolInformation): Promise<vscode.CodeAction> {
         let lineToAddConstructor = SymbolParser.findFirstNonVarDeclarationLine(classSymbols);
         const addConstructorAction = new vscode.CodeAction(CLASS_ACTIONS.ADD_CONSTRUCTOR, vscode.CodeActionKind.Refactor);
 
