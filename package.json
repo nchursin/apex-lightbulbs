@@ -30,7 +30,13 @@
 		"watch": "tsc -watch -p ./",
 		"pretest": "yarn run compile && yarn run test:data",
 		"test": "node ./out/test/runTest.js"
-	},
+    },
+    "_moduleAliases": {
+        "@utils": "out/src/utils",
+        "@templates": "out/src/templates",
+        "@languageServer/*": "out/src/languageServer/*",
+        "@actionProviders/*": "out/src/actionProviders/*"
+    },
 	"devDependencies": {
 		"@types/chai": "^4.2.11",
 		"@types/glob": "^7.1.1",
@@ -52,6 +58,7 @@
 		"es6-template-strings": "^2.0.1",
 		"expand-home-dir": "^0.0.3",
 		"find-java-home": "^1.1.0",
+		"module-alias": "^2.2.2",
 		"ramda": "^0.27.0",
 		"shelljs": "^0.8.3",
 		"sinon": "^9.0.1",
