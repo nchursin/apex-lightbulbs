@@ -15,10 +15,12 @@
         // "noUnusedParameters": true,  /* Report errors on unused parameters. */
 		"baseUrl": "./src",
         "paths": {
-            "@utils": ["utils"],
-            "@templates": ["templates"],
-            "@languageServer/*": ["languageServer/*"],
-            "@actionProviders/*": ["actionProviders/*"]
+            "@utils": ["lib/utils"],
+            "@labels": ["labels"],
+            "@constants": ["constants"],
+            "@templates": ["lib/templates"],
+            "@languageServer/*": ["lib/languageServer/*"],
+            "@actionProviders/*": ["lib/actionProviders/*"]
         }
 	},
 	"exclude": [

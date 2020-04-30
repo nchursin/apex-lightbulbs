@@ -5,7 +5,7 @@ import * as Mocha from 'mocha';
 // You can import and use all API from the 'vscode' module
 // as well as import your extension to test it
 import * as vscode from 'vscode';
-import { find, propEq, replace, keys } from "ramda";
+import { find, propEq, replace } from "ramda";
 import { CLASS_ACTIONS } from '../../../../../../src/labels';
 import { AddConstructorProvider } from '../../../../../../src/lib/actionProviders/classes/addConstructorProvider';
 import { replaceDocumentText, getStubLanguageClient } from '../../../../../utils';

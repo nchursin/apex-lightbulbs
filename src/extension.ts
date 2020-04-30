@@ -3,10 +3,10 @@
 import * as vscode from 'vscode';
 import 'module-alias/register';
 
-import { GetterSetterActionProvider } from './lib/actionProviders/vars';
-import { AddConstructorProvider } from './lib/actionProviders/classes';
-import * as languageServer from './lib/languageServer/languageServer';
-import { telemetryService } from './lib/languageServer/telemetry';
+import { GetterSetterActionProvider } from '@actionProviders/vars';
+import { AddConstructorProvider } from '@actionProviders/classes';
+import * as languageServer from '@languageServer/languageServer';
+import { telemetryService } from '@languageServer/telemetry';
 import { LanguageClient } from 'vscode-languageclient';
 
 // this method is called when your extension is activated

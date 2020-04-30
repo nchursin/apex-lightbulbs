@@ -32,10 +32,12 @@
 		"test": "node ./out/test/runTest.js"
     },
     "_moduleAliases": {
-        "@utils": "out/src/utils",
-        "@templates": "out/src/templates",
-        "@languageServer/*": "out/src/languageServer/*",
-        "@actionProviders/*": "out/src/actionProviders/*"
+        "@utils": "out/src/lib/utils",
+        "@labels": "out/src/labels",
+        "@constants": "out/src/constants",
+        "@templates": "out/src/lib/templates",
+        "@languageServer/*": "out/src/lib/languageServer/*",
+        "@actionProviders/*": "out/src/lib/actionProviders/*"
     },
 	"devDependencies": {
 		"@types/chai": "^4.2.11",

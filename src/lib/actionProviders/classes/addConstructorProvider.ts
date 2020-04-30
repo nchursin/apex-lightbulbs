@@ -1,10 +1,10 @@
 import * as vscode from "vscode";
-import { CLASS_ACTIONS } from "../../../labels";
-import { SYMBOL_KIND } from "../../../constants";
-import { constructor } from "../../templates";
+import { CLASS_ACTIONS } from "@labels";
+import { SYMBOL_KIND } from "@constants";
+import { constructor } from "@templates";
 import { join, find, last, equals, findIndex, slice, findLastIndex, repeat } from "ramda";
 import { LanguageClient } from "vscode-languageclient";
-import { ApexServer, SymbolParser, Editor } from "../../utils";
+import { ApexServer, SymbolParser, Editor } from "@utils";
 import * as template from 'es6-template-strings';
 
 export class AddConstructorProvider implements vscode.CodeActionProvider {
