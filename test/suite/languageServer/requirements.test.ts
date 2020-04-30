@@ -11,7 +11,7 @@ import { expect } from 'chai';
 import * as path from 'path';
 import * as shell from 'shelljs';
 import { workspace } from 'vscode';
-import { JAVA_HOME_KEY, JAVA_MEMORY_KEY } from '../../../src/lib/languageServer/requirements';
+import { JAVA_HOME_KEY, JAVA_MEMORY_KEY } from '@src/lib/languageServer/requirements';
 
 suite('Java Requirements Test', () => {
   test('The jar should be signed', () => {

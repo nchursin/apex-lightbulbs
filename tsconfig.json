@@ -13,14 +13,16 @@
 		// "noImplicitReturns": true, /* Report error when not all code paths in function return a value. */
 		// "noFallthroughCasesInSwitch": true, /* Report errors for fallthrough cases in switch statement. */
         // "noUnusedParameters": true,  /* Report errors on unused parameters. */
-		"baseUrl": "./src",
+		"baseUrl": "./",
         "paths": {
-            "@utils": ["lib/utils"],
-            "@labels": ["labels"],
-            "@constants": ["constants"],
-            "@templates": ["lib/templates"],
-            "@languageServer/*": ["lib/languageServer/*"],
-            "@actionProviders/*": ["lib/actionProviders/*"]
+            "@src/*": ["src/*"],
+            "@utils": ["src/lib/utils"],
+            "@labels": ["src/labels"],
+            "@constants": ["src/constants"],
+            "@templates": ["src/lib/templates"],
+            "@languageServer/*": ["src/lib/languageServer/*"],
+            "@actionProviders/*": ["src/lib/actionProviders/*"],
+            "@testutils": ["test/utils"]
         }
 	},
 	"exclude": [

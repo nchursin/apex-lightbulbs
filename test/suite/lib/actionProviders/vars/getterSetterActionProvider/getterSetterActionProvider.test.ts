@@ -1,17 +1,14 @@
 import * as assert from 'assert';
 import * as path from 'path';
 import * as Mocha from 'mocha';
-import * as fs from 'fs';
 
 // You can import and use all API from the 'vscode' module
 // as well as import your extension to test it
 import * as vscode from 'vscode';
 import { find, propEq } from "ramda";
-import { VARIABLE_ACTIONS } from '../../../../../../src/labels';
-import { GetterSetterActionProvider } from '../../../../../../src/lib/actionProviders/vars/getterSetterActionProvider';
-import { replaceDocumentText, getStubLanguageClient } from '../../../../../utils';
-import { LanguageClient } from 'vscode-languageclient';
-import { stub } from 'sinon';
+import { VARIABLE_ACTIONS } from '@src/labels';
+import { GetterSetterActionProvider } from '@src/lib/actionProviders/vars/getterSetterActionProvider';
+import { replaceDocumentText, getStubLanguageClient } from '@testutils';
 
 suite('GetterSetterActionProvider Suite', async () => {
     vscode.window.showInformationMessage('Start all tests.');

@@ -6,17 +6,11 @@ import * as fs from 'fs';
 // as well as import your extension to test it
 import * as vscode from 'vscode';
 
-import { getFirstNonVarDefnLine, getSymbolAtLine } from '../../../../src/lib/utils';
-import { TYPES } from '../../../../src/constants';
+import { getFirstNonVarDefnLine, getSymbolAtLine } from '@src/lib/utils';
 import { keys } from 'ramda';
 import { stub } from "sinon";
 import { LanguageClient } from 'vscode-languageclient';
-import { getStubLanguageClient } from '../../../utils';
-
-const constructLineMeta = (type: string, isStatic: Boolean = false) => ({
-    type,
-    isStatic,
-});
+import { getStubLanguageClient } from '@testutils';
 
 const NON_VAR_LINE_TEST_CASES = {
     'Test1': 2,
