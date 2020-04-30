@@ -1,5 +1,5 @@
-import { join, find, findLast, compose, repeat } from 'ramda';
-import { TextDocument, SymbolInformation, window } from 'vscode';
+import { join, compose, repeat } from 'ramda';
+import { window } from 'vscode';
 
 const repeatString = compose<string, number, string[], string>(
     join(''),

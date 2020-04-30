@@ -1,4 +1,4 @@
-import { TextDocument, SymbolInformation, window } from 'vscode';
+import { TextDocument, SymbolInformation } from 'vscode';
 import { LanguageClient } from 'vscode-languageclient';
 
 namespace ApexServer {

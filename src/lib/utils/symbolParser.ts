@@ -1,5 +1,5 @@
-import { TextDocument, SymbolInformation, window } from 'vscode';
-import { join, find, findLast, compose, repeat } from 'ramda';
+import { SymbolInformation } from 'vscode';
+import { find, findLast } from 'ramda';
 
 namespace SymbolParser {
     export const findSymbolAtLine = (docSymbolResult: SymbolInformation[], lineNumber: number): SymbolInformation | undefined => {
