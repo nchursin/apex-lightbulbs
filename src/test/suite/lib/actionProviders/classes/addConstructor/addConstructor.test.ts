@@ -109,8 +109,6 @@ suite('AddConstructorActionProvider Suite', () => {
         if (act.edit) {
             await vscode.workspace.applyEdit(act.edit);
             const textAfter = textDocument.getText();
-            console.log('result >> ', result);
-            console.log('textAfter >> ', textAfter);
             assert.equal(textAfter, result, 'Changed text is different from expected');
         }
     });

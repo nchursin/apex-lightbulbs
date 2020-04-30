@@ -5,7 +5,7 @@ import { SYMBOL_KIND } from "../../../constants";
 import { constructor } from "../../templates";
 import { join, find, last, equals, findIndex, slice, findLastIndex, repeat } from "ramda";
 import { LanguageClient } from "vscode-languageclient";
-import { getAllSymbols, findSymbolAtLine, findFirstNonVarDefnLine, singleIndent } from "../../utils";
+import { ApexServer, SymbolParser, Editor } from "../../utils";
 import * as template from 'es6-template-strings';
 
 const modifiers = [
@@ -34,8 +34,8 @@ export class AddConstructorProvider implements vscode.CodeActionProvider {
 
     public async provideCodeActions(document: vscode.TextDocument, range: vscode.Range): Promise<vscode.CodeAction[]> {
         const result: vscode.CodeAction[] = [];
-        const allSymbols = await getAllSymbols(document, this.languageClient);
-        const providingSymbol = findSymbolAtLine(allSymbols, range.start.line);
+        const allSymbols = await ApexServer.getAllSymbols(document, this.languageClient);
+        const providingSymbol = SymbolParser.findSymbolAtLine(allSymbols, range.start.line);
         if (SYMBOL_KIND.CLASS !== providingSymbol?.kind) {
             return result;
         }
@@ -65,7 +65,7 @@ export class AddConstructorProvider implements vscode.CodeActionProvider {
     }
 
     private async constructTheAction(classSymbols: vscode.SymbolInformation[], document: vscode.TextDocument, providingSymbol: vscode.SymbolInformation): Promise<vscode.CodeAction> {
-        let lineToAddConstructor = findFirstNonVarDefnLine(classSymbols);
+        let lineToAddConstructor = SymbolParser.findFirstNonVarDefnLine(classSymbols);
         const addConstructorAction = new vscode.CodeAction(CLASS_ACTIONS.ADD_CONSTRUCTOR, vscode.CodeActionKind.Refactor);
 
         const line = document.lineAt(lineToAddConstructor);
@@ -73,7 +73,7 @@ export class AddConstructorProvider implements vscode.CodeActionProvider {
 
         const source = await constructor();
         const nameSplit = providingSymbol.name.split('.');
-        const indent = join('', repeat(singleIndent, nameSplit.length));
+        const indent = join('', repeat(Editor.singleIndent, nameSplit.length));
         let text = template(source, { indent, className: last(nameSplit) });
         if (lineText) {
             text += '\n';
