@@ -7,8 +7,8 @@ import * as fs from 'fs';
 // as well as import your extension to test it
 import * as vscode from 'vscode';
 import { find, propEq } from "ramda";
-import { VARIABLE_ACTIONS } from '../../../../../../labels';
-import { GetterSetterActionProvider } from '../../../../../../lib/actionProviders/vars/getterSetterActionProvider';
+import { VARIABLE_ACTIONS } from '../../../../../../src/labels';
+import { GetterSetterActionProvider } from '../../../../../../src/lib/actionProviders/vars/getterSetterActionProvider';
 import { replaceDocumentText, getStubLanguageClient } from '../../../../../utils';
 import { LanguageClient } from 'vscode-languageclient';
 import { stub } from 'sinon';

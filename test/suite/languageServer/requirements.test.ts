@@ -11,13 +11,13 @@ import { expect } from 'chai';
 import * as path from 'path';
 import * as shell from 'shelljs';
 import { workspace } from 'vscode';
-import { JAVA_HOME_KEY, JAVA_MEMORY_KEY } from '../../../lib/languageServer/requirements';
+import { JAVA_HOME_KEY, JAVA_MEMORY_KEY } from '../../../src/lib/languageServer/requirements';
 
 suite('Java Requirements Test', () => {
   test('The jar should be signed', () => {
     shell.config.execPath = process.execPath;
-    const apexJarPath = path.join(__dirname, '..', '..', '..', 'apex-jorje-lsp.jar');
-    console.log(shell.exec(`ls ${path.join(__dirname, '..', '..', '..')}`).stdout);
+    const apexJarPath = path.join(__dirname, '..', '..', '..', 'src', 'apex-jorje-lsp.jar');
+    console.log(shell.exec(`ls ${path.join(__dirname, '..', '..', '..', 'src')}`).stdout);
     expect(
       shell
         .exec(`jarsigner -verify ${apexJarPath}`)

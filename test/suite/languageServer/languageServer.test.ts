@@ -9,7 +9,7 @@
 
 import { expect } from 'chai';
 import { Uri } from 'vscode';
-import { code2ProtocolConverter } from '../../../lib/languageServer/languageServer';
+import { code2ProtocolConverter } from '../../../src/lib/languageServer/languageServer';
 import { before, after } from 'mocha';
 
 suite('Apex Language Server Client', () => {

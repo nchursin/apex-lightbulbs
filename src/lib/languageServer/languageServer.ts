@@ -27,7 +27,7 @@ async function createServer(
 ): Promise<Executable> {
     try {
         const requirementsData = await requirements.resolveRequirements();
-        const uberJar = path.resolve(context.extensionPath, 'out', UBER_JAR_NAME);
+        const uberJar = path.resolve(context.extensionPath, 'out', 'src', UBER_JAR_NAME);
         const javaExecutable = path.resolve(
         `${requirementsData.java_home}/bin/java`
         );

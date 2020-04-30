@@ -1,2 +1,2 @@
-cp ./src/apex-jorje-lsp.jar ./out/
-cp src/lib/templates/*.apex out/lib/templates/
+cp ./src/apex-jorje-lsp.jar ./out/src/
+cp src/lib/templates/*.apex out/src/lib/templates/
