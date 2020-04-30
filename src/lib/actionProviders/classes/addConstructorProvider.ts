@@ -1,5 +1,4 @@
 import * as vscode from "vscode";
-import * as path from 'path';
 import { CLASS_ACTIONS } from "../../../labels";
 import { SYMBOL_KIND } from "../../../constants";
 import { constructor } from "../../templates";
@@ -7,19 +6,6 @@ import { join, find, last, equals, findIndex, slice, findLastIndex, repeat } fro
 import { LanguageClient } from "vscode-languageclient";
 import { ApexServer, SymbolParser, Editor } from "../../utils";
 import * as template from 'es6-template-strings';
-
-const modifiers = [
-    'public',
-    'private',
-    'protected',
-];
-const annotation = `(@\\w+\\s+)?`;
-const modifierRegexp = `((${join('|', modifiers)})\\s+)?`;
-const staticModifier = `(static\\s+)?`;
-const endOfDeclaration = '(;|{\\s*((get|set).+)?)';
-const varType = '(?!(?:class))\\w+';
-const finalRegexpString = `^${annotation}${modifierRegexp}${staticModifier}${varType}\\s+\\w+\\s*${endOfDeclaration}`;
-const regex = new RegExp(finalRegexpString);
 
 export class AddConstructorProvider implements vscode.CodeActionProvider {
     private languageClient: LanguageClient;
