@@ -1,3 +1,2 @@
-${singleIndent}public ${className}() {
-${singleIndent}}
-
+${indent}public ${className}() {
+${indent}}

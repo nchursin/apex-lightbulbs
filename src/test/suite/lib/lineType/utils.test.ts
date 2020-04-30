@@ -67,6 +67,7 @@ const NON_VAR_LINE_TEST_CASES = {
     'Test5': 12,
     'Test6': 12,
     'Test7': 13,
+    'Test8': 1,
 };
 
 const CURRENT_DOC_SYMBOL = {

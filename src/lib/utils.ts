@@ -87,14 +87,15 @@ export const findSymbolAtLine = (docSymbolResult: SymbolInformation[], lineNumbe
 };
 
 export const getFirstNonVarDefnLine = async (textDocument: TextDocument, languageClient: LanguageClient): Promise<number> => {
-    const docSymbolResult: SymbolInformation[] = await languageClient.sendRequest(
-        'textDocument/documentSymbol',
-        {
-            textDocument: {
-                uri: `${textDocument.uri.scheme}://${textDocument.uri.fsPath}`,
-            }
-        }
-    );
+    const docSymbolResult: SymbolInformation[] = await getAllSymbols(textDocument, languageClient);
+    return findFirstNonVarDefnLine(docSymbolResult);
+};
+
+export const findFirstNonVarDefnLine = (docSymbolResult: SymbolInformation[]) => {
+    if (1 === docSymbolResult.length) {
+        // If class is empty - return first line after definition
+        return docSymbolResult[0].location.range.start.line + 1;
+    }
     const firstNonVar = find((symbol) => symbol.kind !== 7 && symbol.kind !== 8, docSymbolResult);
     let result: number;
     if (firstNonVar && firstNonVar.location.range.start.line) {
