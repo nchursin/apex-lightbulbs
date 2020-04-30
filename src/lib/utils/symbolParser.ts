@@ -1,26 +1,41 @@
 import { SymbolInformation } from 'vscode';
-import { find, findLast } from 'ramda';
+import { find, findLast, not, compose, last } from 'ramda';
+import { SYMBOL_KIND } from '@constants';
+
+const getStartLine = (symbol: SymbolInformation) => symbol.location.range.start.line;
+const isPropertyOrField = (symbol: SymbolInformation) => symbol.kind === SYMBOL_KIND.PROPERTY || symbol.kind === SYMBOL_KIND.FIELD;
 
 namespace SymbolParser {
     export const findSymbolAtLine = (docSymbolResult: SymbolInformation[], lineNumber: number): SymbolInformation | undefined => {
-        return find((symbol) => symbol.location.range.start.line === lineNumber, docSymbolResult);
+        return find((symbol) => getStartLine(symbol) === lineNumber, docSymbolResult);
     };
 
     export const findFirstNonVarDefnLine = (docSymbolResult: SymbolInformation[]) => {
         if (1 === docSymbolResult.length) {
             // If class is empty - return first line after definition
-            return docSymbolResult[0].location.range.start.line + 1;
+            return getStartLine(docSymbolResult[0]) + 1;
         }
-        const firstNonVar = find((symbol) => symbol.kind !== 7 && symbol.kind !== 8, docSymbolResult);
+        const classDeclaration = last(docSymbolResult);
+        if (!classDeclaration) {
+            return 0;
+        }
+        const firstNonVar = find(
+            compose(not, isPropertyOrField),
+            docSymbolResult
+        );
         let result: number;
-        if (firstNonVar && firstNonVar.location.range.start.line) {
-            result = firstNonVar.location.range.start.line;
+        // if start line is 0, it means no non-var declarations exist
+        if (firstNonVar && getStartLine(firstNonVar) !== getStartLine(classDeclaration)) {
+            result = getStartLine(firstNonVar);
         } else {
-            const lastVar = findLast((symbol) => symbol.kind === 7 || symbol.kind === 8, docSymbolResult);
+            const lastVar = findLast(
+                isPropertyOrField,
+                docSymbolResult
+            );
             if (!lastVar) {
                 throw new Error('No symbols found');
             }
-            result = lastVar.location.range.start.line + 1;
+            result = getStartLine(lastVar) + 1;
         }
         return result;
     };
