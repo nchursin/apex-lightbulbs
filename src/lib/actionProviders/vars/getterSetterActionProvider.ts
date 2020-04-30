@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { VARIABLE_ACTIONS } from '../../../labels';
-import { TYPES, SYMBOL_KIND } from '../../../constants';
-import { getLineMetadata, getSymbolAtLine } from "../../utils";
+import { SYMBOL_KIND } from '../../../constants';
+import { getSymbolAtLine } from "../../utils";
 import { LanguageClient } from 'vscode-languageclient';
 
 export class GetterSetterActionProvider implements vscode.CodeActionProvider {
