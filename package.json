@@ -1,6 +1,6 @@
 {
-	"name": "apex-intention-actions",
-	"displayName": "Apex Intention Actions",
+	"name": "apex-lighbulbs",
+	"displayName": "Apex Lightbulbs",
 	"description": "Bulb actions for VSCode to speed up your development",
 	"version": "0.0.1",
 	"engines": {
