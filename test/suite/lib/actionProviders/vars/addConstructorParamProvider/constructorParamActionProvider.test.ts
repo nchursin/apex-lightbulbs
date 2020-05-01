@@ -17,7 +17,6 @@ suite(suiteName, async () => {
     vscode.window.showInformationMessage(`Starting ${suiteName}...`);
 
     const dataFolder = path.resolve(__dirname, 'data');
-    const testClass = path.join(dataFolder, 'Test1', 'Class.cls');
 
     let textDocument: vscode.TextDocument;
     let initialState: string;
@@ -28,23 +27,23 @@ suite(suiteName, async () => {
     });
 
     Mocha.beforeEach(async () => {
-        textDocument = await vscode.workspace.openTextDocument(testClass);
-        initialState = textDocument.getText();
     });
 
     Mocha.afterEach(async () => {
         replaceDocumentText(textDocument, initialState);
     });
 
-    test('addConstructorParam should add constructor param to existing constructor', async () => {
-        const lineNumber = 1;
+    const runTestCase = async (testDataFolder: string, lineNumber: number) => {
         const label = VARIABLE_ACTIONS.ADD_CONSTRUCTOR_PARAM;
         const actionKind = vscode.CodeActionKind.Refactor;
 
-        const testCaseDataFolder = path.join(dataFolder, 'Test1');
+        const testCaseDataFolder = path.join(dataFolder, testDataFolder);
 
+        const testFilePath = path.join(testCaseDataFolder, 'Class.cls');
         const expectedFilePath = path.join(testCaseDataFolder, 'Expected.cls');
         const expectedText = await fsPromises.readFile(expectedFilePath, 'utf8');
+        textDocument = await vscode.workspace.openTextDocument(testFilePath);
+        initialState = textDocument.getText();
 
         const langClient = await getStubLanguageClient(testCaseDataFolder);
         const provider = new ConstructorParamActionProvider(langClient);
@@ -62,10 +61,18 @@ suite(suiteName, async () => {
         if (act.edit) {
             await vscode.workspace.applyEdit(act.edit);
             const textAfter = textDocument.getText();
-            console.log('textAfter >> ', textAfter);
             console.log('expectedText >> ', expectedText);
+            console.log('textAfter >> ', textAfter);
             assert.equal(textAfter, expectedText, 'Changed text is different from expected');
         }
+    }
+
+    test('addConstructorParam should add constructor param to existing constructor', async () => {
+        await runTestCase('Test1', 1);
+    });
+
+    test('addConstructorParam should add constructor param to existing constructor with param', async () => {
+        await runTestCase('Test2', 2);
     });
 
     test('non-variable type must provide no actions', async () => {

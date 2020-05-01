@@ -61,14 +61,25 @@ export class ConstructorParamActionProvider implements vscode.CodeActionProvider
         constructorSymbol: vscode.SymbolInformation,
         [ varName, varType ]: string[]
     ) {
-        const parameterText = `${varType} ${varName}`;
-        const firstBracketAfterDeclarationPosition = new vscode.Position(
-            constructorSymbol.location.range.end.line,
-            constructorSymbol.location.range.end.character + 1
-        );
+        let parameterText = `${varType} ${varName}`;
+        let positionToInsert;
+        if (constructorSymbol.name.includes('()')) {
+            positionToInsert = new vscode.Position(
+                constructorSymbol.location.range.end.line,
+                constructorSymbol.location.range.end.character + 1
+            );
+        } else {
+            const constructorLine = document.lineAt(constructorSymbol.location.range.end.line);
+            const indexOfCloseBracket = constructorLine.text.indexOf(')');
+            positionToInsert = new vscode.Position(
+                constructorLine.lineNumber,
+                indexOfCloseBracket
+            );
+            parameterText = `, ${parameterText}`;
+        }
         edit.insert(
             document.uri,
-            firstBracketAfterDeclarationPosition,
+            positionToInsert,
             parameterText
         );
     }
@@ -79,7 +90,15 @@ export class ConstructorParamActionProvider implements vscode.CodeActionProvider
         constructorSymbol: vscode.SymbolInformation,
         varName: string
     ) {
-        const constructorDeclarationEnd = document.lineAt(constructorSymbol.location.range.end.line).range.end;
+        let lineNumberToCheck = constructorSymbol.location.range.end.line;
+        let lineToAdd = document.lineAt(lineNumberToCheck);
+
+        while (!lineToAdd.text.includes('{')) {
+            lineNumberToCheck++;
+            lineToAdd = document.lineAt(lineNumberToCheck);
+        }
+
+        const constructorDeclarationEnd = lineToAdd.range.end;
         const assignment = `\n${Editor.singleIndent}${Editor.singleIndent}this.${varName} = ${varName};`;
         edit.insert(
             document.uri,
