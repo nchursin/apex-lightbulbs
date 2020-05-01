@@ -4,6 +4,10 @@
 	"description": "Bulb actions for VSCode to speed up your development",
     "version": "1.0.0",
     "publisher": "nchursin",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/nchursin/apex-lightbulbs.git"
+    },
 	"engines": {
 		"vscode": "^1.41.0"
 	},
