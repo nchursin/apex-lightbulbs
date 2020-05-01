@@ -2,7 +2,7 @@
 	"name": "apex-lighbulbs",
 	"displayName": "Apex Lightbulbs",
 	"description": "Bulb actions for VSCode to speed up your development",
-	"version": "0.0.1",
+	"version": "1.0.0",
 	"engines": {
 		"vscode": "^1.41.0"
 	},
