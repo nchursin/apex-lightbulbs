@@ -3,7 +3,7 @@
 import * as vscode from 'vscode';
 import 'module-alias/register';
 
-import { GetterSetterActionProvider } from '@actionProviders/vars';
+import { GetterSetterActionProvider, ConstructorParamActionProvider } from '@actionProviders/vars';
 import { AddConstructorProvider } from '@actionProviders/classes';
 import * as languageServer from '@languageServer/languageServer';
 import { telemetryService } from '@languageServer/telemetry';
@@ -35,6 +35,11 @@ export async function activate(context: vscode.ExtensionContext) {
                 context.subscriptions.push(
                     vscode.languages.registerCodeActionsProvider('apex', new GetterSetterActionProvider(languageClient), {
                         providedCodeActionKinds: GetterSetterActionProvider.providedCodeActionKinds
+                    }));
+
+                context.subscriptions.push(
+                    vscode.languages.registerCodeActionsProvider('apex', new ConstructorParamActionProvider(languageClient), {
+                        providedCodeActionKinds: ConstructorParamActionProvider.providedCodeActionKinds
                     }));
 
                 context.subscriptions.push(

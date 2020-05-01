@@ -49,6 +49,9 @@ suite(suiteName, async () => {
         const provider = new ConstructorParamActionProvider(langClient);
 
         const position = new vscode.Position(lineNumber, 15);
+
+        console.log('line text >>>>> ', textDocument.lineAt(lineNumber).text);
+
         const actions: vscode.CodeAction[] = await provider.provideCodeActions(textDocument, new vscode.Range(position, position));
         const act: vscode.CodeAction | undefined = find(propEq('title', label), actions);
         if (!act) {
@@ -65,7 +68,7 @@ suite(suiteName, async () => {
             console.log('textAfter >> ', textAfter);
             assert.equal(textAfter, expectedText, 'Changed text is different from expected');
         }
-    }
+    };
 
     test('addConstructorParam should add constructor param to existing constructor', async () => {
         await runTestCase('Test1', 1);
@@ -81,6 +84,10 @@ suite(suiteName, async () => {
 
     test('addConstructorParam should add constructor param to existing constructor with param (multiline)', async () => {
         await runTestCase('Test3', 2);
+    });
+
+    test('addConstructorParam should add constructor param to existing constructor (inner class)', async () => {
+        await runTestCase('Test4', 9);
     });
 
     test('non-variable type must provide no actions', async () => {

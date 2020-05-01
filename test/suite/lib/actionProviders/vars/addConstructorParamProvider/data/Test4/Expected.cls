@@ -9,7 +9,8 @@ public class Test {
     public class InnerClass {
         public String innerClassVar;
 
-        public InnerClass() {
+        public InnerClass(String innerClassVar) {
+            this.innerClassVar = innerClassVar;
 
         }
     }

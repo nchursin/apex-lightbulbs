@@ -3,6 +3,7 @@ import { VARIABLE_ACTIONS } from '@labels';
 import { SYMBOL_KIND } from '@constants';
 import { ApexServer, SymbolParser, Editor } from "@utils";
 import { LanguageClient } from 'vscode-languageclient';
+import { repeat, join } from 'ramda';
 
 export class ConstructorParamActionProvider implements vscode.CodeActionProvider {
     private languageClient: LanguageClient | undefined;
@@ -89,7 +90,11 @@ export class ConstructorParamActionProvider implements vscode.CodeActionProvider
         }
 
         const constructorDeclarationEnd = lineToAdd.range.end;
-        const assignment = `\n${Editor.singleIndent}${Editor.singleIndent}this.${varName} = ${varName};`;
+
+        const numberOfAdditionalIndents = constructorSymbol.name.split('.').length;
+        const indents = join('', repeat(`${Editor.singleIndent}`, numberOfAdditionalIndents));
+
+        const assignment = `\n${Editor.singleIndent}${indents}this.${varName} = ${varName};`;
         edit.insert(
             document.uri,
             constructorDeclarationEnd,
