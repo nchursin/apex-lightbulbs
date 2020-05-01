@@ -3,7 +3,8 @@ import { VARIABLE_ACTIONS } from '@labels';
 import { SYMBOL_KIND } from '@constants';
 import { ApexServer, SymbolParser, Editor } from "@utils";
 import { LanguageClient } from 'vscode-languageclient';
-import { repeat, join } from 'ramda';
+import { repeat, join, last } from 'ramda';
+import { Templates } from '@templates';
 
 export class ConstructorParamActionProvider implements vscode.CodeActionProvider {
     private languageClient: LanguageClient | undefined;
@@ -28,30 +29,30 @@ export class ConstructorParamActionProvider implements vscode.CodeActionProvider
         const symbol = SymbolParser.findSymbolAtLine(symbols, range.start.line);
 
         if (symbol && this.suitableFor.includes(symbol.kind)) {
-            const addGetSetAction = this.getConstructorParamAction(document, symbol, symbols);
+            const addGetSetAction = await this.getConstructorParamAction(document, symbol, symbols);
             result.push(addGetSetAction);
         }
         return result;
     }
 
-    private getConstructorParamAction(
+    private async getConstructorParamAction(
         document: vscode.TextDocument,
         varSymbol: vscode.SymbolInformation,
         classSymbols: vscode.SymbolInformation[]
-    ): vscode.CodeAction {
+    ): Promise<vscode.CodeAction> {
         const action = new vscode.CodeAction(VARIABLE_ACTIONS.ADD_CONSTRUCTOR_PARAM, vscode.CodeActionKind.Refactor);
         action.edit = new vscode.WorkspaceEdit();
 
         const constructor = SymbolParser.findConstructor(classSymbols);
 
         if (!constructor) {
-            return action;
+            await this.addConstructorWithParams(action.edit, classSymbols, varSymbol, document);
+        } else {
+            const [ varName, varType ] = varSymbol.name.split(' : ');
+
+            this.addConstructorParameterInsert(action.edit, document, constructor, [ varName, varType ]);
+            this.addAssignmentInsert(action.edit, document, constructor, varName);
         }
-
-        const [ varName, varType ] = varSymbol.name.split(' : ');
-
-        this.addConstructorParameterInsert(action.edit, document, constructor, [ varName, varType ]);
-        this.addAssignmentInsert(action.edit, document, constructor, varName);
 
         return action;
     }
@@ -122,5 +123,34 @@ export class ConstructorParamActionProvider implements vscode.CodeActionProvider
             lineNumberToCheck,
             indexToInsert
         );
+    }
+
+    private async addConstructorWithParams(
+        edit: vscode.WorkspaceEdit,
+        classSymbols: vscode.SymbolInformation[],
+        parameterSymbol: vscode.SymbolInformation,
+        document: vscode.TextDocument
+    ) {
+        const lineToAddConstructor = SymbolParser.findFirstNonVarDeclarationLine(classSymbols);
+        const classDeclarationSymbol = classSymbols[classSymbols.length - 1];
+
+        const line = document.lineAt(lineToAddConstructor);
+        const lineText = line.text.trim();
+
+        const nameSplit = classDeclarationSymbol.name.split('.');
+        const indent = join('', repeat(Editor.singleIndent, nameSplit.length));
+        const [ varName, varType ] = parameterSymbol.name.split(' : ');
+        let text = await Templates.constructorWithParams({
+            indent,
+            className: last(nameSplit) || '',
+            singleIndent: Editor.singleIndent,
+            parameters: `${varType} ${varName}`,
+            parametersAssignment: `this.${varName} = ${varName};`,
+        });
+        if (lineText) {
+            text = `\n${text}`;
+        }
+
+        edit.insert(document.uri, new vscode.Position(lineToAddConstructor, 0), text);
     }
 }

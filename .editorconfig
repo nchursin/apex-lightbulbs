@@ -29,5 +29,8 @@ indent_style = tab
 [*.md]
 trim_trailing_whitespace = false
 
-[*.cls]
+[**.cls]
+trim_trailing_whitespace = false
+
+[**.apex]
 trim_trailing_whitespace = false

@@ -1,11 +1,10 @@
 import * as vscode from "vscode";
 import { CLASS_ACTIONS } from "@labels";
 import { SYMBOL_KIND } from "@constants";
-import { constructor } from "@templates";
+import { Templates } from "@templates";
 import { join, find, last, equals, findIndex, slice, findLastIndex, repeat, add } from "ramda";
 import { LanguageClient } from "vscode-languageclient";
 import { ApexServer, SymbolParser, Editor } from "@utils";
-import * as template from 'es6-template-strings';
 
 export class AddConstructorProvider implements vscode.CodeActionProvider {
     private languageClient: LanguageClient;
@@ -32,9 +31,8 @@ export class AddConstructorProvider implements vscode.CodeActionProvider {
 
     private async getAvailableClassActions(symbolInfos: vscode.SymbolInformation[], document: vscode.TextDocument): Promise<vscode.CodeAction[]> {
         const result: vscode.CodeAction[] = [];
-        const classDeclaration = symbolInfos[symbolInfos.length - 1];
         if (!this.hasConstructor(symbolInfos)) {
-            const addConstructorAction = await this.createAction(symbolInfos, document, classDeclaration);
+            const addConstructorAction = await this.createAction(symbolInfos, document);
             result.push(addConstructorAction);
         }
         return result;
@@ -65,17 +63,18 @@ export class AddConstructorProvider implements vscode.CodeActionProvider {
         return slice(lastClassIndex + 1, classDefnIndex + 1, allSymbols);
     }
 
-    private async createAction(classSymbols: vscode.SymbolInformation[], document: vscode.TextDocument, providingSymbol: vscode.SymbolInformation): Promise<vscode.CodeAction> {
-        let lineToAddConstructor = SymbolParser.findFirstNonVarDeclarationLine(classSymbols);
+    private async createAction(classSymbols: vscode.SymbolInformation[], document: vscode.TextDocument): Promise<vscode.CodeAction> {
+        const lineToAddConstructor = SymbolParser.findFirstNonVarDeclarationLine(classSymbols);
         const addConstructorAction = new vscode.CodeAction(CLASS_ACTIONS.ADD_CONSTRUCTOR, vscode.CodeActionKind.Refactor);
+
+        const classDeclarationSymbol = classSymbols[classSymbols.length - 1];
 
         const line = document.lineAt(lineToAddConstructor);
         const lineText = line.text.trim();
 
-        const source = await constructor();
-        const nameSplit = providingSymbol.name.split('.');
+        const nameSplit = classDeclarationSymbol.name.split('.');
         const indent = join('', repeat(Editor.singleIndent, nameSplit.length));
-        let text = template(source, { indent, className: last(nameSplit) });
+        let text = await Templates.constructor({ indent, className: last(nameSplit) || '' });
         if (lineText) {
             text += '\n';
         }

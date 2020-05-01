@@ -94,6 +94,10 @@ suite(suiteName, async () => {
         await runTestCase('Test4.1', 10);
     });
 
+    test('addConstructorParam should create constructor and add constructor param', async () => {
+        await runTestCase('Test5', 1);
+    });
+
     test('non-variable type must provide no actions', async () => {
         const testCaseDataFolder = path.join(dataFolder, 'Test1');
         const langClient = await getStubLanguageClient(testCaseDataFolder);
