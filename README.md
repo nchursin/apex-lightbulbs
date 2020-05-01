@@ -1,27 +1,23 @@
 # Apex Lighbulbs
+##### Former _Apex Intention Actions_
 ## Under Development
 
 A VSCode plugin, an analogue of _Apex Intention Actions_ for Sublime Text 3. Adds quick actions for Salesforce Apex to VSCode such as adding getter, creating constructor, etc.
 
 ## Features
 Currently existing features:
-1. Add getter
-2. Add setter
-3. Add both getter and setter
+1. Add { get; set; } to a variable
+1. Add constructor
+1. Add constructor parameter
 
 Planned features:
-1. Add constructor parameter
-2. Add class constructor
-3. Add init method and call in each constructor
-4. Add 0-arg constructor and init method
-5. Add method overload
+1. Add explicit getter and setter
+1. Add method/constructor overload
+1. Make test compile for TDD
+1. Extract constant from a magic value
 
 > A little demo recorded in Sublime Text 3:
 ![Getter-setter demo](https://github.com/nchursin/resources/blob/master/ApexIntentionActions/getter-setter.gif?raw=true)
-
-## Requirements
-
-Just VSCode. You can use it with whatever Apex plugin you like.
 
 ## Extension Settings
 
