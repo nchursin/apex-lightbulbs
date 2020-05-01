@@ -69,13 +69,25 @@ export class ConstructorParamActionProvider implements vscode.CodeActionProvider
                 constructorSymbol.location.range.end.character + 1
             );
         } else {
-            const constructorLine = document.lineAt(constructorSymbol.location.range.end.line);
-            const indexOfCloseBracket = constructorLine.text.indexOf(')');
-            positionToInsert = new vscode.Position(
-                constructorLine.lineNumber,
-                indexOfCloseBracket
-            );
             parameterText = `, ${parameterText}`;
+            const constructorLine = document.lineAt(constructorSymbol.location.range.end.line);
+            let indexToInsert = constructorLine.text.indexOf(')');
+            let lineToPrepend = constructorLine;
+            if (-1 === indexToInsert) {
+                let lineNumberToCheck = constructorLine.lineNumber + 1;
+                lineToPrepend = document.lineAt(lineNumberToCheck);
+                while (!lineToPrepend.text.includes(')')) {
+                    lineNumberToCheck++;
+                    lineToPrepend = document.lineAt(lineNumberToCheck);
+                }
+                lineNumberToCheck--;
+                lineToPrepend = document.lineAt(lineNumberToCheck);
+                indexToInsert = lineToPrepend.range.end.character;
+            }
+            positionToInsert = new vscode.Position(
+                lineToPrepend.lineNumber,
+                indexToInsert
+            );
         }
         edit.insert(
             document.uri,
