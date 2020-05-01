@@ -78,6 +78,10 @@ suite(suiteName, async () => {
         await runTestCase('Test1.1', 1);
     });
 
+    test('addConstructorParam should add constructor param to existing constructor (space after declaration)', async () => {
+        await runTestCase('Test1.2', 1);
+    });
+
     test('addConstructorParam should add constructor param to existing constructor with param', async () => {
         await runTestCase('Test2', 2);
     });

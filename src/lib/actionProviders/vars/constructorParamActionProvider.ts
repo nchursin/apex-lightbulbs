@@ -3,7 +3,7 @@ import { VARIABLE_ACTIONS } from '@labels';
 import { SYMBOL_KIND } from '@constants';
 import { ApexServer, SymbolParser, Editor } from "@utils";
 import { LanguageClient } from 'vscode-languageclient';
-import { repeat, join, last } from 'ramda';
+import { repeat, join, last, match } from 'ramda';
 import { Templates } from '@templates';
 
 export class ConstructorParamActionProvider implements vscode.CodeActionProvider {
@@ -88,6 +88,17 @@ export class ConstructorParamActionProvider implements vscode.CodeActionProvider
         while (!lineToAdd.text.includes('{')) {
             lineNumberToCheck++;
             lineToAdd = document.lineAt(lineNumberToCheck);
+        }
+
+        let lineNumberCheckForSuper = lineNumberToCheck + 1;
+        while(!document.lineAt(lineNumberCheckForSuper).text.trim()) {
+            lineNumberCheckForSuper++;
+        }
+        const superThisKeywordsRegex = /\b(super|this)\b\s*\(/;
+        const textAtLineToCheckForSuper = document.lineAt(lineNumberCheckForSuper).text;
+        const matches = match(superThisKeywordsRegex, textAtLineToCheckForSuper);
+        if (matches.length) {
+            lineToAdd = document.lineAt(lineNumberCheckForSuper);
         }
 
         const constructorDeclarationEnd = lineToAdd.range.end;
