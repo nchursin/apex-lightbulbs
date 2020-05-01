@@ -26,33 +26,33 @@ export class ConstructorParamActionProvider implements vscode.CodeActionProvider
         const symbols = await ApexServer.getAllSymbols(document, this.languageClient);
         const symbol = SymbolParser.findSymbolAtLine(symbols, range.start.line);
 
-        if (symbol && (this.suitableFor.includes(symbol.kind))) {
-            const addGetSetAction = this.getAddGetSetAction(document, symbol, symbols);
+        if (symbol && this.suitableFor.includes(symbol.kind)) {
+            const addGetSetAction = this.getConstructorParamAction(document, symbol, symbols);
             result.push(addGetSetAction);
         }
         return result;
     }
 
-    private getAddGetSetAction(
+    private getConstructorParamAction(
         document: vscode.TextDocument,
         varSymbol: vscode.SymbolInformation,
         classSymbols: vscode.SymbolInformation[]
     ): vscode.CodeAction {
-        const addGetSetAction = new vscode.CodeAction(VARIABLE_ACTIONS.ADD_CONSTRUCTOR_PARAM, vscode.CodeActionKind.Refactor);
-        addGetSetAction.edit = new vscode.WorkspaceEdit();
+        const action = new vscode.CodeAction(VARIABLE_ACTIONS.ADD_CONSTRUCTOR_PARAM, vscode.CodeActionKind.Refactor);
+        action.edit = new vscode.WorkspaceEdit();
 
         const constructor = SymbolParser.findConstructor(classSymbols);
 
         if (!constructor) {
-            return addGetSetAction;
+            return action;
         }
 
         const [ varName, varType ] = varSymbol.name.split(' : ');
 
-        this.addConstructorParameterInsert(addGetSetAction.edit, document, constructor, [ varName, varType ]);
-        this.addAssignmentInsert(addGetSetAction.edit, document, constructor, varName);
+        this.addConstructorParameterInsert(action.edit, document, constructor, [ varName, varType ]);
+        this.addAssignmentInsert(action.edit, document, constructor, varName);
 
-        return addGetSetAction;
+        return action;
     }
 
     private addConstructorParameterInsert(
@@ -62,28 +62,11 @@ export class ConstructorParamActionProvider implements vscode.CodeActionProvider
         [ varName, varType ]: string[]
     ) {
         let parameterText = `${varType} ${varName}`;
-        let positionToInsert;
         if (!constructorSymbol.name.includes('()')) {
+            // no params constructor
             parameterText = `, ${parameterText}`;
         }
-        const constructorLine = document.lineAt(constructorSymbol.location.range.end.line);
-        let indexToInsert = constructorLine.text.indexOf(')');
-        let lineToPrepend = constructorLine;
-        if (-1 === indexToInsert) {
-            let lineNumberToCheck = constructorLine.lineNumber + 1;
-            lineToPrepend = document.lineAt(lineNumberToCheck);
-            while (!lineToPrepend.text.includes(')')) {
-                lineNumberToCheck++;
-                lineToPrepend = document.lineAt(lineNumberToCheck);
-            }
-            lineNumberToCheck--;
-            lineToPrepend = document.lineAt(lineNumberToCheck);
-            indexToInsert = lineToPrepend.range.end.character;
-        }
-        positionToInsert = new vscode.Position(
-            lineToPrepend.lineNumber,
-            indexToInsert
-        );
+        const positionToInsert = this.getPositionToInsertArgument(document, constructorSymbol);
         edit.insert(
             document.uri,
             positionToInsert,
@@ -111,6 +94,28 @@ export class ConstructorParamActionProvider implements vscode.CodeActionProvider
             document.uri,
             constructorDeclarationEnd,
             assignment
+        );
+    }
+
+    private getPositionToInsertArgument(document: vscode.TextDocument, constructorSymbol: vscode.SymbolInformation) {
+        let indexToInsert;
+        let lineNumberToCheck = constructorSymbol.location.range.end.line;
+
+        while (!document.lineAt(lineNumberToCheck).text.includes(')')) {
+            lineNumberToCheck++;
+        }
+
+        if (constructorSymbol.location.range.end.line === lineNumberToCheck) {
+            indexToInsert = document.lineAt(lineNumberToCheck).text.indexOf(')');
+        } else {
+            lineNumberToCheck--;
+            const lineToPrepend = document.lineAt(lineNumberToCheck);
+            indexToInsert = lineToPrepend.range.end.character;
+        }
+
+        return new vscode.Position(
+            lineNumberToCheck,
+            indexToInsert
         );
     }
 }
