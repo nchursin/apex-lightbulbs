@@ -1,8 +1,7 @@
-# Apex Intention Actions
+# Apex Lighbulbs
+## Under Development
 
 A VSCode plugin, an analogue of _Apex Intention Actions_ for Sublime Text 3. Adds quick actions for Salesforce Apex to VSCode such as adding getter, creating constructor, etc.
-
-# WORK IN PROGRESS! AGAIN! Release this week!
 
 ## Features
 Currently existing features:
@@ -39,7 +38,7 @@ Just VSCode. You can use it with whatever Apex plugin you like.
 3. Colaborators: [NChursin](https://github.com/nchursin)
 
 ## Versioning
-Apex Intention Actions follows [Semantic Versioning 2.0.0](https://semver.org/)
+Apex Lightbulbs follows [Semantic Versioning 2.0.0](https://semver.org/)
 
 ## License
 Apache 2.0
