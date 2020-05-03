@@ -1,4 +1,4 @@
-# Apex Lighbulbs
+# Apex Lightbulbs
 ##### Former _Apex Intention Actions_
 
 A VSCode plugin, an analogue of _Apex Intention Actions_ for Sublime Text 3. Adds quick actions for Salesforce Apex to VSCode such as adding getter, creating constructor, etc.
