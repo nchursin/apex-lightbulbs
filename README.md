@@ -17,7 +17,7 @@ Planned features:
 1. Extract constant from a magic value
 
 ## A little demo:
-![Getter-setter demo](https://github.com/nchursin/resources/blob/assets/animations/lightbulbs.gif?raw=true)
+![Getter-setter demo](https://raw.githubusercontent.com/nchursin/apex-lightbulbs/assets/animations/lightbulbs.gif)
 
 ## Extension Settings
 
