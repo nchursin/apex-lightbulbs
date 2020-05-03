@@ -27,7 +27,7 @@ Planned features:
 ## Links
 * [Issues](https://github.com/nchursin/apex-lightbulbs/issues)
 * [Repository](https://github.com/nchursin/apex-lightbulbs)
-* [VSCode Marketplace](https://marketplace.visualstudio.com/items?itemName=nchursin.apex-lighbulbs)
+* [VSCode Marketplace](https://marketplace.visualstudio.com/items?itemName=nchursin.apex-lightbulbs)
 
 ## References
 
