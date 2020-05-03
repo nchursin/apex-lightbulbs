@@ -28,6 +28,7 @@
 	},
 	"scripts": {
 		"vscode:package": "vsce package --yarn",
+		"vscode:publish": "vsce publish --yarn",
 		"vscode:prepublish": "yarn build:prod",
 		"build:prod": "webpack --mode production",
 		"precompile": "rm -rf out",
