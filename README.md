@@ -11,27 +11,27 @@ Currently existing features:
 1. Add constructor parameter
 
 Planned features:
+1. Select constructor to add a parameter. Currently adds to the first constructor in class
 1. Add explicit getter and setter
 1. Add method/constructor overload
 1. Make test compile for TDD
 1. Extract constant from a magic value
 
-> A little demo recorded in Sublime Text 3:
-![Getter-setter demo](https://github.com/nchursin/resources/blob/master/ApexIntentionActions/getter-setter.gif?raw=true)
+## A little demo:
+![Getter-setter demo](https://github.com/nchursin/resources/blob/assets/animations/lightbulbs.gif?raw=true)
 
 ## Extension Settings
 
 >To be described
 
 ## Links
-* [Issues](https://github.com/nchursin/vscode-ApexIntentionActions/issues)
-* [Repository](https://github.com/nchursin/vscode-ApexIntentionActions)
+* [Issues](https://github.com/nchursin/apex-lightbulbs/issues)
+* [Repository](https://github.com/nchursin/apex-lightbulbs)
 
 ## References
 
 1. [Sublime Plugin](https://packagecontrol.io/packages/Apex%20Intention%20Actions)
-2. [Sublime Plugin wiki](https://github.com/nchursin/ApexIntentionActions/wiki)
-3. Colaborators: [NChursin](https://github.com/nchursin)
+1. [Sublime Plugin wiki](https://github.com/nchursin/ApexIntentionActions/wiki)
 
 ## Versioning
 Apex Lightbulbs follows [Semantic Versioning 2.0.0](https://semver.org/)
