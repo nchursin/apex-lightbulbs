@@ -11,6 +11,9 @@
 	"engines": {
 		"vscode": "^1.41.0"
 	},
+	"keywords": [
+        "apex", "salesforce", "automation", "completions", "snippets"
+    ],
 	"categories": [
 		"Other"
 	],
