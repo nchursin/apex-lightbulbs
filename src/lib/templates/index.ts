@@ -2,12 +2,13 @@ import * as path from 'path';
 import { promises } from 'fs';
 const { readFile } = promises;
 import * as template from 'es6-template-strings';
+const constructorTemplate = require('@assets/constructor.apex');
 
 const templatePath = (templateName: string) => path.resolve(__dirname, templateName);
 
-const fileContentsDecorator = (name: string) => async () => {
+const fileContentsDecorator = (name: string) => () => {
     if (!fileContents[`_${name}`]) {
-        fileContents[`_${name}`] = await readFile(templatePath(`${name}.apex`), 'UTF-8');
+        fileContents[`_${name}`] = require(`@assets/${name}.apex`);
     }
     return fileContents[`_${name}`];
 };
@@ -20,12 +21,12 @@ const templateTexts = {
 };
 
 export namespace Templates {
-    export const constructor = async (params: { indent: string, className: string }) => {
-        const templateText = await templateTexts.constructor();
+    export const constructor = (params: { indent: string, className: string }) => {
+        const templateText = templateTexts.constructor();
         return template(templateText, params);
     };
 
-    export const constructorWithParams = async (
+    export const constructorWithParams = (
         params: {
             indent: string
             className: string
@@ -34,7 +35,7 @@ export namespace Templates {
             parametersAssignment: string
         }
     ) => {
-        const templateText = await templateTexts.constructorWithParams();
+        const templateText = templateTexts.constructorWithParams();
         return template(templateText, params);
     };
 }
