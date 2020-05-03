@@ -28,13 +28,13 @@
 	},
 	"scripts": {
 		"vscode:package": "vsce package --yarn",
-        "vscode:prepublish": "webpack --mode production",
-        "build:prod": "webpack --mode production",
+		"vscode:prepublish": "yarn build:prod",
+		"build:prod": "webpack --mode production",
 		"precompile": "rm -rf out",
 		"compile:non-ts": "bash ./scripts/nonTsCompile.sh",
 		"compile": "tsc -p ./ && yarn compile:non-ts",
 		"test:data": "bash ./scripts/testData.sh",
-		"watch": "webpack --mode development --watch",
+		"watch": "webpack --mode development",
 		"pretest": "yarn run compile && yarn run test:data",
 		"test": "node ./out/test/runTest.js"
 	},

@@ -14,5 +14,6 @@ vsc-extension-quickstart.md
 **/tslint.json
 **/*.map
 **/*.ts
+webpack/**
 webpack.config.js
 *.log

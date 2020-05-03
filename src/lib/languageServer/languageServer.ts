@@ -22,12 +22,10 @@ const APEX_LANGUAGE_SERVER_MAIN = 'apex.jorje.lsp.ApexLanguageServerLauncher';
 declare var v8debug: any;
 const DEBUG = typeof v8debug === 'object' || startedInDebugMode();
 
-async function createServer(
-    context: vscode.ExtensionContext
-): Promise<Executable> {
+async function createServer(): Promise<Executable> {
     try {
         const requirementsData = await requirements.resolveRequirements();
-        const uberJar = path.resolve(context.extensionPath, 'assets', UBER_JAR_NAME);
+        const uberJar = path.resolve(global.assets, UBER_JAR_NAME);
         const javaExecutable = path.resolve(
         `${requirementsData.java_home}/bin/java`
         );
@@ -66,6 +64,7 @@ async function createServer(
             args
         };
     } catch (err) {
+        telemetryService.sendApexLSPError(global.assets);
         vscode.window.showErrorMessage(err);
         telemetryService.sendApexLSPError(err);
         throw err;
@@ -101,9 +100,7 @@ function protocol2CodeConverter(value: string) {
     return vscode.Uri.parse(value);
 }
 
-export async function createLanguageServer(
-    context: vscode.ExtensionContext
-): Promise<LanguageClient> {
+export async function createLanguageServer(): Promise<LanguageClient> {
     const clientOptions: LanguageClientOptions = {
         // Register the server for Apex documents
         documentSelector: [{ language: 'apex', scheme: 'file' }],
@@ -118,7 +115,7 @@ export async function createLanguageServer(
         }
     };
 
-    const server = await createServer(context);
+    const server = await createServer();
     const client = new LanguageClient(
         'apex',
         'Apex Intention Actions LSP',

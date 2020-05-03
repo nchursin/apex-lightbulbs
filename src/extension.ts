@@ -3,6 +3,8 @@
 import * as vscode from 'vscode';
 // import 'module-alias/register';
 
+import * as path from 'path';
+
 import { GetterSetterActionProvider, ConstructorParamActionProvider } from '@actionProviders/vars';
 import { AddConstructorProvider } from '@actionProviders/classes';
 import * as languageServer from '@languageServer/languageServer';
@@ -14,8 +16,9 @@ import { LanguageClient } from 'vscode-languageclient';
 export async function activate(context: vscode.ExtensionContext) {
     let languageClient: LanguageClient;
     try {
+        global.assets = path.resolve(context.extensionPath, 'assets');
         const langClientHRStart = process.hrtime();
-        languageClient = await languageServer.createLanguageServer(context);
+        languageClient = await languageServer.createLanguageServer();
         // languageClientUtils.setClientInstance(languageClient);
         const handle = languageClient.start();
         // languageClientUtils.setStatus(ClientStatus.Indexing, '');
