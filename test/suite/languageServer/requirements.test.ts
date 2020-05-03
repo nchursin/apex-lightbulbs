@@ -16,8 +16,8 @@ import { JAVA_HOME_KEY, JAVA_MEMORY_KEY } from '@src/lib/languageServer/requirem
 suite('Java Requirements Test', () => {
   test('The jar should be signed', () => {
     shell.config.execPath = process.execPath;
-    const apexJarPath = path.join(__dirname, '..', '..', '..', 'src', 'apex-jorje-lsp.jar');
-    console.log(shell.exec(`ls ${path.join(__dirname, '..', '..', '..', 'src')}`).stdout);
+    const apexJarPath = path.join(__dirname, '..', '..', '..', '..', 'assets', 'apex-jorje-lsp.jar');
+    console.log(shell.exec(`ls ${path.join(__dirname, '..', '..', '..', '..', 'assets')}`).stdout);
     expect(
       shell
         .exec(`jarsigner -verify ${apexJarPath}`)

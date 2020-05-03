@@ -10,7 +10,8 @@ export function run(): Promise<void> {
 	});
 	mocha.useColors(true);
 
-	const testsRoot = path.resolve(__dirname, '..');
+    const testsRoot = path.resolve(__dirname, '..');
+    global.assets = path.resolve(testsRoot, '..', '..', 'assets');
 
 	return new Promise((c, e) => {
 		glob('**/**.test.js', { cwd: testsRoot }, (err, files) => {
