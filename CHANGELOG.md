@@ -7,3 +7,6 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ## [1.0.1]
 
 - Initial release
+- "Add constructor" action for classes
+- "Add { get; set; }" action for fields
+- "Add constructor parameter" action for fields and properties
