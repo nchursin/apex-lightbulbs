@@ -1,2 +1,0 @@
-${indent}public ${className}() {
-${indent}}
