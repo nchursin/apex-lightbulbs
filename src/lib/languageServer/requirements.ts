@@ -10,7 +10,7 @@
 
 import * as cp from 'child_process';
 import { workspace } from 'vscode';
-import pathExists = require('path-exists');
+import { existsSync } from 'fs';
 
 // tslint:disable-next-line:no-var-requires
 const expandHomeDir = require('expand-home-dir');
@@ -63,7 +63,7 @@ function checkJavaRuntime(): Promise<string> {
 
         if (javaHome) {
             javaHome = expandHomeDir(javaHome) as string;
-            if (!pathExists.sync(javaHome)) {
+            if (!existsSync(javaHome)) {
                 return reject(
                     `${source} points to a missing folder. For information on how to setup the Salesforce Apex extension, see [Set Your Java Version](${SET_JAVA_DOC_LINK}).`
                 );

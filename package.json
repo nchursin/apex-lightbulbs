@@ -2,12 +2,12 @@
 	"name": "apex-lighbulbs",
 	"displayName": "Apex Lightbulbs",
 	"description": "Bulb actions for VSCode to speed up your development",
-    "version": "1.0.0",
-    "publisher": "nchursin",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/nchursin/apex-lightbulbs.git"
-    },
+	"version": "1.0.0",
+	"publisher": "nchursin",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/nchursin/apex-lightbulbs.git"
+	},
 	"engines": {
 		"vscode": "^1.41.0"
 	},
@@ -35,17 +35,17 @@
 		"watch": "tsc -watch -p ./",
 		"pretest": "yarn run compile && yarn run test:data",
 		"test": "node ./out/test/runTest.js"
-    },
-    "_moduleAliases": {
-        "@src": "out/src",
-        "@utils": "out/src/lib/utils",
-        "@labels": "out/src/labels",
-        "@constants": "out/src/constants",
-        "@templates": "out/src/lib/templates",
-        "@languageServer": "out/src/lib/languageServer",
-        "@actionProviders": "out/src/lib/actionProviders",
-        "@testutils": "out/test/utils"
-    },
+	},
+	"_moduleAliases": {
+		"@src": "out/src",
+		"@utils": "out/src/lib/utils",
+		"@labels": "out/src/labels",
+		"@constants": "out/src/constants",
+		"@templates": "out/src/lib/templates",
+		"@languageServer": "out/src/lib/languageServer",
+		"@actionProviders": "out/src/lib/actionProviders",
+		"@testutils": "out/test/utils"
+	},
 	"devDependencies": {
 		"@types/chai": "^4.2.11",
 		"@types/glob": "^7.1.1",
