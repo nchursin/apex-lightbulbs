@@ -3,6 +3,10 @@
 
 A VSCode plugin, an analogue of _Apex Intention Actions_ for Sublime Text 3. Adds quick actions for Salesforce Apex to VSCode such as adding getter, creating constructor, etc.
 
+## Requirements
+1. VSCode (obviously)
+1. VSCode Extension [salesforce.salesforcedx-vscode-apex](https://marketplace.visualstudio.com/items?itemName=salesforce.salesforcedx-vscode-apex)
+
 ## Features
 Currently existing features:
 1. Add { get; set; } to a variable
