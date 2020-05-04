@@ -5,7 +5,7 @@ node_js:
   - 10
 
 os:
-  - linux
+#   - linux
   - osx
 #   - windows
 

@@ -1,6 +1,7 @@
 import * as path from 'path';
 
-import { runTests } from 'vscode-test';
+import { runTests, resolveCliPathFromVSCodeExecutablePath, downloadAndUnzipVSCode } from 'vscode-test';
+import { spawnSync } from 'child_process';
 
 async function main() {
 	try {
@@ -12,7 +13,15 @@ async function main() {
 		// Passed to --extensionTestsPath
 		const extensionTestsPath = path.resolve(__dirname, './suite/index');
 
-		// Download VS Code, unzip it and run the integration test
+        // Download VS Code, unzip it
+        const vscodeExecutablePath = await downloadAndUnzipVSCode();
+        const cliPath = resolveCliPathFromVSCodeExecutablePath(vscodeExecutablePath);
+        spawnSync(cliPath, ['--install-extension', 'salesforce.salesforcedx-vscode-apex'], {
+            encoding: 'utf-8',
+            stdio: 'inherit'
+        });
+
+        // run the integration test
 		await runTests({ extensionDevelopmentPath, extensionTestsPath });
 	} catch (err) {
 		console.error('Failed to run tests');

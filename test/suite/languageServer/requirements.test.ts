@@ -9,19 +9,22 @@
 
 import { expect } from 'chai';
 import * as path from 'path';
-import * as shell from 'shelljs';
+import { spawnSync } from 'child_process';
 import { workspace } from 'vscode';
 import { JAVA_HOME_KEY, JAVA_MEMORY_KEY } from '@src/lib/languageServer/requirements';
 
 suite('Java Requirements Test', () => {
   test('The jar should be signed', () => {
-    shell.config.execPath = process.execPath;
-    const apexJarPath = path.join(__dirname, '..', '..', '..', '..', 'assets', 'apex-jorje-lsp.jar');
-    console.log(shell.exec(`ls ${path.join(__dirname, '..', '..', '..', '..', 'assets')}`).stdout);
+    const jarFolderPath = path.join(__dirname, '..', '..', '..', '..', 'assets');
+    const apexJarPath = path.join(jarFolderPath, 'apex-jorje-lsp.jar');
+    const signCheckResult = spawnSync('jarsigner', [ '-verify', apexJarPath ],{
+            cwd: process.cwd(),
+            env: process.env,
+            stdio: 'pipe',
+            encoding: 'utf-8'
+        });
     expect(
-      shell
-        .exec(`jarsigner -verify ${apexJarPath}`)
-        .stdout.includes('jar verified')
+        signCheckResult.stdout.includes('jar verified')
     ).to.be.true;
   });
 

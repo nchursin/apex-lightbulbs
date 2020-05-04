@@ -1,7 +1,6 @@
 import * as path from 'path';
 import * as Mocha from 'mocha';
 import * as glob from 'glob';
-import * as shell from 'shelljs';
 import 'module-alias/register';
 
 export function run(): Promise<void> {
@@ -13,8 +12,6 @@ export function run(): Promise<void> {
 
     const testsRoot = path.resolve(__dirname, '..');
     global.assets = path.resolve(testsRoot, '..', '..', 'assets');
-    // in case not installed (CI case)
-    console.log(shell.exec(`code --install-extension salesforce.salesforcedx-vscode-apex`).stdout);
 
 	return new Promise((c, e) => {
 		glob('**/**.test.js', { cwd: testsRoot }, (err, files) => {
