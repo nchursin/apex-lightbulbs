@@ -1,3 +1,6 @@
+![Build status](https://travis-ci.com/nchursin/apex-lightbulbs.svg?branch=master)
+![Version](https://img.shields.io/github/package-json/v/nchursin/apex-lightbulbs)
+![Installs](https://img.shields.io/visual-studio-marketplace/i/nchursin.apex-lightbulbs)
 # Apex Lightbulbs
 ##### Former _Apex Intention Actions_
 
