@@ -1,0 +1,11 @@
+sudo: false
+os:
+  - linux
+  - osx
+  - windows
+
+install:
+  - yarn install
+
+script:
+  - yarn test
