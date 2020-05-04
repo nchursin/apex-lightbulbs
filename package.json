@@ -46,16 +46,6 @@
 		"pretest": "yarn run compile && yarn run test:data",
 		"test": "node ./out/test/runTest.js"
 	},
-	"_moduleAliases": {
-		"@src": "out/src",
-		"@utils": "out/src/lib/utils",
-		"@labels": "out/src/labels",
-		"@constants": "out/src/constants",
-		"@templates": "out/src/lib/templates",
-		"@languageServer": "out/src/lib/languageServer",
-		"@actionProviders": "out/src/lib/actionProviders",
-		"@testutils": "out/test/utils"
-	},
 	"devDependencies": {
 		"@types/chai": "^4.2.11",
 		"@types/glob": "^7.1.1",
@@ -74,6 +64,7 @@
 		"webpack-cli": "^3.3.11"
 	},
 	"dependencies": {
+		"@types/module-alias": "^2.0.0",
 		"@types/ramda": "^0.26.44",
 		"@types/sinon": "^7.5.2",
 		"chai": "^4.2.0",
