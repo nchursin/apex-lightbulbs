@@ -5,6 +5,13 @@
 const path = require('path');
 
 const root = __dirname;
+const packageContent = require('./package.json');
+const { mapObjIndexed } = require('ramda');
+
+const alias = mapObjIndexed(
+    (aliasContent, aliasName, obj) => path.resolve(root, aliasContent.replace('out/', '')),
+    packageContent._moduleAliases
+);
 
 /**@type {import('webpack').Configuration}*/
 const config = {
@@ -25,15 +32,17 @@ const config = {
   resolve: {
     // support reading TypeScript and JavaScript files, 📖 -> https://github.com/TypeStrong/ts-loader
     extensions: ['.ts', '.js'],
-    alias: {
-        "@src": path.resolve(root, "src"),
-        "@utils": path.resolve(root, "src/lib/utils"),
-        "@labels": path.resolve(root, "src/labels"),
-        "@constants": path.resolve(root, "src/constants"),
-        "@templates": path.resolve(root, "src/lib/templates"),
-        "@languageServer": path.resolve(root, "src/lib/languageServer"),
-        "@actionProviders": path.resolve(root, "src/lib/actionProviders"),
-    },
+    alias,
+    // : {
+    //     "@src": path.resolve(root, "src"),
+    //     "@utils": path.resolve(root, "src/lib/utils"),
+    //     "@labels": path.resolve(root, "src/labels"),
+    //     "@constants": path.resolve(root, "src/constants"),
+    //     "@templates": path.resolve(root, "src/lib/templates"),
+    //     "@languageServer": path.resolve(root, "src/lib/languageServer"),
+    //     "@actionProviders": path.resolve(root, "src/lib/actionProviders"),
+	// 	"@testutils": path.resolve(root, "out/test/utils"),
+    // },
   },
   module: {
     rules: [

@@ -47,7 +47,6 @@
 		"test": "node ./out/test/runTest.js"
 	},
 	"_moduleAliases": {
-		"@assets": "assets",
 		"@src": "out/src",
 		"@utils": "out/src/lib/utils",
 		"@labels": "out/src/labels",

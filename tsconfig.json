@@ -16,7 +16,6 @@
 		"baseUrl": "./",
         "paths": {
             "@src/*": ["src/*"],
-            "@assets/*": ["assets/*"],
             "@utils": ["src/lib/utils"],
             "@labels": ["src/labels"],
             "@constants": ["src/constants"],
