@@ -18,7 +18,6 @@ before_install:
 
 install:
   - yarn install
-  - yarn vscode:prepublish
 
 script:
   - yarn test
