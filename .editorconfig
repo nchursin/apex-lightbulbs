@@ -34,3 +34,6 @@ trim_trailing_whitespace = false
 
 [**.apex]
 trim_trailing_whitespace = false
+
+[**.yml]
+indent_size = 4
