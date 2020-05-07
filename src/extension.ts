@@ -38,6 +38,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
                 const actionProviders: BaseProvider[] = [
                     new ConstructorParamActionProvider(languageClient),
+                    new AddConstructorProvider(languageClient),
                 ];
 
                 actionProviders.forEach(
@@ -50,11 +51,6 @@ export async function activate(context: vscode.ExtensionContext) {
                 context.subscriptions.push(
                     vscode.languages.registerCodeActionsProvider('apex', new GetterSetterActionProvider(languageClient), {
                         providedCodeActionKinds: GetterSetterActionProvider.providedCodeActionKinds
-                    }));
-
-                context.subscriptions.push(
-                    vscode.languages.registerCodeActionsProvider('apex', new AddConstructorProvider(languageClient), {
-                        providedCodeActionKinds: AddConstructorProvider.providedCodeActionKinds
                     }));
             })
             .catch(err => {

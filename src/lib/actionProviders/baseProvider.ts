@@ -10,9 +10,13 @@ export abstract class BaseProvider implements vscode.CodeActionProvider {
     }
 
     public abstract provideCodeActions(document: vscode.TextDocument, range: vscode.Range): Promise<vscode.CodeAction[]>;
-
-    public abstract getProvidedCodeActionsKind(): vscode.CodeActionKind[];
     public abstract getActionableSymbolKinds(): SymbolKind[];
+
+    public getProvidedCodeActionsKind(): vscode.CodeActionKind[] {
+        return [
+            vscode.CodeActionKind.Refactor
+        ];
+    }
 
     protected isActionable(symbol: SymbolInformation) {
         return this.getActionableSymbolKinds().includes(symbol.kind);

@@ -20,12 +20,6 @@ export class ConstructorParamActionProvider extends BaseProvider {
         return result;
     }
 
-    public getProvidedCodeActionsKind(): vscode.CodeActionKind[] {
-        return [
-            vscode.CodeActionKind.Refactor
-        ];
-    }
-
     public getActionableSymbolKinds(): SymbolKind[] {
         return [ SymbolKind.Field, SymbolKind.Property ];
     }

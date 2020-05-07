@@ -4,28 +4,24 @@ import { Templates } from "@templates";
 import { join, find, last, equals, findIndex, slice, findLastIndex, repeat, add } from "ramda";
 import { LanguageClient, SymbolKind, SymbolInformation } from "vscode-languageclient";
 import { ApexServer, SymbolParser, Editor } from "@utils";
+import { BaseProvider } from "../baseProvider";
 
-export class AddConstructorProvider implements vscode.CodeActionProvider {
-    private languageClient: LanguageClient;
-
-    public static readonly providedCodeActionKinds = [
-		vscode.CodeActionKind.Refactor
-	];
-
-    constructor(languageClient: LanguageClient) {
-        this.languageClient = languageClient;
-    }
+export class AddConstructorProvider extends BaseProvider {
 
     public async provideCodeActions(document: vscode.TextDocument, range: vscode.Range): Promise<vscode.CodeAction[]> {
-        const allSymbols = await ApexServer.getAllSymbols(document, this.languageClient);
+        let result: vscode.CodeAction[] = [];
+        const allSymbols = await this.getAllSymbols(document);
         const providingSymbol = SymbolParser.findSymbolAtLine(allSymbols, range.start.line);
 
-        if (!providingSymbol || !this.isClassSymbol(providingSymbol)) {
-            return [];
+        if (providingSymbol && this.isActionable(providingSymbol)) {
+            const classSymbols = this.getWholeClassMeta(providingSymbol, allSymbols);
+            result = await this.getAvailableClassActions(classSymbols, document);
         }
+        return result;
+    }
 
-        const classSymbols = this.getWholeClassMeta(providingSymbol, allSymbols);
-        return await this.getAvailableClassActions(classSymbols, document);
+    public getActionableSymbolKinds(): SymbolKind[] {
+        return [ SymbolKind.Class ];
     }
 
     private async getAvailableClassActions(symbolInfos: SymbolInformation[], document: vscode.TextDocument): Promise<vscode.CodeAction[]> {
