@@ -1,9 +1,8 @@
 import * as vscode from "vscode";
 import { CLASS_ACTIONS } from "@labels";
-import { SYMBOL_KIND } from "@constants";
 import { Templates } from "@templates";
 import { join, find, last, equals, findIndex, slice, findLastIndex, repeat, add } from "ramda";
-import { LanguageClient } from "vscode-languageclient";
+import { LanguageClient, SymbolKind } from "vscode-languageclient";
 import { ApexServer, SymbolParser, Editor } from "@utils";
 
 export class AddConstructorProvider implements vscode.CodeActionProvider {
@@ -39,7 +38,7 @@ export class AddConstructorProvider implements vscode.CodeActionProvider {
     }
 
     private isClassSymbol(symbol: vscode.SymbolInformation): boolean {
-        return SYMBOL_KIND.CLASS === symbol.kind;
+        return SymbolKind.Class === symbol.kind;
     }
 
     private hasConstructor(symbolInfos: vscode.SymbolInformation[]): Boolean {
@@ -49,7 +48,7 @@ export class AddConstructorProvider implements vscode.CodeActionProvider {
     private findConstructor(symbolInfos: vscode.SymbolInformation[]): vscode.SymbolInformation | undefined {
         const classDeclaration = last(symbolInfos);
         return classDeclaration && find((symbol: vscode.SymbolInformation) => {
-            return SYMBOL_KIND.CONSTRUCTOR === symbol.kind && symbol.name.startsWith(classDeclaration.name);
+            return SymbolKind.Constructor === symbol.kind && symbol.name.startsWith(classDeclaration.name);
         }, symbolInfos);
     }
 
@@ -59,7 +58,7 @@ export class AddConstructorProvider implements vscode.CodeActionProvider {
             return allSymbols;
         }
         const previousSymbols = slice(0, classDefnIndex, allSymbols);
-        const lastClassIndex = findLastIndex((s) => s.kind === SYMBOL_KIND.CLASS, previousSymbols);
+        const lastClassIndex = findLastIndex(this.isClassSymbol, previousSymbols);
         return slice(lastClassIndex + 1, classDefnIndex + 1, allSymbols);
     }
 

@@ -1,9 +1,12 @@
 import { SymbolInformation } from 'vscode';
 import { find, findLast, not, compose, last, dropLast } from 'ramda';
-import { SYMBOL_KIND } from '@constants';
+import { SymbolKind } from 'vscode-languageclient';
+
+const propertyOrField: number[] = [ SymbolKind.Property, SymbolKind.Field ];
 
 const getStartLine = (symbol: SymbolInformation): number => symbol.location.range.start.line;
-const isPropertyOrField = (symbol: SymbolInformation) => symbol.kind === SYMBOL_KIND.PROPERTY || symbol.kind === SYMBOL_KIND.FIELD;
+const isPropertyOrField = (symbol: SymbolInformation) => propertyOrField.includes(symbol.kind);
+const isConstructor = (symbol: SymbolInformation) => SymbolKind.Constructor === symbol.kind;
 
 const findFirstNonVarDeclaration = find(compose(not, isPropertyOrField));
 const findLastVarDeclaration = findLast(isPropertyOrField);
@@ -37,7 +40,7 @@ namespace SymbolParser {
     export const findConstructor = (symbolInfos: SymbolInformation[]): SymbolInformation | undefined => {
         const classDeclaration = last(symbolInfos);
         return classDeclaration && find((symbol: SymbolInformation) => {
-            return SYMBOL_KIND.CONSTRUCTOR === symbol.kind && symbol.name.startsWith(classDeclaration.name);
+            return isConstructor(symbol) && symbol.name.startsWith(classDeclaration.name);
         }, symbolInfos);
     };
 }

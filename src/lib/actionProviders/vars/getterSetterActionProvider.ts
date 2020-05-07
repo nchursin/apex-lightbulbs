@@ -1,8 +1,7 @@
 import * as vscode from 'vscode';
 import { VARIABLE_ACTIONS } from '@labels';
-import { SYMBOL_KIND } from '@constants';
 import { getSymbolAtLine } from "@utils";
-import { LanguageClient } from 'vscode-languageclient';
+import { LanguageClient, SymbolKind } from 'vscode-languageclient';
 
 export class GetterSetterActionProvider implements vscode.CodeActionProvider {
     private languageClient: LanguageClient | undefined;
@@ -23,7 +22,7 @@ export class GetterSetterActionProvider implements vscode.CodeActionProvider {
             const result = [];
             const symbol = await getSymbolAtLine(range.start.line, document, this.languageClient);
 
-            if (symbol && SYMBOL_KIND.FIELD === symbol.kind) {
+            if (symbol && SymbolKind.Field === symbol.kind) {
                 const addGetSetAction = this.getAddGetSetAction(document, range);
                 result.push(addGetSetAction);
             }

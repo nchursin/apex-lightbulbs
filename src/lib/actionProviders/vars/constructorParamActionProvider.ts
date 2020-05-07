@@ -1,15 +1,14 @@
 import * as vscode from 'vscode';
 import { VARIABLE_ACTIONS } from '@labels';
-import { SYMBOL_KIND } from '@constants';
 import { ApexServer, SymbolParser, Editor } from "@utils";
-import { LanguageClient } from 'vscode-languageclient';
+import { LanguageClient, SymbolKind } from 'vscode-languageclient';
 import { repeat, join, last, match } from 'ramda';
 import { Templates } from '@templates';
 
 export class ConstructorParamActionProvider implements vscode.CodeActionProvider {
     private languageClient: LanguageClient | undefined;
 
-    private suitableFor = [SYMBOL_KIND.FIELD, SYMBOL_KIND.PROPERTY];
+    private suitableFor: number[] = [ SymbolKind.Field, SymbolKind.Property ];
 
     constructor(languageClient: LanguageClient | undefined = undefined) {
         this.languageClient = languageClient;
