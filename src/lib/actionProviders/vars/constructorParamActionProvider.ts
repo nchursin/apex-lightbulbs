@@ -8,27 +8,15 @@ import { BaseProvider } from '@actionProviders/baseProvider';
 
 export class ConstructorParamActionProvider extends BaseProvider {
 
-	public async provideCodeActions(document: vscode.TextDocument, range: vscode.Range): Promise<vscode.CodeAction[]> {
-        const result = [];
-        const symbols = await this.getAllSymbols(document);
-        const symbol = SymbolParser.findSymbolAtLine(symbols, range.start.line);
-
-        if (symbol && this.isActionable(symbol)) {
-            const addGetSetAction = await this.getConstructorParamAction(document, symbol, symbols);
-            result.push(addGetSetAction);
-        }
-        return result;
-    }
-
     public getActionableSymbolKinds(): SymbolKind[] {
         return [ SymbolKind.Field, SymbolKind.Property ];
     }
 
-    private async getConstructorParamAction(
+    protected async getAction(
         document: vscode.TextDocument,
         varSymbol: SymbolInformation,
         classSymbols: SymbolInformation[]
-    ): Promise<vscode.CodeAction> {
+    ) {
         const action = new vscode.CodeAction(VARIABLE_ACTIONS.ADD_CONSTRUCTOR_PARAM, vscode.CodeActionKind.Refactor);
         action.edit = new vscode.WorkspaceEdit();
 

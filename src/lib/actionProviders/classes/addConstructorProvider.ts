@@ -4,33 +4,24 @@ import { Templates } from "@templates";
 import { join, find, last, equals, findIndex, slice, findLastIndex, repeat, add } from "ramda";
 import { SymbolKind, SymbolInformation } from "vscode-languageclient";
 import { SymbolParser, Editor } from "@utils";
-import { BaseProvider } from "../baseProvider";
+import { BaseProvider } from '@actionProviders/baseProvider';
 
 export class AddConstructorProvider extends BaseProvider {
-
-    public async provideCodeActions(document: vscode.TextDocument, range: vscode.Range): Promise<vscode.CodeAction[]> {
-        let result: vscode.CodeAction[] = [];
-        const allSymbols = await this.getAllSymbols(document);
-        const providingSymbol = SymbolParser.findSymbolAtLine(allSymbols, range.start.line);
-
-        if (providingSymbol && this.isActionable(providingSymbol)) {
-            const classSymbols = this.getWholeClassMeta(providingSymbol, allSymbols);
-            result = await this.getAvailableClassActions(classSymbols, document);
-        }
-        return result;
-    }
 
     public getActionableSymbolKinds(): SymbolKind[] {
         return [ SymbolKind.Class ];
     }
 
-    private async getAvailableClassActions(symbolInfos: SymbolInformation[], document: vscode.TextDocument): Promise<vscode.CodeAction[]> {
-        const result: vscode.CodeAction[] = [];
-        if (!this.hasConstructor(symbolInfos)) {
-            const addConstructorAction = await this.createAction(symbolInfos, document);
-            result.push(addConstructorAction);
+    protected async getAction(
+        document: vscode.TextDocument,
+        actionableSymbol: SymbolInformation,
+        allSymbols: SymbolInformation[]
+    ) {
+        const classSymbols = this.getWholeClassMeta(actionableSymbol, allSymbols);
+
+        if (!this.hasConstructor(classSymbols)) {
+            return this.createAction(classSymbols, document);
         }
-        return result;
     }
 
     private isClassSymbol(symbol: SymbolInformation): boolean {
