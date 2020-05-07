@@ -1,5 +1,5 @@
 import { SymbolInformation } from 'vscode-languageclient';
-import { find, findLast, not, compose, last, dropLast } from 'ramda';
+import { find, findLast, not, compose, last, dropLast, findIndex, equals, slice, findLastIndex } from 'ramda';
 import { SymbolKind } from 'vscode-languageclient';
 
 const propertyOrField: number[] = [ SymbolKind.Property, SymbolKind.Field ];
@@ -10,6 +10,8 @@ const isConstructor = (symbol: SymbolInformation) => SymbolKind.Constructor === 
 
 const findFirstNonVarDeclaration = find(compose(not, isPropertyOrField));
 const findLastVarDeclaration = findLast(isPropertyOrField);
+
+const isClassSymbol = (symbol: SymbolInformation) => SymbolKind.Class === symbol.kind;
 
 namespace SymbolParser {
     export const findSymbolAtLine = (docSymbolResult: SymbolInformation[], lineNumber: number): SymbolInformation | undefined => {
@@ -42,6 +44,16 @@ namespace SymbolParser {
         return classDeclaration && find((symbol: SymbolInformation) => {
             return isConstructor(symbol) && symbol.name.startsWith(classDeclaration.name);
         }, symbolInfos);
+    };
+
+    export const getWholeClassMeta = (symbol: SymbolInformation, allSymbols: SymbolInformation[]) => {
+        const classDefnIndex = findIndex(equals(symbol), allSymbols);
+        if (allSymbols.length === classDefnIndex + 1) {
+            return allSymbols;
+        }
+        const previousSymbols = slice(0, classDefnIndex, allSymbols);
+        const lastClassIndex = findLastIndex(isClassSymbol, previousSymbols);
+        return slice(lastClassIndex + 1, classDefnIndex + 1, allSymbols);
     };
 }
 

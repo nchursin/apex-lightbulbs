@@ -17,36 +17,15 @@ export class AddConstructorProvider extends BaseProvider {
         actionableSymbol: SymbolInformation,
         allSymbols: SymbolInformation[]
     ) {
-        const classSymbols = this.getWholeClassMeta(actionableSymbol, allSymbols);
+        const classSymbols = SymbolParser.getWholeClassMeta(actionableSymbol, allSymbols);
 
         if (!this.hasConstructor(classSymbols)) {
             return this.createAction(classSymbols, document);
         }
     }
 
-    private isClassSymbol(symbol: SymbolInformation): boolean {
-        return SymbolKind.Class === symbol.kind;
-    }
-
     private hasConstructor(symbolInfos: SymbolInformation[]): Boolean {
-        return Boolean(this.findConstructor(symbolInfos));
-    }
-
-    private findConstructor(symbolInfos: SymbolInformation[]): SymbolInformation | undefined {
-        const classDeclaration = last(symbolInfos);
-        return classDeclaration && find((symbol: SymbolInformation) => {
-            return SymbolKind.Constructor === symbol.kind && symbol.name.startsWith(classDeclaration.name);
-        }, symbolInfos);
-    }
-
-    private getWholeClassMeta(symbol: SymbolInformation, allSymbols: SymbolInformation[]) {
-        const classDefnIndex = findIndex(equals(symbol), allSymbols);
-        if (allSymbols.length === classDefnIndex + 1) {
-            return allSymbols;
-        }
-        const previousSymbols = slice(0, classDefnIndex, allSymbols);
-        const lastClassIndex = findLastIndex(this.isClassSymbol, previousSymbols);
-        return slice(lastClassIndex + 1, classDefnIndex + 1, allSymbols);
+        return Boolean(SymbolParser.findConstructor(symbolInfos));
     }
 
     private async createAction(classSymbols: SymbolInformation[], document: vscode.TextDocument): Promise<vscode.CodeAction> {
