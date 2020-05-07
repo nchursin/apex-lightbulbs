@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { VARIABLE_ACTIONS } from '@labels';
 import { ApexServer, SymbolParser, Editor } from "@utils";
-import { LanguageClient, SymbolKind } from 'vscode-languageclient';
+import { LanguageClient, SymbolKind, SymbolInformation } from 'vscode-languageclient';
 import { repeat, join, last, match } from 'ramda';
 import { Templates } from '@templates';
 
@@ -36,8 +36,8 @@ export class ConstructorParamActionProvider implements vscode.CodeActionProvider
 
     private async getConstructorParamAction(
         document: vscode.TextDocument,
-        varSymbol: vscode.SymbolInformation,
-        classSymbols: vscode.SymbolInformation[]
+        varSymbol: SymbolInformation,
+        classSymbols: SymbolInformation[]
     ): Promise<vscode.CodeAction> {
         const action = new vscode.CodeAction(VARIABLE_ACTIONS.ADD_CONSTRUCTOR_PARAM, vscode.CodeActionKind.Refactor);
         action.edit = new vscode.WorkspaceEdit();
@@ -59,7 +59,7 @@ export class ConstructorParamActionProvider implements vscode.CodeActionProvider
     private addConstructorParameterInsert(
         edit: vscode.WorkspaceEdit,
         document: vscode.TextDocument,
-        constructorSymbol: vscode.SymbolInformation,
+        constructorSymbol: SymbolInformation,
         [ varName, varType ]: string[]
     ) {
         let parameterText = `${varType} ${varName}`;
@@ -78,7 +78,7 @@ export class ConstructorParamActionProvider implements vscode.CodeActionProvider
     private addAssignmentInsert(
         edit: vscode.WorkspaceEdit,
         document: vscode.TextDocument,
-        constructorSymbol: vscode.SymbolInformation,
+        constructorSymbol: SymbolInformation,
         varName: string
     ) {
         let lineNumberToCheck = constructorSymbol.location.range.end.line;
@@ -113,7 +113,7 @@ export class ConstructorParamActionProvider implements vscode.CodeActionProvider
         );
     }
 
-    private getPositionToInsertArgument(document: vscode.TextDocument, constructorSymbol: vscode.SymbolInformation) {
+    private getPositionToInsertArgument(document: vscode.TextDocument, constructorSymbol: SymbolInformation) {
         let indexToInsert;
         let lineNumberToCheck = constructorSymbol.location.range.end.line;
 
@@ -137,8 +137,8 @@ export class ConstructorParamActionProvider implements vscode.CodeActionProvider
 
     private async addConstructorWithParams(
         edit: vscode.WorkspaceEdit,
-        classSymbols: vscode.SymbolInformation[],
-        parameterSymbol: vscode.SymbolInformation,
+        classSymbols: SymbolInformation[],
+        parameterSymbol: SymbolInformation,
         document: vscode.TextDocument
     ) {
         const lineToAddConstructor = SymbolParser.findFirstNonVarDeclarationLine(classSymbols);

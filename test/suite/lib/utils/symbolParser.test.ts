@@ -3,6 +3,7 @@ import * as vscode from 'vscode';
 
 import { SymbolParser } from '@src/lib/utils';
 import { AssertionError } from 'assert';
+import { SymbolInformation } from 'vscode-languageclient';
 
 const suiteName = 'SymbolParser test suite';
 
@@ -10,7 +11,7 @@ suite(suiteName, () => {
 	vscode.window.showInformationMessage(`Starting ${suiteName}...`);
 
     test('findFirstNonVarDefnLine: non var defns exist', async () => {
-        const testData: vscode.SymbolInformation[] = JSON.parse(`[
+        const testData: SymbolInformation[] = JSON.parse(`[
             {
                 "name": "stringVar : String",
                 "kind": 8,
@@ -68,7 +69,7 @@ suite(suiteName, () => {
     });
 
     test('findFirstNonVarDefnLine: non var defns do not exist', async () => {
-        const testData: vscode.SymbolInformation[] = JSON.parse(`[
+        const testData: SymbolInformation[] = JSON.parse(`[
             {
                 "name": "stringVar : String",
                 "kind": 8,
@@ -109,7 +110,7 @@ suite(suiteName, () => {
     });
 
     test('findFirstNonVarDefnLine: non var defns do not exist for inner class', async () => {
-        const testData: vscode.SymbolInformation[] = JSON.parse(`[
+        const testData: SymbolInformation[] = JSON.parse(`[
             {
                 "name": "stringVar : String",
                 "kind": 8,
@@ -150,7 +151,7 @@ suite(suiteName, () => {
     });
 
     test('findFirstNonVarDefnLine: empty class', async () => {
-        const testData: vscode.SymbolInformation[] = JSON.parse(`[
+        const testData: SymbolInformation[] = JSON.parse(`[
             {
                 "name": "Test",
                 "kind": 5,

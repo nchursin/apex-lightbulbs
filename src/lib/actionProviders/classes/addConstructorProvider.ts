@@ -2,7 +2,7 @@ import * as vscode from "vscode";
 import { CLASS_ACTIONS } from "@labels";
 import { Templates } from "@templates";
 import { join, find, last, equals, findIndex, slice, findLastIndex, repeat, add } from "ramda";
-import { LanguageClient, SymbolKind } from "vscode-languageclient";
+import { LanguageClient, SymbolKind, SymbolInformation } from "vscode-languageclient";
 import { ApexServer, SymbolParser, Editor } from "@utils";
 
 export class AddConstructorProvider implements vscode.CodeActionProvider {
@@ -28,7 +28,7 @@ export class AddConstructorProvider implements vscode.CodeActionProvider {
         return await this.getAvailableClassActions(classSymbols, document);
     }
 
-    private async getAvailableClassActions(symbolInfos: vscode.SymbolInformation[], document: vscode.TextDocument): Promise<vscode.CodeAction[]> {
+    private async getAvailableClassActions(symbolInfos: SymbolInformation[], document: vscode.TextDocument): Promise<vscode.CodeAction[]> {
         const result: vscode.CodeAction[] = [];
         if (!this.hasConstructor(symbolInfos)) {
             const addConstructorAction = await this.createAction(symbolInfos, document);
@@ -37,22 +37,22 @@ export class AddConstructorProvider implements vscode.CodeActionProvider {
         return result;
     }
 
-    private isClassSymbol(symbol: vscode.SymbolInformation): boolean {
+    private isClassSymbol(symbol: SymbolInformation): boolean {
         return SymbolKind.Class === symbol.kind;
     }
 
-    private hasConstructor(symbolInfos: vscode.SymbolInformation[]): Boolean {
+    private hasConstructor(symbolInfos: SymbolInformation[]): Boolean {
         return Boolean(this.findConstructor(symbolInfos));
     }
 
-    private findConstructor(symbolInfos: vscode.SymbolInformation[]): vscode.SymbolInformation | undefined {
+    private findConstructor(symbolInfos: SymbolInformation[]): SymbolInformation | undefined {
         const classDeclaration = last(symbolInfos);
-        return classDeclaration && find((symbol: vscode.SymbolInformation) => {
+        return classDeclaration && find((symbol: SymbolInformation) => {
             return SymbolKind.Constructor === symbol.kind && symbol.name.startsWith(classDeclaration.name);
         }, symbolInfos);
     }
 
-    private getWholeClassMeta(symbol: vscode.SymbolInformation, allSymbols: vscode.SymbolInformation[]) {
+    private getWholeClassMeta(symbol: SymbolInformation, allSymbols: SymbolInformation[]) {
         const classDefnIndex = findIndex(equals(symbol), allSymbols);
         if (allSymbols.length === classDefnIndex + 1) {
             return allSymbols;
@@ -62,7 +62,7 @@ export class AddConstructorProvider implements vscode.CodeActionProvider {
         return slice(lastClassIndex + 1, classDefnIndex + 1, allSymbols);
     }
 
-    private async createAction(classSymbols: vscode.SymbolInformation[], document: vscode.TextDocument): Promise<vscode.CodeAction> {
+    private async createAction(classSymbols: SymbolInformation[], document: vscode.TextDocument): Promise<vscode.CodeAction> {
         const lineToAddConstructor = SymbolParser.findFirstNonVarDeclarationLine(classSymbols);
         const addConstructorAction = new vscode.CodeAction(CLASS_ACTIONS.ADD_CONSTRUCTOR, vscode.CodeActionKind.Refactor);
 

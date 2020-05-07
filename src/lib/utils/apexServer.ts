@@ -1,5 +1,5 @@
-import { TextDocument, SymbolInformation } from 'vscode';
-import { LanguageClient } from 'vscode-languageclient';
+import { TextDocument } from 'vscode';
+import { LanguageClient, SymbolInformation } from 'vscode-languageclient';
 
 namespace ApexServer {
     export const getAllSymbols = async (textDocument: TextDocument, languageClient: LanguageClient): Promise<SymbolInformation[]> => {

@@ -1,6 +1,6 @@
 import { find } from 'ramda';
-import { TextDocument, SymbolInformation } from 'vscode';
-import { LanguageClient } from 'vscode-languageclient';
+import { TextDocument } from 'vscode';
+import { LanguageClient, SymbolInformation } from 'vscode-languageclient';
 
 import ApexServer from './apexServer';
 import SymbolParser from './symbolParser';

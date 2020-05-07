@@ -1,4 +1,4 @@
-import { SymbolInformation } from 'vscode';
+import { SymbolInformation } from 'vscode-languageclient';
 import { find, findLast, not, compose, last, dropLast } from 'ramda';
 import { SymbolKind } from 'vscode-languageclient';
 
