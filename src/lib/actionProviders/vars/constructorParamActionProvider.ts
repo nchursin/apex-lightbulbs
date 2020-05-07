@@ -4,34 +4,30 @@ import { ApexServer, SymbolParser, Editor } from "@utils";
 import { LanguageClient, SymbolKind, SymbolInformation } from 'vscode-languageclient';
 import { repeat, join, last, match } from 'ramda';
 import { Templates } from '@templates';
+import { BaseProvider } from '@actionProviders/baseProvider';
 
-export class ConstructorParamActionProvider implements vscode.CodeActionProvider {
-    private languageClient: LanguageClient | undefined;
-
-    private suitableFor: number[] = [ SymbolKind.Field, SymbolKind.Property ];
-
-    constructor(languageClient: LanguageClient | undefined = undefined) {
-        this.languageClient = languageClient;
-    }
-
-    public static readonly providedCodeActionKinds = [
-		vscode.CodeActionKind.Refactor
-	];
+export class ConstructorParamActionProvider extends BaseProvider {
 
 	public async provideCodeActions(document: vscode.TextDocument, range: vscode.Range): Promise<vscode.CodeAction[]> {
-        if (!this.languageClient) {
-            throw new Error('Language Client is not provided');
-        }
-
         const result = [];
-        const symbols = await ApexServer.getAllSymbols(document, this.languageClient);
+        const symbols = await this.getAllSymbols(document);
         const symbol = SymbolParser.findSymbolAtLine(symbols, range.start.line);
 
-        if (symbol && this.suitableFor.includes(symbol.kind)) {
+        if (symbol && this.isActionable(symbol)) {
             const addGetSetAction = await this.getConstructorParamAction(document, symbol, symbols);
             result.push(addGetSetAction);
         }
         return result;
+    }
+
+    public getProvidedCodeActionsKind(): vscode.CodeActionKind[] {
+        return [
+            vscode.CodeActionKind.Refactor
+        ];
+    }
+
+    public getActionableSymbolKinds(): SymbolKind[] {
+        return [ SymbolKind.Field, SymbolKind.Property ];
     }
 
     private async getConstructorParamAction(

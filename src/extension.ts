@@ -10,6 +10,7 @@ import { AddConstructorProvider } from '@actionProviders/classes';
 import * as languageServer from '@languageServer/languageServer';
 import { telemetryService } from '@languageServer/telemetry';
 import { LanguageClient } from 'vscode-languageclient';
+import { BaseProvider } from './lib/actionProviders/baseProvider';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -35,14 +36,20 @@ export async function activate(context: vscode.ExtensionContext) {
                 // languageClientUtils.setStatus(ClientStatus.Ready, '');
                 telemetryService.sendApexLSPActivationEvent(langClientHRStart);
 
+                const actionProviders: BaseProvider[] = [
+                    new ConstructorParamActionProvider(languageClient),
+                ];
+
+                actionProviders.forEach(
+                    (provider) => context.subscriptions.push(
+                        vscode.languages.registerCodeActionsProvider('apex', provider, {
+                            providedCodeActionKinds: provider.getProvidedCodeActionsKind()
+                        }))
+                );
+
                 context.subscriptions.push(
                     vscode.languages.registerCodeActionsProvider('apex', new GetterSetterActionProvider(languageClient), {
                         providedCodeActionKinds: GetterSetterActionProvider.providedCodeActionKinds
-                    }));
-
-                context.subscriptions.push(
-                    vscode.languages.registerCodeActionsProvider('apex', new ConstructorParamActionProvider(languageClient), {
-                        providedCodeActionKinds: ConstructorParamActionProvider.providedCodeActionKinds
                     }));
 
                 context.subscriptions.push(
