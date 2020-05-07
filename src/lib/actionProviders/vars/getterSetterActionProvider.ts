@@ -1,28 +1,22 @@
 import * as vscode from 'vscode';
 import { VARIABLE_ACTIONS } from '@labels';
-import { getSymbolAtLine } from "@utils";
-import { LanguageClient, SymbolKind } from 'vscode-languageclient';
+import { SymbolParser } from "@utils";
+import { SymbolKind } from 'vscode-languageclient';
+import { BaseProvider } from '../baseProvider';
 
-export class GetterSetterActionProvider implements vscode.CodeActionProvider {
-    private languageClient: LanguageClient | undefined;
-
-    constructor(languageClient: LanguageClient | undefined = undefined) {
-        this.languageClient = languageClient;
-    }
+export class GetterSetterActionProvider extends BaseProvider {
 
     public static readonly providedCodeActionKinds = [
 		vscode.CodeActionKind.Refactor
 	];
 
 	public async provideCodeActions(document: vscode.TextDocument, range: vscode.Range): Promise<vscode.CodeAction[]> {
-        if (!this.languageClient) {
-            throw new Error('Language Client is not provided');
-        }
         try {
             const result = [];
-            const symbol = await getSymbolAtLine(range.start.line, document, this.languageClient);
+            const allSymbols = await this.getAllSymbols(document);
+            const symbol = SymbolParser.findSymbolAtLine(allSymbols, range.start.line);
 
-            if (symbol && SymbolKind.Field === symbol.kind) {
+            if (symbol && this.isActionable(symbol)) {
                 const addGetSetAction = this.getAddGetSetAction(document, range);
                 result.push(addGetSetAction);
             }
@@ -31,6 +25,10 @@ export class GetterSetterActionProvider implements vscode.CodeActionProvider {
             console.error(err);
             throw err;
         }
+    }
+
+    public getActionableSymbolKinds(): SymbolKind[] {
+        return [ SymbolKind.Field ];
     }
 
     private getAddGetSetAction(document: vscode.TextDocument, range: vscode.Range): vscode.CodeAction {

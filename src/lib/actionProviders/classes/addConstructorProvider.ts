@@ -2,8 +2,8 @@ import * as vscode from "vscode";
 import { CLASS_ACTIONS } from "@labels";
 import { Templates } from "@templates";
 import { join, find, last, equals, findIndex, slice, findLastIndex, repeat, add } from "ramda";
-import { LanguageClient, SymbolKind, SymbolInformation } from "vscode-languageclient";
-import { ApexServer, SymbolParser, Editor } from "@utils";
+import { SymbolKind, SymbolInformation } from "vscode-languageclient";
+import { SymbolParser, Editor } from "@utils";
 import { BaseProvider } from "../baseProvider";
 
 export class AddConstructorProvider extends BaseProvider {

@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { VARIABLE_ACTIONS } from '@labels';
-import { ApexServer, SymbolParser, Editor } from "@utils";
-import { LanguageClient, SymbolKind, SymbolInformation } from 'vscode-languageclient';
+import { SymbolParser, Editor } from "@utils";
+import { SymbolKind, SymbolInformation } from 'vscode-languageclient';
 import { repeat, join, last, match } from 'ramda';
 import { Templates } from '@templates';
 import { BaseProvider } from '@actionProviders/baseProvider';
