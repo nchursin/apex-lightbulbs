@@ -6,10 +6,6 @@ import { BaseProvider } from '../baseProvider';
 
 export class GetterSetterActionProvider extends BaseProvider {
 
-    public static readonly providedCodeActionKinds = [
-		vscode.CodeActionKind.Refactor
-	];
-
 	public async provideCodeActions(document: vscode.TextDocument, range: vscode.Range): Promise<vscode.CodeAction[]> {
         try {
             const result = [];
