@@ -50,8 +50,6 @@ suite(suiteName, async () => {
 
         const position = new vscode.Position(lineNumber, 15);
 
-        console.log('line text >>>>> ', textDocument.lineAt(lineNumber).text);
-
         const actions: vscode.CodeAction[] = await provider.provideCodeActions(textDocument, new vscode.Range(position, position));
         const act: vscode.CodeAction | undefined = find(propEq('title', label), actions);
         if (!act) {
@@ -64,8 +62,6 @@ suite(suiteName, async () => {
         if (act.edit) {
             await vscode.workspace.applyEdit(act.edit);
             const textAfter = textDocument.getText();
-            console.log('expectedText >> ', expectedText);
-            console.log('textAfter >> ', textAfter);
             assert.equal(textAfter, expectedText, 'Changed text is different from expected');
         }
     };

@@ -5,12 +5,15 @@ import * as vscode from 'vscode';
 
 import * as path from 'path';
 
+import { COMMANDS } from '@constants';
+
 import { GetterSetterActionProvider, ConstructorParamActionProvider } from '@actionProviders/vars';
 import { AddConstructorProvider } from '@actionProviders/classes';
 import * as languageServer from '@languageServer/languageServer';
 import { telemetryService } from '@languageServer/telemetry';
 import { LanguageClient } from 'vscode-languageclient';
 import { BaseProvider } from './lib/actionProviders/baseProvider';
+import { AddOverloadActionProvider } from './lib/actionProviders/methods/addOverloadProvider';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -40,6 +43,7 @@ export async function activate(context: vscode.ExtensionContext) {
                     new ConstructorParamActionProvider(languageClient),
                     new AddConstructorProvider(languageClient),
                     new GetterSetterActionProvider(languageClient),
+                    // new AddOverloadActionProvider(languageClient),
                 ];
 
                 actionProviders.forEach(

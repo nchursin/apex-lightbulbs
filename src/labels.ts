@@ -6,3 +6,13 @@ export const VARIABLE_ACTIONS = {
 export const CLASS_ACTIONS = {
     ADD_CONSTRUCTOR: 'Add constructor',
 };
+
+export const METHOD_ACTIONS = {
+    ADD_OVERLOAD: 'Add method overload'
+};
+
+export const PLACEHOLDERS = {
+    ADD_OVERLOAD: {
+        QUICK_PICK_ARGS: 'Select parameter to overload',
+    }
+};
