@@ -107,6 +107,9 @@ export class AddOverloadActionProvider extends BaseProvider {
     ) {
         const edit = new vscode.WorkspaceEdit();
         const methodName = SymbolParser.getSymbolName(methodSymbol);
+
+        const methodReturnType = SymbolParser.getSymbolReturnType(methodSymbol);
+
         const declarationLine = document.lineAt(methodSymbol.location.range.start.line);
         const declarationText = declarationLine.text;
 
@@ -116,8 +119,10 @@ export class AddOverloadActionProvider extends BaseProvider {
 
         const indent = Editor.singleIndent;
 
+        const returnKeyword = (methodReturnType === 'void') ? '' : 'return ';
+
         const newDeclaration = `${declarationBeforeArgs}(${newArgumentSequence.join(', ')}) {\n`;
-        const callText = `${indent}${Editor.singleIndent}return ${methodName}(${passingArgumentsValues.join(', ')});\n`;
+        const callText = `${indent}${Editor.singleIndent}${returnKeyword}${methodName}(${passingArgumentsValues.join(', ')});\n`;
         const close = `${indent}}\n\n`;
 
         const newText = `${newDeclaration}${callText}${close}`;

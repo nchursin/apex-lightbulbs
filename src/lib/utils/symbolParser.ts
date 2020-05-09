@@ -20,7 +20,9 @@ namespace SymbolParser {
         return find((symbol) => getStartLine(symbol) === lineNumber, docSymbolResult);
     };
 
-    export const getSymbolName = (synbol: SymbolInformation) => synbol.name.split(':')[0].split('(')[0];
+    export const getSymbolName = (synbol: SymbolInformation) => synbol.name.split(':')[0].split('(')[0].trim();
+
+    export const getSymbolReturnType = (synbol: SymbolInformation) => synbol.name.split(':')[1]?.trim();
 
     export const getDeclarationLine = (symbol: SymbolInformation, document: TextDocument) => document.lineAt(symbol.location.range.start.line);
 

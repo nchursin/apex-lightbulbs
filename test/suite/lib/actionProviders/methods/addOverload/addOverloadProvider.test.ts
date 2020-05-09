@@ -20,12 +20,17 @@ suite(suiteName, async () => {
 
     const dataFolder = path.resolve(__dirname, 'data');
 
+    let quickPickStub: any;
+    let inputBoxStub: any;
+
     let textDocument: vscode.TextDocument;
     let initialState: string;
 
     Mocha.before(async () => {
         // const langClient = await getStubLanguageClient(dataFolder);
         // provider = new AddOverloadActionProvider(langClient);
+        quickPickStub = stub(vscode.window, 'showQuickPick');
+        inputBoxStub = stub(vscode.window, 'showInputBox');
     });
 
     Mocha.beforeEach(async () => {
@@ -50,9 +55,7 @@ suite(suiteName, async () => {
         textDocument = await vscode.workspace.openTextDocument(testFilePath);
         initialState = textDocument.getText();
 
-        const quickPickStub = stub(vscode.window, 'showQuickPick');
         quickPickStub.resolves(quickPickOptions[argNumToOverload]);
-        const inputBoxStub = stub(vscode.window, 'showInputBox');
         inputBoxStub.resolves(defaultValue);
 
         const langClient = await getStubLanguageClient(testCaseDataFolder);
@@ -99,6 +102,10 @@ suite(suiteName, async () => {
 
     test('addOverload should add constructor param to existing constructor', async () => {
         await runTestCase('Test1', 1, 0, '\'cba\'');
+    });
+
+    test('addOverload should add constructor param to existing constructor', async () => {
+        await runTestCase('Test1.1', 1, 0, '\'cba\'');
     });
 
     test('non-method type must provide no actions', async () => {
