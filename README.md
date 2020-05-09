@@ -15,11 +15,12 @@ Currently existing features:
 1. Add { get; set; } to a variable
 1. Add constructor
 1. Add constructor parameter
+1. Add method overload
 
 Planned features:
 1. Select constructor to add a parameter. Currently adds to the first constructor in class
 1. Add explicit getter and setter
-1. Add method/constructor overload
+1. Add constructor overload
 1. Make test compile for TDD
 1. Extract constant from a magic value
 

@@ -1,7 +1,8 @@
 {
 	"name": "apex-lightbulbs",
 	"displayName": "Apex Lightbulbs",
-	"description": "Bulb actions for VSCode to speed up your development",
+    "description": "Bulb actions for VSCode to speed up your development",
+    "icon": "icon.png",
 	"version": "1.0.1",
 	"publisher": "nchursin",
 	"repository": {
