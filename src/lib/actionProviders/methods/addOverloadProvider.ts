@@ -20,7 +20,11 @@ export class AddOverloadActionProvider extends BaseProvider {
         document: vscode.TextDocument,
         actionableSymbol: SymbolInformation,
         allSymbols: SymbolInformation[]
-    ): Promise<vscode.CodeAction> {
+    ): Promise<vscode.CodeAction | undefined> {
+        if (actionableSymbol.name.includes('()')) {
+            return;
+        }
+
         await this.registerCommand();
         const action = new vscode.CodeAction(METHOD_ACTIONS.ADD_OVERLOAD, vscode.CodeActionKind.Refactor);
         action.command = {

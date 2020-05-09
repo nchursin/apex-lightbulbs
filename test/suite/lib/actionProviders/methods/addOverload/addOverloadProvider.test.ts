@@ -102,11 +102,21 @@ suite(suiteName, async () => {
     });
 
     test('non-method type must provide no actions', async () => {
-        const testCaseDataFolder = path.join(dataFolder, 'Test1');
+        const testCaseDataFolder = path.join(dataFolder, 'TestNegative');
         const langClient = await getStubLanguageClient(testCaseDataFolder);
         const provider = new AddOverloadActionProvider(langClient);
 
         const position = new vscode.Position(0, 15);
+        const actions = await provider.provideCodeActions(textDocument, new vscode.Range(position, position));
+        assert.equal(actions.length, 0, '0 actions must be returned');
+    });
+
+    test('method with no args must provide no actions', async () => {
+        const testCaseDataFolder = path.join(dataFolder, 'TestNegative');
+        const langClient = await getStubLanguageClient(testCaseDataFolder);
+        const provider = new AddOverloadActionProvider(langClient);
+
+        const position = new vscode.Position(1, 15);
         const actions = await provider.provideCodeActions(textDocument, new vscode.Range(position, position));
         assert.equal(actions.length, 0, '0 actions must be returned');
     });
