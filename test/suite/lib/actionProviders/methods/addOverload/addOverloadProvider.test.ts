@@ -108,6 +108,10 @@ suite(suiteName, async () => {
         await runTestCase('Test1.1', 1, 0, '\'cba\'');
     });
 
+    test('addOverload should add constructor param to existing constructor', async () => {
+        await runTestCase('Test1.2', 2, 0, '\'cba\'');
+    });
+
     test('non-method type must provide no actions', async () => {
         const testCaseDataFolder = path.join(dataFolder, 'TestNegative');
         const langClient = await getStubLanguageClient(testCaseDataFolder);

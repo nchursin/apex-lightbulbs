@@ -12,6 +12,8 @@ namespace Editor {
     export const isSpaceIndent = () => editor()?.options.insertSpaces || true;
     export const tabSize = () => Number(editor()?.options.tabSize || 4);
     export const singleIndent = isSpaceIndent() ? repeatString(' ', tabSize()) : '\t';
+
+    export const getIndentation = (numberOfIndents: number) => repeatString(singleIndent, numberOfIndents);
 }
 
 export default Editor;

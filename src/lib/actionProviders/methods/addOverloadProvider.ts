@@ -3,7 +3,7 @@ import { SymbolKind, SymbolInformation } from 'vscode-languageclient';
 import { COMMANDS } from '@constants';
 import { METHOD_ACTIONS, PLACEHOLDERS } from '@labels';
 import { BaseProvider } from '../baseProvider';
-import { compose, splitEvery, filter, identity, takeLastWhile, not, equals, map, join, findIndex, remove, tail, split, flatten } from 'ramda';
+import { compose, splitEvery, filter, identity, takeLastWhile, not, equals, map, join, findIndex, remove, tail, split, flatten, repeat } from 'ramda';
 import { Editor, SymbolParser } from '@utils';
 
 export class AddOverloadActionProvider extends BaseProvider {
@@ -71,7 +71,7 @@ export class AddOverloadActionProvider extends BaseProvider {
 
             const value = await this.getDefaultValue();
 
-            const edit = this.createEdit(selected, value, methodArgs, methodSymbol, document);
+            const edit = this.createEdit(selected, value, methodArgs, methodSymbol, document, allSymbols);
             await vscode.workspace.applyEdit(edit);
         } catch (err) {
             console.error(err);
@@ -103,7 +103,8 @@ export class AddOverloadActionProvider extends BaseProvider {
         value: string = 'null',
         methodArgs: string[],
         methodSymbol: SymbolInformation,
-        document: vscode.TextDocument
+        document: vscode.TextDocument,
+        allSymbols: SymbolInformation[]
     ) {
         const edit = new vscode.WorkspaceEdit();
         const methodName = SymbolParser.getSymbolName(methodSymbol);
@@ -117,9 +118,13 @@ export class AddOverloadActionProvider extends BaseProvider {
 
         const { newArgumentSequence, passingArgumentsValues } = this.convertArguments(selected.label, methodArgs, value);
 
-        const indent = Editor.singleIndent;
 
         const returnKeyword = (methodReturnType === 'void') ? '' : 'return ';
+        const parentClass = SymbolParser.getParentClass(methodSymbol, allSymbols);
+        const parentClassName = parentClass?.name || 'classname';
+        const indentsCount = parentClassName.split('.').length;
+
+        const indent = Editor.getIndentation(indentsCount);
 
         const newDeclaration = `${declarationBeforeArgs}(${newArgumentSequence.join(', ')}) {\n`;
         const callText = `${indent}${Editor.singleIndent}${returnKeyword}${methodName}(${passingArgumentsValues.join(', ')});\n`;

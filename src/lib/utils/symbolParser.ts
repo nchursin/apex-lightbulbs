@@ -1,5 +1,4 @@
 import { SymbolInformation } from 'vscode-languageclient';
-import { find, findLast, not, compose, last, dropLast, findIndex, equals, slice, findLastIndex } from 'ramda';
 import { SymbolKind } from 'vscode-languageclient';
 import { TextDocument } from 'vscode';
 import * as R from 'ramda';
@@ -10,19 +9,25 @@ const getStartLine = (symbol: SymbolInformation): number => symbol.location.rang
 const isPropertyOrField = (symbol: SymbolInformation) => propertyOrField.includes(symbol.kind);
 const isConstructor = (symbol: SymbolInformation) => SymbolKind.Constructor === symbol.kind;
 
-const findFirstNonVarDeclaration = find(compose(not, isPropertyOrField));
-const findLastVarDeclaration = findLast(isPropertyOrField);
+const findFirstNonVarDeclaration = R.find(R.compose(R.not, isPropertyOrField));
+const findLastVarDeclaration = R.findLast(isPropertyOrField);
 
 const isClassSymbol = (symbol: SymbolInformation) => SymbolKind.Class === symbol.kind;
 
 namespace SymbolParser {
     export const findSymbolAtLine = (docSymbolResult: SymbolInformation[], lineNumber: number): SymbolInformation | undefined => {
-        return find((symbol) => getStartLine(symbol) === lineNumber, docSymbolResult);
+        return R.find((symbol) => getStartLine(symbol) === lineNumber, docSymbolResult);
     };
 
-    export const getSymbolName = (synbol: SymbolInformation) => synbol.name.split(':')[0].split('(')[0].trim();
+    export const getSymbolName = (symbol: SymbolInformation) => symbol.name.split(':')[0].split('(')[0].trim();
 
-    export const getSymbolReturnType = (synbol: SymbolInformation) => synbol.name.split(':')[1]?.trim();
+    export const getSymbolReturnType = (symbol: SymbolInformation) => symbol.name.split(':')[1]?.trim();
+
+    export const getParentClass = (symbol: SymbolInformation, allSymbols: SymbolInformation[]) => {
+        const symbolIndex = R.findIndex(R.equals(symbol), allSymbols);
+        const afterSymbol = R.flatten(R.tail(R.splitAt(symbolIndex, allSymbols)));
+        return R.find(isClassSymbol, afterSymbol);
+    };
 
     export const getDeclarationLine = (symbol: SymbolInformation, document: TextDocument) => document.lineAt(symbol.location.range.start.line);
 
@@ -31,14 +36,14 @@ namespace SymbolParser {
         const methodName = SymbolParser.getSymbolName(methodSymbol);
         const declarationSplitByWords = declarationLine.text.split(/[\s\(\)\{,]/);
 
-        const getMethodArguments = compose(
+        const getMethodArguments = R.compose(
             R.map(R.join(' ')),
             R.splitEvery(2),
             R.filter((el) => Boolean(R.identity(el))),
             R.takeLastWhile(
-                compose(
-                    not,
-                    equals(methodName)
+                R.compose(
+                    R.not,
+                    R.equals(methodName)
                 )
             )
         );
@@ -49,8 +54,8 @@ namespace SymbolParser {
     export const findFirstNonVarDeclarationLine = (symbolInfos: SymbolInformation[]) => {
         let result: number;
         // classDeclaration always goes last
-        const classDeclaration = last(symbolInfos);
-        const inClassDeclarations = dropLast(1, symbolInfos);
+        const classDeclaration = R.last(symbolInfos);
+        const inClassDeclarations = R.dropLast(1, symbolInfos);
         if (!classDeclaration) {
             // no class declaration (empty file?) - use first line
             result = 0;
@@ -68,20 +73,20 @@ namespace SymbolParser {
     };
 
     export const findConstructor = (symbolInfos: SymbolInformation[]): SymbolInformation | undefined => {
-        const classDeclaration = last(symbolInfos);
-        return classDeclaration && find((symbol: SymbolInformation) => {
+        const classDeclaration = R.last(symbolInfos);
+        return classDeclaration && R.find((symbol: SymbolInformation) => {
             return isConstructor(symbol) && symbol.name.startsWith(classDeclaration.name);
         }, symbolInfos);
     };
 
     export const getWholeClassMeta = (symbol: SymbolInformation, allSymbols: SymbolInformation[]) => {
-        const classDefnIndex = findIndex(equals(symbol), allSymbols);
+        const classDefnIndex = R.findIndex(R.equals(symbol), allSymbols);
         if (allSymbols.length === classDefnIndex + 1) {
             return allSymbols;
         }
-        const previousSymbols = slice(0, classDefnIndex, allSymbols);
-        const lastClassIndex = findLastIndex(isClassSymbol, previousSymbols);
-        return slice(lastClassIndex + 1, classDefnIndex + 1, allSymbols);
+        const previousSymbols = R.slice(0, classDefnIndex, allSymbols);
+        const lastClassIndex = R.findLastIndex(isClassSymbol, previousSymbols);
+        return R.slice(lastClassIndex + 1, classDefnIndex + 1, allSymbols);
     };
 }
 
