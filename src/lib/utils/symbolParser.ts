@@ -1,6 +1,8 @@
 import { SymbolInformation } from 'vscode-languageclient';
 import { find, findLast, not, compose, last, dropLast, findIndex, equals, slice, findLastIndex } from 'ramda';
 import { SymbolKind } from 'vscode-languageclient';
+import { TextDocument } from 'vscode';
+import * as R from 'ramda';
 
 const propertyOrField: number[] = [ SymbolKind.Property, SymbolKind.Field ];
 
@@ -16,6 +18,30 @@ const isClassSymbol = (symbol: SymbolInformation) => SymbolKind.Class === symbol
 namespace SymbolParser {
     export const findSymbolAtLine = (docSymbolResult: SymbolInformation[], lineNumber: number): SymbolInformation | undefined => {
         return find((symbol) => getStartLine(symbol) === lineNumber, docSymbolResult);
+    };
+
+    export const getSymbolName = (synbol: SymbolInformation) => synbol.name.split(':')[0].split('(')[0];
+
+    export const getDeclarationLine = (symbol: SymbolInformation, document: TextDocument) => document.lineAt(symbol.location.range.start.line);
+
+    export const getMethodArguments = (methodSymbol: SymbolInformation, document: TextDocument) => {
+        const declarationLine = SymbolParser.getDeclarationLine(methodSymbol, document);
+        const methodName = SymbolParser.getSymbolName(methodSymbol);
+        const declarationSplitByWords = declarationLine.text.split(/[\s\(\)\{,]/);
+
+        const getMethodArguments = compose(
+            R.map(R.join(' ')),
+            R.splitEvery(2),
+            R.filter((el) => Boolean(R.identity(el))),
+            R.takeLastWhile(
+                compose(
+                    not,
+                    equals(methodName)
+                )
+            )
+        );
+
+        return getMethodArguments(declarationSplitByWords);
     };
 
     export const findFirstNonVarDeclarationLine = (symbolInfos: SymbolInformation[]) => {

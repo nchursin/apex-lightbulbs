@@ -4,7 +4,7 @@ import { COMMANDS } from '@constants';
 import { METHOD_ACTIONS, PLACEHOLDERS } from '@labels';
 import { BaseProvider } from '../baseProvider';
 import { compose, splitEvery, filter, identity, takeLastWhile, not, equals, map, join, findIndex, remove, tail, split, flatten } from 'ramda';
-import { Editor } from '@utils';
+import { Editor, SymbolParser } from '@utils';
 
 export class AddOverloadActionProvider extends BaseProvider {
 
@@ -54,29 +54,11 @@ export class AddOverloadActionProvider extends BaseProvider {
 
     private async commandCallback(
         document: vscode.TextDocument,
-        actionableSymbol: SymbolInformation,
+        methodSymbol: SymbolInformation,
         allSymbols: SymbolInformation[]
     ) {
-        console.log('>>> commandCallback <<<');
         try {
-            const methodName = actionableSymbol.name.split('(')[0];
-            const declarationLine = document.lineAt(actionableSymbol.location.range.start.line);
-            const declarationText = declarationLine.text;
-
-            const getMethodArguments = compose(
-                map(join(' ')),
-                splitEvery(2),
-                filter((el) => Boolean(identity(el))),
-                takeLastWhile(
-                    compose(
-                        not,
-                        equals(methodName)
-                    )
-                )
-            );
-
-            const declarationSplitByWords = declarationText.split(/[\s\(\)\{,]/);
-            const methodArgs = getMethodArguments(declarationSplitByWords);
+            const methodArgs = SymbolParser.getMethodArguments(methodSymbol, document);
 
             const selected = await this.pickArgument(methodArgs);
             if (!selected) {
@@ -85,31 +67,7 @@ export class AddOverloadActionProvider extends BaseProvider {
 
             const value = await this.getDefaultValue();
 
-            const edit = new vscode.WorkspaceEdit();
-
-            const declarationBeforeArgs = declarationText.split(methodName)[0] + methodName;
-
-            const selectedArgIndex = findIndex(equals(selected.label), methodArgs);
-            const newArgs = remove(selectedArgIndex, 1, methodArgs);
-            const argsToPass = flatten(map(
-                compose(
-                    tail,
-                    split(' ')
-                ),
-                methodArgs
-            ));
-            argsToPass.splice(selectedArgIndex, 1, [ value || 'null' ]);
-
-            const indent = Editor.singleIndent;
-
-            const newDeclaration = `${declarationBeforeArgs}(${newArgs.join(', ')}) {\n`;
-            const callText = `${indent}${indent}return ${methodName}(${argsToPass.join(', ')});\n`;
-            const close = `${indent}}\n\n`;
-
-            const newText = `${newDeclaration}${callText}${close}`;
-
-            edit.insert(document.uri, declarationLine.range.start, newText);
-
+            const edit = this.createEdit(selected, value, methodArgs, methodSymbol, document);
             await vscode.workspace.applyEdit(edit);
         } catch (err) {
             console.error(err);
@@ -134,5 +92,53 @@ export class AddOverloadActionProvider extends BaseProvider {
             placeHolder: 'Enter default value',
         };
         return vscode.window.showInputBox(inputBoxOpts);
+    }
+
+    private createEdit(
+        selected: vscode.QuickPickItem,
+        value: string = 'null',
+        methodArgs: string[],
+        methodSymbol: SymbolInformation,
+        document: vscode.TextDocument
+    ) {
+        const edit = new vscode.WorkspaceEdit();
+        const methodName = SymbolParser.getSymbolName(methodSymbol);
+        const declarationLine = document.lineAt(methodSymbol.location.range.start.line);
+        const declarationText = declarationLine.text;
+
+        const declarationBeforeArgs = declarationText.split(methodName)[0] + methodName;
+
+        const { newArgumentSequence, passingArgumentsValues } = this.convertArguments(selected.label, methodArgs, value);
+
+        const indent = Editor.singleIndent;
+
+        const newDeclaration = `${declarationBeforeArgs}(${newArgumentSequence.join(', ')}) {\n`;
+        const callText = `${indent}${Editor.singleIndent}return ${methodName}(${passingArgumentsValues.join(', ')});\n`;
+        const close = `${indent}}\n\n`;
+
+        const newText = `${newDeclaration}${callText}${close}`;
+
+        edit.insert(document.uri, declarationLine.range.start, newText);
+
+        return edit;
+    }
+
+    private convertArguments(argToOverload: string, methodArgs: string[], value: string) {
+        const selectedArgIndex = findIndex(equals(argToOverload), methodArgs);
+        const newArgumentSequence = remove(selectedArgIndex, 1, methodArgs);
+
+        const passingArgumentsValues = flatten(map(
+            compose(
+                tail,
+                split(' ')
+            ),
+            methodArgs
+        ));
+        passingArgumentsValues.splice(selectedArgIndex, 1, [ value ]);
+
+        return {
+            newArgumentSequence,
+            passingArgumentsValues,
+        };
     }
 }
