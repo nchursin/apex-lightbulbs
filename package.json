@@ -34,6 +34,7 @@
 		]
 	},
 	"scripts": {
+		"prevscode:package": "yarn test",
 		"vscode:package": "vsce package --yarn",
 		"vscode:publish": "vsce publish --yarn",
 		"vscode:prepublish": "yarn build:prod",
@@ -46,8 +47,8 @@
 		"watch": "webpack --mode development",
 		"pretest": "yarn build:prod && yarn build:test",
         "test": "node ./out/test/runTest.js",
-        "preversion": "yarn test",
-        "posversion": "git push --tags && yarn vscode:package && yarn vscode:publish && git push && echo \"Successfully released version $npm_package_version!\""
+        "preversion": "yarn vscode:package",
+        "postversion": "git push --tags && yarn vscode:publish && git push && echo \"Successfully released version $npm_package_version!\""
 	},
 	"devDependencies": {
 		"@types/chai": "^4.2.11",
