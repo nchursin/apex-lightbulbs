@@ -43,7 +43,7 @@ export async function activate(context: vscode.ExtensionContext) {
                     new ConstructorParamActionProvider(languageClient),
                     new AddConstructorProvider(languageClient),
                     new GetterSetterActionProvider(languageClient),
-                    // new AddOverloadActionProvider(languageClient),
+                    new AddOverloadActionProvider(languageClient),
                 ];
 
                 actionProviders.forEach(
