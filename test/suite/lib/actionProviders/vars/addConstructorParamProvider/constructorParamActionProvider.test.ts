@@ -94,6 +94,10 @@ suite(suiteName, async () => {
         await runTestCase('Test4.1', 10);
     });
 
+    test('addConstructorParam should add constructor param to existing constructor (with inner class for top lvl)', async () => {
+        await runTestCase('Test4.2', 1);
+    });
+
     test('addConstructorParam should create constructor and add constructor param', async () => {
         await runTestCase('Test5', 1);
     });

@@ -75,7 +75,7 @@ namespace SymbolParser {
     export const findConstructor = (symbolInfos: SymbolInformation[]): SymbolInformation | undefined => {
         const classDeclaration = R.last(symbolInfos);
         return classDeclaration && R.find((symbol: SymbolInformation) => {
-            return isConstructor(symbol) && symbol.name.startsWith(classDeclaration.name);
+            return isConstructor(symbol) && symbol.name.startsWith(`${classDeclaration.name}(`);
         }, symbolInfos);
     };
 
