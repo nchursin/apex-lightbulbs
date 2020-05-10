@@ -6,6 +6,10 @@ All notable changes to the "Apex Lightbulbs" extension will be documented in thi
 ### Fixed
 - Search for top level class constructor if inner class exists ([#8](https://github.com/nchursin/apex-lightbulbs/issues/8))
 
+### Changed
+- Changed logo for the extension
+- Added links to build and VSCode Marketplace for shields in README
+
 ## [1.1.0]
 ### Added
 - NEW ACTION! "Add Overload" for methods. Now you can add overloads for methods in just a couple of clicks
