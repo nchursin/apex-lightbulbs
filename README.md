@@ -27,10 +27,6 @@ Planned features:
 ## A little demo:
 ![Getter-setter demo](https://raw.githubusercontent.com/nchursin/apex-lightbulbs/assets/animations/lightbulbs.gif)
 
-## Extension Settings
-
->To be described
-
 ## Links
 * [Issues](https://github.com/nchursin/apex-lightbulbs/issues)
 * [Repository](https://github.com/nchursin/apex-lightbulbs)
