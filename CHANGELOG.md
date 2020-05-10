@@ -2,7 +2,7 @@
 
 All notable changes to the "Apex Lightbulbs" extension will be documented in this file.
 
-## [Unreleased]
+## [1.1.1]
 ### Fixed
 - Search for top level class constructor if inner class exists ([#8](https://github.com/nchursin/apex-lightbulbs/issues/8))
 
