@@ -15,11 +15,16 @@ export class ConstructorParamActionProvider extends BaseProvider {
     protected async getAction(
         document: vscode.TextDocument,
         varSymbol: SymbolInformation,
-        classSymbols: SymbolInformation[]
+        allSymbols: SymbolInformation[]
     ) {
         const action = new vscode.CodeAction(VARIABLE_ACTIONS.ADD_CONSTRUCTOR_PARAM, vscode.CodeActionKind.Refactor);
         action.edit = new vscode.WorkspaceEdit();
 
+        const containerClass = SymbolParser.getParentClass(varSymbol, allSymbols);
+        if (!containerClass) {
+            return;
+        }
+        const classSymbols = SymbolParser.getWholeClassMeta(containerClass, allSymbols);
         const constructor = SymbolParser.findConstructor(classSymbols);
 
         if (!constructor) {
