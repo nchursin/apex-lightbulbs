@@ -42,7 +42,7 @@
 		"watch": "webpack --mode development",
 		"pretest": "yarn build:prod && yarn build:test",
 		"test": "node ./out/test/runTest.js",
-		"preversion": "yarn vscode:package",
+		"preversion": "yarn vscode:package && git add CHANGELOG.md",
 		"postversion": "git push --tags && yarn vscode:publish && git push && echo \"Successfully released version $npm_package_version!\""
 	},
 	"devDependencies": {
