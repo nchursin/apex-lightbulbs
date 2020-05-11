@@ -1,8 +1,10 @@
 [
     {
-        "label": "Test(String)"
+        "label": "Test(String)",
+        "detail": "Test(String)"
     },
     {
-        "label": "Test()"
+        "label": "Test()",
+        "detail": "Test()"
     }
 ]

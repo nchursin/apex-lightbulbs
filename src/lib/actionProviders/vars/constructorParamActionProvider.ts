@@ -70,7 +70,12 @@ export class ConstructorParamActionProvider extends BaseProvider {
         varSymbol: SymbolInformation,
         constructors: SymbolInformation[]
     ) {
-        const items = constructors.map((constrSymbol) => ({ label: constrSymbol.name }));
+        const items = constructors.map((constrSymbol): vscode.QuickPickItem => (
+            {
+                label: last(constrSymbol.name.split('.')) || '',
+                detail: constrSymbol.name,
+            }
+        ));
         const pickedConstructorItem = await vscode.window.showQuickPick(
             items,
             { placeHolder: PLACEHOLDERS.ADD_CONSTRUCTOR_PARAM.QUICK_PICK_ARGS }
@@ -80,7 +85,7 @@ export class ConstructorParamActionProvider extends BaseProvider {
             return;
         }
 
-        const pickedConstructor = constructors.find((constr) => constr.name === pickedConstructorItem.label);
+        const pickedConstructor = constructors.find((constr) => constr.name === pickedConstructorItem.detail);
         if (!pickedConstructor) {
             return;
         }

@@ -38,7 +38,6 @@ export class AddOverloadActionProvider extends BaseProvider {
         };
 
         const commands = await vscode.commands.getCommands();
-        console.log('commands >> ', commands.filter((c) => c === COMMANDS.ADD_OVERLOAD));
 
         return action;
     }
