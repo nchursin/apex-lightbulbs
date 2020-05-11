@@ -2,7 +2,10 @@
 
 All notable changes to the "Apex Lightbulbs" extension will be documented in this file.
 
-## [Unreleased]
+## [1.2.0]
+### Added
+- Added ability to pick a constructor to add parameter to if several constructors exist
+
 ### Changed
 - Removed `helloWorld` command from package.json
 

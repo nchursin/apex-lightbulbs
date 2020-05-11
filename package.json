@@ -3,7 +3,7 @@
 	"displayName": "Apex Lightbulbs",
 	"description": "Bulb actions for VSCode to speed up your development",
 	"icon": "icon.png",
-	"version": "1.1.1",
+	"version": "1.2.0",
 	"publisher": "nchursin",
 	"repository": {
 		"type": "git",
@@ -26,8 +26,7 @@
 		"onLanguage:apex"
 	],
 	"main": "./dist/extension.js",
-	"contributes": {
-	},
+	"contributes": {},
 	"scripts": {
 		"prevscode:package": "yarn test",
 		"vscode:package": "vsce package --yarn",
