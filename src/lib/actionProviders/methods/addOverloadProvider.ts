@@ -37,8 +37,6 @@ export class AddOverloadActionProvider extends BaseProvider {
             ],
         };
 
-        const commands = await vscode.commands.getCommands();
-
         return action;
     }
 
