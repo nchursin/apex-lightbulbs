@@ -18,7 +18,6 @@ Currently existing features:
 1. Add method overload
 
 Planned features:
-1. Select constructor to add a parameter. Currently adds to the first constructor in class
 1. Add explicit getter and setter
 1. Add constructor overload
 1. Make test compile for TDD
