@@ -1,0 +1,10 @@
+[
+    {
+        "label": "InnerClass(String)",
+        "detail": "Test.InnerClass(String)"
+    },
+    {
+        "label": "InnerClass()",
+        "detail": "Test.InnerClass()"
+    }
+]

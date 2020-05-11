@@ -11,7 +11,7 @@ import { METHOD_ACTIONS, PLACEHOLDERS } from '@src/labels';
 import { COMMANDS } from '@src/constants';
 import { AddOverloadActionProvider } from '@src/lib/actionProviders/methods/addOverloadProvider';
 import { replaceDocumentText, getStubLanguageClient } from '@testutils';
-import { stub, reset } from "sinon";
+import { stub, reset as stubReset, SinonStub, restore as restoreFunctions } from "sinon";
 
 const suiteName = 'AddOverloadProvider Suite';
 
@@ -20,8 +20,8 @@ suite(suiteName, async () => {
 
     const dataFolder = path.resolve(__dirname, 'data');
 
-    let quickPickStub: any;
-    let inputBoxStub: any;
+    let quickPickStub: SinonStub;
+    let inputBoxStub: SinonStub;
 
     let textDocument: vscode.TextDocument;
     let initialState: string;
@@ -38,7 +38,11 @@ suite(suiteName, async () => {
 
     Mocha.afterEach(async () => {
         replaceDocumentText(textDocument, initialState);
-        reset();
+        stubReset();
+    });
+
+    Mocha.after(() => {
+        restoreFunctions();
     });
 
     const runTestCase = async (testDataFolder: string, lineNumber: number, argNumToOverload: number, defaultValue: string) => {
@@ -62,8 +66,6 @@ suite(suiteName, async () => {
         const provider = new AddOverloadActionProvider(langClient);
 
         const position = new vscode.Position(lineNumber, 15);
-
-        console.log('line text >>>>> ', textDocument.lineAt(lineNumber).text);
 
         const actions: vscode.CodeAction[] = await provider.provideCodeActions(textDocument, new vscode.Range(position, position));
         const act: vscode.CodeAction | undefined = find(propEq('title', label), actions);
@@ -94,8 +96,6 @@ suite(suiteName, async () => {
             assert(inputBoxStub.calledWith({ placeHolder: 'Enter default value' }), 'InputBoxOptions are different from expected');
 
             const textAfter = textDocument.getText();
-            console.log('expectedText >> ', expectedText);
-            console.log('textAfter >> ', textAfter);
             assert.equal(textAfter, expectedText, 'Changed text is different from expected');
         }
     };

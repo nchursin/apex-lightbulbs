@@ -1,10 +1,11 @@
 import * as vscode from 'vscode';
-import { VARIABLE_ACTIONS } from '@labels';
+import { VARIABLE_ACTIONS, PLACEHOLDERS } from '@labels';
 import { SymbolParser, Editor } from "@utils";
 import { SymbolKind, SymbolInformation } from 'vscode-languageclient';
 import { repeat, join, last, match } from 'ramda';
 import { Templates } from '@templates';
 import { BaseProvider } from '@actionProviders/baseProvider';
+import { COMMANDS } from '@constants';
 
 export class ConstructorParamActionProvider extends BaseProvider {
 
@@ -25,18 +26,76 @@ export class ConstructorParamActionProvider extends BaseProvider {
             return;
         }
         const classSymbols = SymbolParser.getWholeClassMeta(containerClass, allSymbols);
-        const constructor = SymbolParser.findConstructor(classSymbols);
+        const constructors: SymbolInformation[] = SymbolParser.findAllConstructors(classSymbols);
 
-        if (!constructor) {
-            await this.addConstructorWithParams(action.edit, classSymbols, varSymbol, document);
-        } else {
+        if (!constructors.length) {
+            await this.addConstructorWithParams(action.edit, allSymbols, varSymbol, document);
+        } else if (1 === constructors.length) {
             const [ varName, varType ] = varSymbol.name.split(' : ');
 
-            this.addConstructorParameterInsert(action.edit, document, constructor, [ varName, varType ]);
-            this.addAssignmentInsert(action.edit, document, constructor, varName);
+            this.addConstructorParameterInsert(action.edit, document, constructors[0], [ varName, varType ]);
+            this.addAssignmentInsert(action.edit, document, constructors[0], varName);
+        } else {
+            action.edit = undefined;
+            await this.registerCommand();
+            action.command = {
+                command: COMMANDS.ADD_CONSTRUCTOR_PARAM,
+                title: VARIABLE_ACTIONS.ADD_CONSTRUCTOR_PARAM,
+                arguments: [
+                    document,
+                    varSymbol,
+                    constructors,
+                ],
+            };
         }
 
         return action;
+    }
+
+    private async registerCommand() {
+        const commands = await vscode.commands.getCommands();
+        const filtered = commands.filter((c) => c === COMMANDS.ADD_CONSTRUCTOR_PARAM);
+
+        if (!filtered.length) {
+            vscode.commands.registerCommand(
+                COMMANDS.ADD_CONSTRUCTOR_PARAM,
+                this.commandCallback,
+                this
+            );
+        }
+    }
+
+    private async commandCallback(
+        document: vscode.TextDocument,
+        varSymbol: SymbolInformation,
+        constructors: SymbolInformation[]
+    ) {
+        const items = constructors.map((constrSymbol): vscode.QuickPickItem => (
+            {
+                label: last(constrSymbol.name.split('.')) || '',
+                detail: constrSymbol.name,
+            }
+        ));
+        const pickedConstructorItem = await vscode.window.showQuickPick(
+            items,
+            { placeHolder: PLACEHOLDERS.ADD_CONSTRUCTOR_PARAM.QUICK_PICK_ARGS }
+        );
+
+        if (!pickedConstructorItem) {
+            return;
+        }
+
+        const pickedConstructor = constructors.find((constr) => constr.name === pickedConstructorItem.detail);
+        if (!pickedConstructor) {
+            return;
+        }
+
+        const [ varName, varType ] = varSymbol.name.split(' : ');
+
+        const edit = new vscode.WorkspaceEdit();
+        this.addConstructorParameterInsert(edit, document, pickedConstructor, [ varName, varType ]);
+        this.addAssignmentInsert(edit, document, pickedConstructor, varName);
+        await vscode.workspace.applyEdit(edit);
     }
 
     private addConstructorParameterInsert(
@@ -47,7 +106,7 @@ export class ConstructorParamActionProvider extends BaseProvider {
     ) {
         let parameterText = `${varType} ${varName}`;
         if (!constructorSymbol.name.includes('()')) {
-            // no params constructor
+            // constructor already has some arguments
             parameterText = `, ${parameterText}`;
         }
         const positionToInsert = this.getPositionToInsertArgument(document, constructorSymbol);

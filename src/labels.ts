@@ -14,5 +14,8 @@ export const METHOD_ACTIONS = {
 export const PLACEHOLDERS = {
     ADD_OVERLOAD: {
         QUICK_PICK_ARGS: 'Select parameter to overload',
-    }
+    },
+    ADD_CONSTRUCTOR_PARAM: {
+        QUICK_PICK_ARGS: 'Select constructor to add parameter to',
+    },
 };

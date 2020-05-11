@@ -72,11 +72,18 @@ namespace SymbolParser {
         return result;
     };
 
-    export const findConstructor = (symbolInfos: SymbolInformation[]): SymbolInformation | undefined => {
-        const classDeclaration = R.last(symbolInfos);
+    export const findConstructor = (classSymbols: SymbolInformation[]): SymbolInformation | undefined => {
+        const classDeclaration = R.last(classSymbols);
         return classDeclaration && R.find((symbol: SymbolInformation) => {
             return isConstructor(symbol) && symbol.name.startsWith(`${classDeclaration.name}(`);
-        }, symbolInfos);
+        }, classSymbols);
+    };
+
+    export const findAllConstructors = (classSymbols: SymbolInformation[]): SymbolInformation[] => {
+        const classDeclaration = R.last(classSymbols);
+        return classDeclaration && R.filter((symbol: SymbolInformation) => {
+            return isConstructor(symbol) && symbol.name.startsWith(`${classDeclaration.name}(`);
+        }, classSymbols) || [];
     };
 
     export const getWholeClassMeta = (symbol: SymbolInformation, allSymbols: SymbolInformation[]) => {
