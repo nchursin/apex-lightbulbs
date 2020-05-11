@@ -11,7 +11,7 @@ import { VARIABLE_ACTIONS, PLACEHOLDERS } from '@src/labels';
 import { ConstructorParamActionProvider } from '@src/lib/actionProviders/vars/constructorParamActionProvider';
 import { replaceDocumentText, getStubLanguageClient } from '@testutils';
 import { COMMANDS } from '@src/constants';
-import { SinonStub, reset as stubReset, createSandbox, restore as restoreFunctions } from 'sinon';
+import { SinonStub, reset as stubReset, restore as restoreFunctions, stub } from 'sinon';
 
 const suiteName = 'ConstructorParamActionProvider Suite';
 
@@ -19,7 +19,6 @@ suite(suiteName, async () => {
     vscode.window.showInformationMessage(`Starting ${suiteName}...`);
 
     const dataFolder = path.resolve(__dirname, 'data');
-    const stubSandbox = createSandbox();
 
     let textDocument: vscode.TextDocument;
     let initialState: string;
@@ -27,16 +26,16 @@ suite(suiteName, async () => {
     let inputBoxStub: SinonStub;
 
     Mocha.before(async () => {
-        quickPickStub = stubSandbox.stub(vscode.window, 'showQuickPick');
-        inputBoxStub = stubSandbox.stub(vscode.window, 'showInputBox');
+        quickPickStub = stub(vscode.window, 'showQuickPick');
+        inputBoxStub = stub(vscode.window, 'showInputBox');
     });
 
     Mocha.beforeEach(async () => {
     });
 
     Mocha.afterEach(async () => {
-        replaceDocumentText(textDocument, initialState);
         stubReset();
+        replaceDocumentText(textDocument, initialState);
     });
 
     Mocha.after(() => {
@@ -116,7 +115,8 @@ suite(suiteName, async () => {
                 act.command.arguments[2]
             );
 
-            assert(quickPickStub.calledOnce, 'showQuickPick is not called');
+            assert(quickPickStub.called, 'showQuickPick is not called');
+            assert(quickPickStub.calledOnce, 'showQuickPick is not called once');
             assert(
                 quickPickStub.calledWith(quickPickOptions),
                 `QuickPickItems are different from expected: ${JSON.stringify(quickPickStub.args)}`
@@ -172,6 +172,10 @@ suite(suiteName, async () => {
 
     test('addConstructorParam should add constructor param to selected constructor', async () => {
         await runTestCase('Test6.1', 2, true, 1);
+    });
+
+    test('addConstructorParam should add constructor param to selected constructor (has inner class)', async () => {
+        await runTestCase('Test6.2', 2, true, 1);
     });
 
     test('non-variable type must provide no actions', async () => {
