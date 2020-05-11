@@ -7,4 +7,5 @@ export const TYPES = {
 
 export const COMMANDS = {
     ADD_OVERLOAD: 'apex-lightbulbs.addOverload',
+    ADD_CONSTRUCTOR_PARAM: 'apex-lightbulbs.addConstructorParam',
 };
